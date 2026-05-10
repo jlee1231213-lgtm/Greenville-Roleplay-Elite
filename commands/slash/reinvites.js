@@ -20,29 +20,7 @@ function applyReinvitesTokens(text, userId, ptStatus, frpLimit, sessionLink) {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("reinvites")
-    .setDescription("Post reinvites for a session")
-    .addStringOption(option =>
-      option.setName("link")
-        .setDescription("Private server link")
-        .setRequired(true))
-    .addStringOption(option =>
-      option.setName("pt")
-        .setDescription("LEO status")
-        .setRequired(true)
-        .addChoices(
-          { name: 'Strict', value: 'Strict' },
-          { name: 'On', value: 'On' },
-          { name: 'Off', value: 'Off' }
-        ))
-    .addStringOption(option =>
-      option.setName("frplimit")
-        .setDescription("FRP speed limit")
-        .setRequired(true)
-        .addChoices(
-          { name: '65MPH', value: '65MPH' },
-          { name: '75MPH', value: '75MPH' },
-          { name: '85MPH', value: '85MPH' }
-        )),
+    .setDescription("Post reinvites for a session"),
 
   async execute(interaction) {
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
@@ -65,9 +43,9 @@ module.exports = {
     const channelId = interaction.channelId;
     const currentCount = (interaction.client.reinviteCounters.get(channelId) || 0) + 1;
     interaction.client.reinviteCounters.set(channelId, currentCount);
-    const sessionLink = interaction.options.getString('link');
-    const ptStatus = interaction.options.getString('pt');
-    const frpLimit = interaction.options.getString('frplimit');
+    const sessionLink = 'N/A';
+    const ptStatus = 'N/A';
+    const frpLimit = 'N/A';
     const reinvitesTemplate = settings?.reinvitesEmbed || DEFAULT_REINVITES_EMBED;
 
     const userToPing = interaction.user.id;
