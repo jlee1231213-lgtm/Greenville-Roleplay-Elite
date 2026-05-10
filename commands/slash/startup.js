@@ -97,8 +97,9 @@ module.exports = {
 
         const setupTitle = (setupTemplate.title || '').trim();
         const setupDescription = (setupTemplate.description || 'Data was not found, please use `/settings` to configure the Embed')
-          .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
+          .replace(/\{\{user\}\}|\{user\}|\$user/g, `<@${userId}>`)
           .replace(/\\n/g, '\n');
+        const setupEndsAt = Math.floor((Date.now() + 10 * 60 * 1000) / 1000);
 
         const finalDescription = setupTitle.startsWith('##')
           ? `${setupTitle}\n${setupDescription}`
@@ -108,6 +109,12 @@ module.exports = {
           .setDescription(finalDescription)
           .setColor(embedColor)
           .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
+
+        setupEmbed.addFields({
+          name: 'Setup Time Window',
+          value: `Please give the host 10 minutes to setup. Expected ready time: <t:${setupEndsAt}:R>`,
+          inline: false,
+        });
 
         if (setupTitle && !setupTitle.startsWith('##')) {
           setupEmbed.setTitle(setupTitle);

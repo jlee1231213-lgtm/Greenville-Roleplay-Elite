@@ -5,7 +5,7 @@ const { activeStartupSessions } = require('./startup');
 
 const DEFAULT_SETUP_EMBED = {
   title: '<a:loading:1500587786649211051> *__Greenville Roleplay Elite - Session Preparation!__* <a:loading:1500587786649211051>',
-  description: '<:dot:1500584469906591971> {{user}} is officially setting up their session! While you wait for **EA & Release**, make sure you registered a **vehicle**.\n**Please don\'t ping the host** during this time, setup takes **5-10 minutes.**',
+  description: '<:dot:1500584469906591971> {user} is officially setting up their session! While you wait for **EA & Release**, make sure you registered a **vehicle**. Please don\'t ping the host during this time, setup takes time.',
   image: null,
 };
 
@@ -60,8 +60,9 @@ module.exports = {
     const setupTemplate = settings?.setupEmbed || DEFAULT_SETUP_EMBED;
     const setupTitle = (setupTemplate.title || DEFAULT_SETUP_EMBED.title || '').trim();
     const setupDescription = (setupTemplate.description || DEFAULT_SETUP_EMBED.description)
-      .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
+      .replace(/\{\{user\}\}|\{user\}|\$user/g, `<@${userId}>`)
       .replace(/\\n/g, '\n');
+    const setupEndsAt = Math.floor((Date.now() + 10 * 60 * 1000) / 1000);
 
     // Discord does not render markdown headings in embed titles. If title starts with ##,
     // move it into the description so the heading styling works.
@@ -73,6 +74,12 @@ module.exports = {
       .setDescription(finalDescription)
       .setColor('#368f4c')
       .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
+
+    setupEmbed.addFields({
+      name: 'Setup Time Window',
+      value: `Please give the host 10 minutes to setup. Expected ready time: <t:${setupEndsAt}:R>`,
+      inline: false,
+    });
 
     if (setupTitle && !setupTitle.startsWith('##')) {
       setupEmbed.setTitle(setupTitle);
