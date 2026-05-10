@@ -20,6 +20,8 @@ module.exports = {
 
     if (interaction.isStringSelectMenu() && interaction.customId === 'supportOptions') {
       const type = interaction.values[0];
+      const today = new Date();
+      const dateString = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
       const modal = new ModalBuilder()
         .setCustomId(`ticketModal_${type}`)
         .setTitle('Ticket Information');
@@ -38,6 +40,7 @@ module.exports = {
             .setCustomId('reportDate')
             .setLabel('Date')
             .setStyle(TextInputStyle.Short)
+            .setValue(dateString)
             .setRequired(true)
         ),
         new ActionRowBuilder().addComponents(
@@ -62,6 +65,7 @@ module.exports = {
             .setCustomId('reportDate')
             .setLabel('Date')
             .setStyle(TextInputStyle.Short)
+            .setValue(dateString)
             .setRequired(true)
         ),
         new ActionRowBuilder().addComponents(
@@ -169,7 +173,9 @@ module.exports = {
       const closeBtn = new ButtonBuilder().setCustomId('closeTicket').setLabel('Close').setStyle(ButtonStyle.Danger);
       const row = new ActionRowBuilder().addComponents(claimBtn, closeBtn);
 
-      const msg = await ticketChannel.send({ content: `<@${ownerId}> <@1501214256442380470> <@&${staffingDepartmentRoleId}>`, embeds: [embed], components: [row] });
+      const mentionParts = [`<@${ownerId}>`];
+      if (staffingDepartmentRole) mentionParts.push(`<@&${staffingDepartmentRole.id}>`);
+      const msg = await ticketChannel.send({ content: mentionParts.join(' '), embeds: [embed], components: [row] });
       await msg.pin();
 
       await Ticket.create({
