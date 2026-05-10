@@ -6,6 +6,9 @@ const Settings = require("./models/settings");
 
 const { token, mongodb } = process.env;
 
+const SOURCE_GUILD_ID = "1490472044213829864";
+const TARGET_GUILD_ID = "1500582461703327754";
+
 mongoose.set("bufferCommands", false);
 
 const client = new Client({
@@ -54,14 +57,17 @@ const handleCommands = async () => {
   }
 
   const clientId = process.env.clientId || Buffer.from(token.split(".")[0], "base64").toString("utf8");
-  const guildId = "1490472044213829864";
   const rest = new REST({ version: "10" }).setToken(token);
+  const deploymentGuildIds = [SOURCE_GUILD_ID, TARGET_GUILD_ID];
 
   try {
-    await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
-      body: client.commandArray,
-    });
-    console.log("Slash commands uploaded successfully.");
+    for (const guildId of deploymentGuildIds) {
+      await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+        body: client.commandArray,
+      });
+      console.log(`Slash commands uploaded successfully for guild ${guildId}.`);
+    }
+
     console.log("Available commands:");
     client.commands.forEach((cmd, name) => {
       console.log(`- ${name}`);
@@ -71,6 +77,25 @@ const handleCommands = async () => {
   }
 };
 
+async function syncGuildSettings(sourceGuildId, targetGuildId) {
+  const sourceSettings = await Settings.findOne({ guildId: sourceGuildId }).lean();
+  if (!sourceSettings) {
+    console.log(`No settings found for source guild ${sourceGuildId}. Skipping sync.`);
+    return;
+  }
+
+  const { _id, __v, createdAt, updatedAt, ...settingsPayload } = sourceSettings;
+  settingsPayload.guildId = targetGuildId;
+
+  await Settings.updateOne(
+    { guildId: targetGuildId },
+    { $set: settingsPayload },
+    { upsert: true }
+  );
+
+  console.log(`Settings synced from ${sourceGuildId} to ${targetGuildId}.`);
+}
+
 client.handleEvents = handleEvents;
 client.handleCommands = handleCommands;
 
@@ -79,6 +104,7 @@ client.handleCommands = handleCommands;
     try {
       await connectDatabase();
       await Settings.updateMany({}, { $set: { embedcolor: '#368f4c' } });
+      await syncGuildSettings(SOURCE_GUILD_ID, TARGET_GUILD_ID);
     } catch (dbError) {
       console.error("MongoDB unavailable. Starting in degraded mode:", dbError.message);
     }
