@@ -45,23 +45,21 @@ module.exports = {
         )),
 
   async execute(interaction) {
+    await interaction.deferReply({ ephemeral: true });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#368f4c';
     const staffRoleId = settings?.staffRoleId;
 
     if (!staffRoleId || !interaction.member.roles.cache.has(staffRoleId)) {
-      return interaction.reply({
+      return interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setTitle('Data not found')
             .setDescription(`You do not have the required role to use this command or data is not configured. Please use \`/settings\` to configure the Embed.`)
             .setColor(embedColor)
         ],
-        ephemeral: true
       });
     }
-
-    await interaction.deferReply({ ephemeral: true });
 
     const sessionLink = interaction.options.getString('link');
     const ptStatus = interaction.options.getString('pt');

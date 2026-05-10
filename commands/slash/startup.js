@@ -7,7 +7,7 @@ const activeStartupSessions = new Map();
 const startupCooldowns = new Map();
 const STARTUP_COOLDOWN_MS = 20 * 60 * 1000;
 const STARTUP_REACTION_EMOJI_ID = '1500587804445638897';
-const STARTUP_REACTION_EMOJI_TAG = '<a:beatinghearts:1500587804445638897>';
+const STARTUP_REACTION_EMOJI_TAG = 'beatinghearts:1500587804445638897';
 
 const DEFAULT_STARTUP_EMBED = {
   title: '## <a:beatinghearts:1500587804445638897>   *__Greenville Roleplay Elite — Startup__* <a:beatinghearts:1500587804445638897>',

@@ -21,12 +21,11 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    await interaction.deferReply({ ephemeral: true });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#368f4c';
 
     const allowedRoleIds = EA_WHITELIST_ROLE_IDS;
-
-    await interaction.deferReply({ ephemeral: true });
 
     const sessionLink = interaction.options.getString('link');
     const userMention = `<@${interaction.user.id}>`;

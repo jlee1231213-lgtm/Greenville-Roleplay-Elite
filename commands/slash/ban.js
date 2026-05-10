@@ -20,6 +20,7 @@ module.exports = {
         .setRequired(true)),
 
   async execute(interaction) {
+    await interaction.deferReply({ ephemeral: true });
     const guildId = interaction.guild.id;
     const member = interaction.member;
     const target = interaction.options.getUser('user');
@@ -27,14 +28,14 @@ module.exports = {
     const proof = interaction.options.getString('proof') || null;
 
     const settings = await Settings.findOne({ guildId });
-    if (!settings) return interaction.reply({ content: 'Server settings not found!', ephemeral: true });
+    if (!settings) return interaction.editReply({ content: 'Server settings not found!' });
 
     const adminRoleId = settings.adminRoleId;
-    if (!adminRoleId) return interaction.reply({ content: 'Admin role is not set in server settings.', ephemeral: true });
-    if (!member.roles.cache.has(adminRoleId)) return interaction.reply({ content: 'You must have the Admin role to use this command.', ephemeral: true });
+    if (!adminRoleId) return interaction.editReply({ content: 'Admin role is not set in server settings.' });
+    if (!member.roles.cache.has(adminRoleId)) return interaction.editReply({ content: 'You must have the Admin role to use this command.' });
 
     const guildMember = await interaction.guild.members.fetch(target.id).catch(() => null);
-    if (!guildMember) return interaction.reply({ content: 'User not found in the server.', ephemeral: true });
+    if (!guildMember) return interaction.editReply({ content: 'User not found in the server.' });
 
     const embedColor = '#368f4c';
 
@@ -68,6 +69,6 @@ module.exports = {
       .setColor(embedColor)
       .setTimestamp();
 
-    return interaction.reply({ embeds: [replyEmbed], ephemeral: true });
+    return interaction.editReply({ embeds: [replyEmbed] });
   }
 };
