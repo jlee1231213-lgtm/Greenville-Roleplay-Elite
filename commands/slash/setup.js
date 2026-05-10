@@ -3,7 +3,7 @@ const Settings = require('../../models/settings');
 const { activeStartupSessions } = require('./startup');
 
 const DEFAULT_SETUP_EMBED = {
-  title: '## :loading: *__Greenville Roleplay Elite - Session Preparation!__* :loading:',
+  title: '<a:loading:1500587786649211051> *__Greenville Roleplay Elite - Session Preparation!__* <a:loading:1500587786649211051>',
   description: '<:dot:1500584469906591971> {{user}} is officially setting up their session! While you wait for **EA & Release**, make sure you registered a **vehicle**.\n**Please don\'t ping the host** during this time, setup takes **5-10 minutes.**',
   image: null,
 };
@@ -44,16 +44,24 @@ module.exports = {
 
     const setupTemplate = settings?.setupEmbed || DEFAULT_SETUP_EMBED;
     const setupTitle = (setupTemplate.title || DEFAULT_SETUP_EMBED.title || '').trim();
-    const normalizedSetupTitle = setupTitle.startsWith('##') ? setupTitle : '## ' + setupTitle;
+    const setupDescription = (setupTemplate.description || DEFAULT_SETUP_EMBED.description)
+      .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
+      .replace(/\\n/g, '\n');
+
+    // Discord does not render markdown headings in embed titles. If title starts with ##,
+    // move it into the description so the heading styling works.
+    const finalDescription = setupTitle.startsWith('##')
+      ? `${setupTitle}\n${setupDescription}`
+      : setupDescription;
+
     const setupEmbed = new EmbedBuilder()
-      .setTitle(normalizedSetupTitle)
-      .setDescription(
-        (setupTemplate.description || DEFAULT_SETUP_EMBED.description)
-          .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
-          .replace(/\\n/g, '\n')
-      )
+      .setDescription(finalDescription)
       .setColor('#368f4c')
       .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
+
+    if (setupTitle && !setupTitle.startsWith('##')) {
+      setupEmbed.setTitle(setupTitle);
+    }
 
     if (setupTemplate.image?.startsWith('http')) {
       setupEmbed.setImage(setupTemplate.image);
