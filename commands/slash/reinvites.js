@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js");
 const Settings = require('../../models/settings');
 
 const DEFAULT_REINVITES_EMBED = {
@@ -76,7 +76,7 @@ module.exports = {
 
     const reinviteMessage = await interaction.channel.send({ embeds: [embed] });
     await reinviteMessage.react('beatinghearts:1500587804445638897').catch(() => {});
-    await interaction.editReply({ content: 'Reinvites sent successfully.' });
+    await interaction.editReply({ content: 'Reinvites sent successfully.', flags: MessageFlags.Ephemeral });
 
     let logChannel;
     try { logChannel = await interaction.client.channels.fetch(settings?.logChannelId || '1419318345731411968'); } catch { logChannel = null; }

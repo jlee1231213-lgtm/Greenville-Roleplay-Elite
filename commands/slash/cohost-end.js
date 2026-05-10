@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
 const Settings = require('../../models/settings');
 const SessionLog = require('../../models/sessionlog');
 const { activeStartupSessions } = require('../slash/startup');
@@ -46,6 +46,6 @@ module.exports = {
     if (originalCohostMessage && originalCohostMessage.reply) await originalCohostMessage.reply({ embeds: [endEmbed] });
     else await interaction.channel.send({ embeds: [endEmbed] });
 
-    await interaction.editReply({ content: 'Command executed successfully' });
+    await interaction.editReply({ content: 'Command executed successfully', flags: MessageFlags.Ephemeral });
   }
 };

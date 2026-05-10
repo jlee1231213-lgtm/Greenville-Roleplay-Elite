@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
 const { v4: uuidv4 } = require('uuid');
 const StartupSession = require('../../models/startupsession');
 const Settings = require('../../models/settings');
@@ -86,7 +86,7 @@ module.exports = {
 
     await StartupSession.create({ guildId: interaction.guild.id, channelId: interaction.channel.id, messageId: message.id, createdAt: now });
 
-    await interaction.editReply({ content: 'Session started successfully.' });
+    await interaction.editReply({ content: 'Session started successfully.', flags: MessageFlags.Ephemeral });
 
     const filter = (reaction, user) => reaction.emoji.id === STARTUP_REACTION_EMOJI_ID && !user.bot;
     const collector = message.createReactionCollector({ filter, max: reactionsRequired, time: 1000 * 60 * 60 }); 

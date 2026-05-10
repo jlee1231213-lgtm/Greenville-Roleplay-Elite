@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, MessageFlags } = require('discord.js');
 const Settings = require('../models/settings');
 
 module.exports = {
@@ -35,7 +35,7 @@ module.exports = {
 
                 await interaction.channel.send({ embeds: [embed] });
 
-                await interaction.editReply({ content: 'Embed successfully created!' });
+                await interaction.editReply({ content: 'Embed successfully created!', flags: MessageFlags.Ephemeral });
 
                 console.log('Embed sent successfully.');
             }
