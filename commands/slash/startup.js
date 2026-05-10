@@ -95,10 +95,23 @@ module.exports = {
       if (message.reactions.cache.get(STARTUP_REACTION_EMOJI_ID)?.count - 1 >= reactionsRequired) {
         collector.stop();
 
+        const setupTitle = (setupTemplate.title || '').trim();
+        const setupDescription = (setupTemplate.description || 'Data was not found, please use `/settings` to configure the Embed')
+          .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
+          .replace(/\\n/g, '\n');
+
+        const finalDescription = setupTitle.startsWith('##')
+          ? `${setupTitle}\n${setupDescription}`
+          : setupDescription;
+
         const setupEmbed = new EmbedBuilder()
-          .setTitle(setupTemplate.title?.replace(/\$user/g, `<@${userId}>`) || 'Data not found')
-          .setDescription(setupTemplate.description?.replace(/\$user/g, `<@${userId}>`) || 'Data was not found, please use `/settings` to configure the Embed')
-          .setColor(embedColor);
+          .setDescription(finalDescription)
+          .setColor(embedColor)
+          .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
+
+        if (setupTitle && !setupTitle.startsWith('##')) {
+          setupEmbed.setTitle(setupTitle);
+        }
 
         if (setupTemplate.image && setupTemplate.image.startsWith('http')) setupEmbed.setImage(setupTemplate.image);
 
