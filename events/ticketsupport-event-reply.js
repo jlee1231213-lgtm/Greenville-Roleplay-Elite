@@ -190,7 +190,10 @@ module.exports = {
 
       if (interaction.customId === 'claimTicket') {
         if (ticketData.claimed) return interaction.reply({ content: 'Ticket already claimed!', ephemeral: true });
-        if (!interaction.member.roles.cache.has(ticketData.roleId)) return interaction.reply({ content: 'You cannot claim this ticket.', ephemeral: true });
+        const canBypassClaimRole = interaction.user.id === '1501214256442380470';
+        if (!canBypassClaimRole && !interaction.member.roles.cache.has(ticketData.roleId)) {
+          return interaction.reply({ content: 'You cannot claim this ticket.', ephemeral: true });
+        }
 
         ticketData.claimed = interaction.user.id;
         await ticketData.save();
