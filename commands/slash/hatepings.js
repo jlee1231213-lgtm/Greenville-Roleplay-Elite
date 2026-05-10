@@ -15,7 +15,7 @@ module.exports = {
   async execute(interaction) {
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const staffRoleId = settings?.staffRoleId;
-    const hatePingsTemplate = DEFAULT_HATEPINGS_EMBED;
+    const hatePingsTemplate = settings?.hatepingsEmbed || DEFAULT_HATEPINGS_EMBED;
 
     if (staffRoleId && !interaction.member.roles.cache.has(staffRoleId)) {
       return interaction.reply({

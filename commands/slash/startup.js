@@ -62,12 +62,6 @@ module.exports = {
     const now = new Date();
     const embedColor = '#368f4c';
 
-    // Force update startup embed in settings to the new default every time this command is run.
-    settings.startupEmbed = DEFAULT_STARTUP_EMBED;
-    await settings.save();
-    // Reload settings in case of any DB triggers/middleware.
-    settings = await Settings.findOne({ guildId: interaction.guild.id });
-
     const startupTemplate = settings.startupEmbed || DEFAULT_STARTUP_EMBED;
     const setupTemplate = settings.setupEmbed || {};
 

@@ -162,7 +162,7 @@ module.exports = {
                 return interaction.showModal(modal);
             }
 
-            const embedFields = ['startupEmbed','eaEmbed','giveawayEmbed','setupEmbed','welcomeEmbed','cohostEmbed','cohostendEmbed','releaseEmbed','reinvitesEmbed','overEmbed','hatepingsEmbed'];
+            const embedFields = ['startupEmbed','eaEmbed','giveawayEmbed','setupEmbed','welcomeEmbed','cohostEmbed','cohostendEmbed','releaseEmbed','reinvitesEmbed','overEmbed','hatepingsEmbed','superviseEmbed'];
             if (embedFields.includes(interaction.values[0])) {
                 const field = interaction.values[0];
                 const currentEmbed = settings?.[field] || {};

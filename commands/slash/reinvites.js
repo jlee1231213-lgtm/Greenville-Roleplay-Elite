@@ -68,7 +68,7 @@ module.exports = {
     const sessionLink = interaction.options.getString('link');
     const ptStatus = interaction.options.getString('pt');
     const frpLimit = interaction.options.getString('frplimit');
-    const reinvitesTemplate = DEFAULT_REINVITES_EMBED;
+    const reinvitesTemplate = settings?.reinvitesEmbed || DEFAULT_REINVITES_EMBED;
 
     const userToPing = interaction.user.id;
 
