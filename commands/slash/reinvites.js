@@ -40,7 +40,7 @@ module.exports = {
     const channelId = interaction.channelId;
     const currentCount = (interaction.client.reinviteCounters.get(channelId) || 0) + 1;
     interaction.client.reinviteCounters.set(channelId, currentCount);
-    const reinvitesTemplate = settings?.reinvitesEmbed || DEFAULT_REINVITES_EMBED;
+    const reinvitesTemplate = DEFAULT_REINVITES_EMBED;
 
     const userToPing = interaction.user.id;
 
