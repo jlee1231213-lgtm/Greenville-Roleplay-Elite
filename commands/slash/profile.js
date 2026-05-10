@@ -78,15 +78,15 @@ module.exports = {
       const buttons = new ActionRowBuilder()
         .addComponents(
           new ButtonBuilder()
-            .setCustomId(`view_vehicles_${userId}`)
+            .setCustomId(`profile_vehicles_${userId}_page_1`)
             .setLabel('Registered Assets')
             .setStyle(ButtonStyle.Secondary),
           new ButtonBuilder()
-            .setCustomId(`view_tickets_${userId}`)
+            .setCustomId(`profile_tickets_${userId}`)
             .setLabel('Public Service Records')
             .setStyle(ButtonStyle.Secondary),
           new ButtonBuilder()
-            .setCustomId(`view_balance_${userId}`)
+            .setCustomId(`profile_balance_${userId}`)
             .setLabel('Account Balance')
             .setStyle(ButtonStyle.Secondary),
         );
