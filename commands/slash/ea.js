@@ -27,7 +27,23 @@ module.exports = {
 
     const allowedRoleIds = EA_WHITELIST_ROLE_IDS;
 
-    const sessionLink = interaction.options.getString('link');
+    const rawSessionLink = interaction.options.getString('link').trim();
+    const candidateLink = /^https?:\/\//i.test(rawSessionLink) ? rawSessionLink : `https://${rawSessionLink}`;
+
+    let sessionLink;
+    try {
+      const parsedUrl = new URL(candidateLink);
+      if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+        throw new Error('Invalid protocol');
+      }
+      sessionLink = parsedUrl.toString();
+    } catch {
+      await interaction.editReply({
+        content: 'Invalid link. Please provide a valid URL (example: https://example.com).'
+      });
+      return;
+    }
+
     const userMention = `<@${interaction.user.id}>`;
     const whitelistMentions = allowedRoleIds.map(roleId => `<@&${roleId}>`).join(' ');
 
@@ -108,7 +124,7 @@ module.exports = {
       }
 
       await i.reply({
-        embeds: [new EmbedBuilder().setDescription(`[Click here to join the session](${sessionLink})`).setColor(embedColor)],
+        embeds: [new EmbedBuilder().setDescription(`Click here to join the session:\n${sessionLink}`).setColor(embedColor)],
         ephemeral: true
       });
 
