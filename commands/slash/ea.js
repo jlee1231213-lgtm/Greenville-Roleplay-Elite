@@ -24,16 +24,6 @@ module.exports = {
     const embedColor = '#368f4c';
 
     const allowedRoleIds = EA_WHITELIST_ROLE_IDS;
-    if (!interaction.member.roles.cache.some(r => allowedRoleIds.includes(r.id))) {
-      return interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setDescription('You do not have the required role to access the link.')
-            .setColor(embedColor)
-        ],
-        ephemeral: true
-      });
-    }
 
     await interaction.deferReply({ ephemeral: true });
 
