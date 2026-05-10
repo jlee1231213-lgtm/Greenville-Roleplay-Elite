@@ -223,7 +223,7 @@ module.exports = {
           await ticketData.save();
 
           await interaction.channel.send({ content: `<@${interaction.user.id}> claimed the ticket.` });
-          await interaction.editReply({ content: 'Ticket claimed successfully.', flags: MessageFlags.Ephemeral });
+          await interaction.editReply({ content: 'Ticket claimed successfully.' });
           if (logChannel) logChannel.send({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription(`<@${interaction.user.id}> claimed ticket <#${interaction.channel.id}>.`)] });
         } catch (error) {
           console.error('Error claiming ticket:', error.message, error.code);
@@ -258,7 +258,7 @@ module.exports = {
         const msg = await interaction.channel.messages.fetch({ limit: 10 }).then(ms => ms.find(m => m.embeds.length));
         if (msg) msg.edit({ components: [row] });
 
-        await interaction.reply({ content: `<@${interaction.user.id}> unclaimed the ticket.`, ephemeral: true });
+        await interaction.reply({ content: `<@${interaction.user.id}> unclaimed the ticket.` });
         if (logChannel) logChannel.send({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription(`<@${interaction.user.id}> unclaimed ticket <#${interaction.channel.id}>.`)] });
         return;
       }
