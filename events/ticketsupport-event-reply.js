@@ -213,8 +213,11 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
 
         try {
-          await interaction.channel.permissionOverwrites.edit(ticketData.roleId, { deny: [PermissionsBitField.Flags.ViewChannel] });
-          await interaction.channel.permissionOverwrites.edit(interaction.user.id, { allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages] });
+          const ticketRole = await interaction.guild.roles.fetch(ticketData.roleId).catch(() => null);
+          if (ticketRole) {
+            await interaction.channel.permissionOverwrites.edit(ticketRole.id, { ViewChannel: false });
+          }
+          await interaction.channel.permissionOverwrites.edit(interaction.user.id, { ViewChannel: true, SendMessages: true });
 
           const row = new ActionRowBuilder()
             .addComponents(
@@ -239,6 +242,8 @@ module.exports = {
           }
           const errorMsg = error.code === 'MissingPermissions' 
             ? `Missing permissions: ${error.message}. Please ensure the bot has MANAGE_CHANNELS and SEND_MESSAGES in this channel.`
+            : error.code === 'InvalidType'
+            ? 'Failed to claim this ticket because a configured ticket role is invalid or missing in this server. Please update ticket role settings and try again.'
             : `Failed to claim this ticket (${error.code || 'Unknown error'}). Please check bot permissions and try again.`;
           await interaction.editReply({ content: errorMsg });
         }
