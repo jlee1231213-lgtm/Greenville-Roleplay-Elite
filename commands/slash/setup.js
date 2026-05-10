@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, MessageFlags, EmbedBuilder } = require('discord.js');
 const Settings = require('../../models/settings');
+const StartupSession = require('../../models/startupsession');
 const { activeStartupSessions } = require('./startup');
 
 const DEFAULT_SETUP_EMBED = {
@@ -26,18 +27,32 @@ module.exports = {
 
     const userId = interaction.user.id;
 
-    const latestStartup = [...activeStartupSessions.entries()]
-      .filter(([, data]) => data.type === 'session')
-      .sort((a, b) => b[1].timestamp - a[1].timestamp)[0];
-
     let replyTarget = null;
-    if (latestStartup) {
-      const [, startupData] = latestStartup;
-      if (startupData.messageId) {
-        try {
-          replyTarget = await interaction.channel.messages.fetch(startupData.messageId);
-        } catch {
-          replyTarget = null;
+    const startupFromDb = await StartupSession.findOne({ guildId: interaction.guild.id }).sort({ createdAt: -1 });
+    if (startupFromDb) {
+      try {
+        const startupChannel = await interaction.client.channels.fetch(startupFromDb.channelId);
+        if (startupChannel?.isTextBased?.()) {
+          replyTarget = await startupChannel.messages.fetch(startupFromDb.messageId).catch(() => null);
+        }
+      } catch {
+        replyTarget = null;
+      }
+    }
+
+    if (!replyTarget) {
+      const latestStartup = [...activeStartupSessions.entries()]
+        .filter(([, data]) => data.type === 'session')
+        .sort((a, b) => b[1].timestamp - a[1].timestamp)[0];
+
+      if (latestStartup) {
+        const [, startupData] = latestStartup;
+        if (startupData.messageId) {
+          try {
+            replyTarget = await interaction.channel.messages.fetch(startupData.messageId);
+          } catch {
+            replyTarget = null;
+          }
         }
       }
     }
@@ -67,8 +82,14 @@ module.exports = {
       setupEmbed.setImage(setupTemplate.image);
     }
 
-    if (replyTarget?.reply) await replyTarget.reply({ embeds: [setupEmbed] });
-    else await interaction.channel.send({ embeds: [setupEmbed] });
+    try {
+      if (replyTarget?.reply) await replyTarget.reply({ embeds: [setupEmbed] });
+      else await interaction.channel.send({ embeds: [setupEmbed] });
+    } catch {
+      return interaction.editReply({
+        content: 'I do not have access to post setup in that channel. Please check channel permissions.',
+      });
+    }
 
     await interaction.editReply({ content: 'Setup message sent.' });
   },
