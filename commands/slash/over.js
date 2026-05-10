@@ -146,6 +146,7 @@ module.exports = {
     const overTemplate = settings?.overEmbed || DEFAULT_OVER_EMBED;
 
     const descriptionTemplate = normalizeTemplateText(overTemplate.description || DEFAULT_OVER_EMBED.description);
+    const cooldownUntil = new Date(Date.now() + OVER_COOLDOWN_MS);
 
     const embed = new EmbedBuilder()
       .setColor(embedColor)
@@ -156,6 +157,9 @@ module.exports = {
           .replace(/\{\{starttime\}\}|\$starttime/g, formatDateTime(sessionData.timestamp))
           .replace(/\{\{endtime\}\}|\$endtime/g, formatDateTime(endTime))
           .replace(/\{\{notes\}\}|\$notes/g, note)
+      )
+      .addFields(
+        { name: 'Next Session Available', value: `<t:${Math.floor(cooldownUntil.getTime() / 1000)}:R>`, inline: false }
       )
       .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
     if (overTemplate.image?.startsWith('http')) embed.setImage(overTemplate.image);
