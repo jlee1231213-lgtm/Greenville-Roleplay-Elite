@@ -4,6 +4,8 @@ const StartupSession = require('../../models/startupsession');
 const Settings = require('../../models/settings');
 
 const activeStartupSessions = new Map();
+const startupCooldowns = new Map();
+const STARTUP_COOLDOWN_MS = 20 * 60 * 1000;
 
 const DEFAULT_STARTUP_EMBED = {
   title: '## > <a:beatinghearts:1500587804445638897>   *__Greenville Roleplay Elite — Startup__* <a:beatinghearts:1500587804445638897>',
@@ -17,6 +19,13 @@ function applyStartupTokens(text, userId, now, reactionsRequired) {
     .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
     .replace(/\{\{date\}\}|\$date/g, now.toLocaleString())
     .replace(/\{\{reactions\}\}|\$reactions/g, String(reactionsRequired));
+}
+
+function formatCooldown(msRemaining) {
+  const totalSeconds = Math.max(1, Math.ceil(msRemaining / 1000));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}m ${seconds}s`;
 }
 
 module.exports = {
@@ -38,6 +47,14 @@ module.exports = {
     const staffRoleId = settings.staffRoleId;
     if (!staffRoleId || !interaction.member.roles.cache.has(staffRoleId)) {
       return interaction.editReply({ content: 'You must have the Staff role', ephemeral: true });
+    }
+
+    const startupCooldownUntil = startupCooldowns.get(interaction.user.id);
+    if (startupCooldownUntil && startupCooldownUntil > Date.now()) {
+      return interaction.editReply({
+        content: `You can use /startup again in ${formatCooldown(startupCooldownUntil - Date.now())}.`,
+        ephemeral: true,
+      });
     }
 
     const reactionsRequired = interaction.options.getInteger('reactions');
@@ -66,6 +83,8 @@ module.exports = {
 
     const message = await interaction.channel.send({ content: '@everyone', embeds: [embed] });
     await message.react('✅');
+
+    startupCooldowns.set(interaction.user.id, Date.now() + STARTUP_COOLDOWN_MS);
 
     const sessionId = uuidv4();
     activeStartupSessions.set(sessionId, { userId, timestamp: now, type: 'session', messageId: message.id });

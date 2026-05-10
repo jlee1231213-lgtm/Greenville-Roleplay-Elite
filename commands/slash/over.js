@@ -15,6 +15,9 @@ const StartupSession = require('../../models/startupsession');
 const Settings = require('../../models/settings');
 const { activeStartupSessions } = require('../slash/startup');
 
+const overCooldowns = new Map();
+const OVER_COOLDOWN_MS = 20 * 60 * 1000;
+
 const DEFAULT_OVER_EMBED = {
   title: '<a:beatinghearts:1500587804445638897> *__Greenville Roleplay Elite  - Session Concluded!__* <a:beatinghearts:1500587804445638897>',
   description: '<:dot:1500584469906591971> {{user}} has officially **concluded the current session!** If there was issues within the session, feel free to open a ticket! Ensure you maximize your fun within the session!\n\n> `Start Time:` {{starttime}}\n> `End time:` {{endtime}}\n> Additional Notes: {{notes}}',
@@ -33,6 +36,13 @@ function clip(value, max = 1024) {
 function normalizeTemplateText(text) {
   if (!text) return text;
   return text.replace(/\\n/g, '\n');
+}
+
+function formatCooldown(msRemaining) {
+  const totalSeconds = Math.max(1, Math.ceil(msRemaining / 1000));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}m ${seconds}s`;
 }
 
 async function purgeChannelExceptPinned(channel) {
@@ -96,6 +106,14 @@ module.exports = {
       });
     }
 
+    const overCooldownUntil = overCooldowns.get(interaction.user.id);
+    if (overCooldownUntil && overCooldownUntil > Date.now()) {
+      return interaction.reply({
+        content: `You can use /over again in ${formatCooldown(overCooldownUntil - Date.now())}.`,
+        flags: MessageFlags.Ephemeral,
+      });
+    }
+
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
     const userId = interaction.user.id;
@@ -124,6 +142,7 @@ module.exports = {
     });
 
     activeStartupSessions.delete(sessionId);
+    overCooldowns.set(interaction.user.id, Date.now() + OVER_COOLDOWN_MS);
     const overTemplate = settings?.overEmbed || DEFAULT_OVER_EMBED;
 
     const descriptionTemplate = normalizeTemplateText(overTemplate.description || DEFAULT_OVER_EMBED.description);
