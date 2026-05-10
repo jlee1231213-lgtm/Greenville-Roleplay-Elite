@@ -234,6 +234,11 @@ module.exports = {
                 await updateSetting(guildId, 'welcomemessage', message);
                 return interaction.reply({ content: 'Welcome message updated successfully!', ephemeral: true });
             }
+            if (interaction.customId === 'welcome_channel_modal') {
+                const channel = interaction.fields.getTextInputValue('welcome_channel_input');
+                await updateSetting(guildId, 'welcomechannelid', channel);
+                return interaction.reply({ content: `Welcome channel set to <#${channel}>`, ephemeral: true });
+            }
             if (interaction.customId === 'logging_channel_modal') {
                 const channel = interaction.fields.getTextInputValue('logging_channel_input');
                 await updateSetting(guildId, 'logChannelId', channel);
