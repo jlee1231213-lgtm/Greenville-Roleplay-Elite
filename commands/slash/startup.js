@@ -6,6 +6,8 @@ const Settings = require('../../models/settings');
 const activeStartupSessions = new Map();
 const startupCooldowns = new Map();
 const STARTUP_COOLDOWN_MS = 20 * 60 * 1000;
+const STARTUP_REACTION_EMOJI_ID = '1500587804445638897';
+const STARTUP_REACTION_EMOJI_TAG = '<a:beatinghearts:1500587804445638897>';
 
 const DEFAULT_STARTUP_EMBED = {
   title: '## <a:beatinghearts:1500587804445638897>   *__Greenville Roleplay Elite — Startup__* <a:beatinghearts:1500587804445638897>',
@@ -76,7 +78,7 @@ module.exports = {
     if (startupTemplate.image && startupTemplate.image.startsWith('http')) embed.setImage(startupTemplate.image);
 
     const message = await interaction.channel.send({ content: '@everyone', embeds: [embed] });
-    await message.react('✅');
+    await message.react(STARTUP_REACTION_EMOJI_TAG);
 
     startupCooldowns.set(interaction.user.id, Date.now() + STARTUP_COOLDOWN_MS);
 
@@ -87,11 +89,11 @@ module.exports = {
 
     await interaction.editReply({ content: 'Session started successfully.', ephemeral: true });
 
-    const filter = (reaction, user) => reaction.emoji.name === '✅' && !user.bot;
+    const filter = (reaction, user) => reaction.emoji.id === STARTUP_REACTION_EMOJI_ID && !user.bot;
     const collector = message.createReactionCollector({ filter, max: reactionsRequired, time: 1000 * 60 * 60 }); 
 
     collector.on('collect', async () => {
-      if (message.reactions.cache.get('✅')?.count - 1 >= reactionsRequired) {
+      if (message.reactions.cache.get(STARTUP_REACTION_EMOJI_ID)?.count - 1 >= reactionsRequired) {
         collector.stop();
 
         const setupEmbed = new EmbedBuilder()

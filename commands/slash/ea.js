@@ -8,6 +8,7 @@ const EA_WHITELIST_ROLE_IDS = [
   '1503044009797619983',
   '1501214256442380470'
 ];
+const STARTUP_REACTION_EMOJI_ID = '1500587804445638897';
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -93,7 +94,7 @@ module.exports = {
         });
       }
 
-      const reaction = startupMsg.reactions.cache.get('✅');
+      const reaction = startupMsg.reactions.cache.get(STARTUP_REACTION_EMOJI_ID);
       if (!reaction || !(await reaction.users.fetch()).has(i.user.id)) {
         return i.reply({
           embeds: [
