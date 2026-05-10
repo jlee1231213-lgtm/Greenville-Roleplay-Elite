@@ -14,6 +14,7 @@ module.exports = {
         .setAutocomplete(true)),
 
   async execute(interaction) {
+    await interaction.deferReply({ });
     const userId = interaction.user.id;
     const guildId = interaction.guild.id;
     const ticketId = interaction.options.getString('ticket');
@@ -21,14 +22,14 @@ module.exports = {
     const settings = await Settings.findOne({ guildId });
     const embedColor = '#368f4c';
 
-    if (!ticket) return interaction.reply({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription('Ticket not found.')], ephemeral: true });
-    if (ticket.UserID !== userId) return interaction.reply({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription('This ticket is not yours.')], ephemeral: true });
+    if (!ticket) return interaction.editReply({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription('Ticket not found.')] });
+    if (ticket.UserID !== userId) return interaction.editReply({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription('This ticket is not yours.')] });
 
     let userEco = await Eco.findOne({ userId });
-    if (!userEco) return interaction.reply({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription('You have no money to pay this ticket.')], ephemeral: true });
+    if (!userEco) return interaction.editReply({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription('You have no money to pay this ticket.')] });
 
     let totalBalance = userEco.cash + userEco.bank;
-    if (totalBalance < ticket.Price) return interaction.reply({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription(`You do not have enough funds to pay this ticket. Amount needed: $${ticket.Price}`)], ephemeral: true });
+    if (totalBalance < ticket.Price) return interaction.editReply({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription(`You do not have enough funds to pay this ticket. Amount needed: $${ticket.Price}`)] });
 
     let remaining = ticket.Price;
 
@@ -52,6 +53,6 @@ module.exports = {
       .setDescription(`You have successfully paid the ticket.\n**Offense:** ${ticket.Offense}\n**Amount Paid:** $${ticket.Price}`)
       .setColor(embedColor);
 
-    await interaction.reply({ embeds: [embed], ephemeral: true });
+    await interaction.editReply({ embeds: [embed] });
   }
 };

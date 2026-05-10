@@ -12,6 +12,7 @@ module.exports = {
         .setRequired(true)),
 
   async execute(interaction) {
+    await interaction.deferReply({ });
     const guildId = interaction.guild.id;
     const settings = await Settings.findOne({ guildId });
     const embedColor = '#368f4c';
@@ -25,8 +26,8 @@ module.exports = {
       await userEco.save();
     }
 
-    if (amount <= 0) return interaction.reply({ content: 'You must withdraw more than 0.', ephemeral: true });
-    if (userEco.bank < amount) return interaction.reply({ content: 'You do not have enough in your bank.', ephemeral: true });
+    if (amount <= 0) return interaction.editReply({ content: 'You must withdraw more than 0.' });
+    if (userEco.bank < amount) return interaction.editReply({ content: 'You do not have enough in your bank.' });
 
     userEco.bank -= amount;
     userEco.cash += amount;
@@ -37,6 +38,6 @@ module.exports = {
       .setColor(embedColor)
       .setDescription(`You have withdrawn $${amount} from your bank.\nYour new balances:\n**Cash:** $${userEco.cash}\n**Bank:** $${userEco.bank}`);
 
-    return interaction.reply({ embeds: [embed] });
+    return interaction.editReply({ embeds: [embed] });
   }
 };

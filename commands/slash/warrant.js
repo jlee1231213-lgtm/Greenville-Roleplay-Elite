@@ -24,15 +24,16 @@ module.exports = {
         .setRequired(true)),
 
   async execute(interaction) {
+    await interaction.deferReply({ });
     const guildId = interaction.guild.id;
     const member = interaction.member;
 
     const settings = await Settings.findOne({ guildId });
-    if (!settings) return interaction.reply({ content: 'Server settings not found!', ephemeral: true });
+    if (!settings) return interaction.editReply({ content: 'Server settings not found!' });
 
     const leoRoleId = settings.leoRoleId;
-    if (!leoRoleId) return interaction.reply({ content: 'LEO role is not set in server settings.', ephemeral: true });
-    if (!member.roles.cache.has(leoRoleId)) return interaction.reply({ content: 'You must have the LEO role to issue warrants.', ephemeral: true });
+    if (!leoRoleId) return interaction.editReply({ content: 'LEO role is not set in server settings.' });
+    if (!member.roles.cache.has(leoRoleId)) return interaction.editReply({ content: 'You must have the LEO role to issue warrants.' });
 
     const targetUser = interaction.options.getUser('user');
     const offense = interaction.options.getString('offense');
@@ -68,6 +69,6 @@ Please comply with authorities to avoid further consequences.`)
       .setDescription(`You have successfully issued a warrant for ${targetUser.tag}.\n**Offense:** ${offense}\n**Duration:** ${time}\n**Reason:** ${reason}`)
       .setColor('#368f4c');
 
-    await interaction.reply({ embeds: [confirmationEmbed], ephemeral: true });
+    await interaction.editReply({ embeds: [confirmationEmbed] });
   }
 };

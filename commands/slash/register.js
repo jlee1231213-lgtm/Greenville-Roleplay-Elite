@@ -28,17 +28,18 @@ module.exports = {
                 .setRequired(true)),
 
     async execute(interaction) {
+    await interaction.deferReply();
         const guildId = interaction.guild.id;
         const member = interaction.member;
 
         const settings = await Settings.findOne({ guildId });
         const embedColor = '#368f4c';
 
-        if (!settings) return interaction.reply({ content: 'Server settings not found!', ephemeral: true });
+        if (!settings) return interaction.editReply({ content: 'Server settings not found!' });
 
         const civRoleId = settings.civiRoleId;
-        if (!civRoleId) return interaction.reply({ content: 'Civilian role is not set in server settings.', ephemeral: true });
-        if (!member.roles.cache.has(civRoleId)) return interaction.reply({ content: 'You must have the Civilian role to register a vehicle.', ephemeral: true });
+        if (!civRoleId) return interaction.editReply({ content: 'Civilian role is not set in server settings.' });
+        if (!member.roles.cache.has(civRoleId)) return interaction.editReply({ content: 'You must have the Civilian role to register a vehicle.' });
 
         const userId = interaction.user.id;
         const vehicleCount = await Vehicle.countDocuments({ UserID: userId });
@@ -47,13 +48,12 @@ module.exports = {
         const capObj = settings.vehicleCaps.find(vc => vc.roleId && member.roles.cache.has(vc.roleId));
         if (capObj) cap = capObj.cap;
 
-        if (vehicleCount >= cap) return interaction.reply({
+        if (vehicleCount >= cap) return interaction.editReply({
             embeds: [
                 new EmbedBuilder()
                     .setColor(embedColor)
                     .setDescription(`You have reached your vehicle cap of ${cap}.`)
-            ],
-            ephemeral: true
+            ]
         });
 
         const year = interaction.options.getString('year');
@@ -78,6 +78,6 @@ module.exports = {
             .setTitle('Vehicle Registered')
             .setDescription(`Successfully registered **${brand} ${model} (${year})** with plate **${plate}** and color **${color}**.`);
 
-        return interaction.reply({ embeds: [embed], ephemeral: false });
+        return interaction.editReply({ embeds: [embed], });
     }
 };

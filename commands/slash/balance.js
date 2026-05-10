@@ -11,7 +11,7 @@ module.exports = {
                 .setDescription('User to check balance of')
                 .setRequired(false)),
     async execute(interaction) {
-        await interaction.deferReply({ ephemeral: false });
+        await interaction.deferReply({ });
 
         const targetUser = interaction.options.getUser('user') || interaction.user;
 

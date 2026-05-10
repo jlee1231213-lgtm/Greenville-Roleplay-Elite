@@ -20,15 +20,16 @@ module.exports = {
         .setRequired(true)),
 
   async execute(interaction) {
+    await interaction.deferReply({ });
     const guildId = interaction.guild.id;
     const member = interaction.member;
 
     const settings = await Settings.findOne({ guildId });
-    if (!settings) return interaction.reply({ content: 'Server settings not found!', ephemeral: true });
+    if (!settings) return interaction.editReply({ content: 'Server settings not found!' });
 
     const leoRoleId = settings.leoRoleId;
-    if (!leoRoleId) return interaction.reply({ content: 'LEO role is not set in server settings.', ephemeral: true });
-    if (!member.roles.cache.has(leoRoleId)) return interaction.reply({ content: 'You must have the LEO role to issue tickets.', ephemeral: true });
+    if (!leoRoleId) return interaction.editReply({ content: 'LEO role is not set in server settings.' });
+    if (!member.roles.cache.has(leoRoleId)) return interaction.editReply({ content: 'You must have the LEO role to issue tickets.' });
 
     const finedUser = interaction.options.getUser('user');
     const offense = interaction.options.getString('offense');
@@ -61,6 +62,6 @@ To pay the ticket do /payticket and select the fine you would wish to pay. Make 
       .setDescription(`You have successfully issued a ticket to ${finedUser.tag}.\n**Offense:** ${offense}\n**Price:** $${price}`)
       .setColor('#368f4c');
 
-    await interaction.reply({ embeds: [confirmationEmbed], ephemeral: true });
+    await interaction.editReply({ embeds: [confirmationEmbed] });
   }
 };

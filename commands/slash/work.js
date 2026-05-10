@@ -11,30 +11,29 @@ module.exports = {
     .setDescription('Work to earn some cash.'),
 
   async execute(interaction) {
+    await interaction.deferReply();
     const { guild, user, member } = interaction;
 
     const settings = await Settings.findOne({ guildId: guild.id });
     const embedColor = '#368f4c';
 
     if (!settings || !settings.civiRoleId) {
-      return interaction.reply({
+      return interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setColor(embedColor)
             .setDescription("Civilian role is not set up in this server.")
-        ],
-        ephemeral: true
+        ]
       });
     }
 
     if (!member.roles.cache.has(settings.civiRoleId)) {
-      return interaction.reply({
+      return interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setColor(embedColor)
             .setDescription("You must have the **Civilian** role to use this command.")
-        ],
-        ephemeral: true
+        ]
       });
     }
 
@@ -48,13 +47,12 @@ module.exports = {
       const minutes = Math.floor(remaining / 60000);
       const seconds = Math.floor((remaining % 60000) / 1000);
 
-      return interaction.reply({
+      return interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setColor(embedColor)
             .setDescription(`You need to wait **${minutes}m ${seconds}s** before working again.`)
-        ],
-        ephemeral: true
+        ]
       });
     }
 
@@ -131,6 +129,6 @@ module.exports = {
       .setColor(embedColor)
       .setFooter({ text: `Total Cash: $${userEco.cash}` });
 
-    return interaction.reply({ embeds: [embed] });
+    return interaction.editReply({ embeds: [embed] });
   }
 };

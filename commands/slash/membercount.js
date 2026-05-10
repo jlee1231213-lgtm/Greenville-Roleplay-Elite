@@ -7,6 +7,7 @@ module.exports = {
     .setDescription('Display the current member count of the server.'),
 
   async execute(interaction) {
+    await interaction.deferReply();
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#368f4c';
 
@@ -28,6 +29,6 @@ module.exports = {
       .setColor(embedColor)
       .setTimestamp();
 
-    return interaction.reply({ embeds: [embed] });
+    return interaction.editReply({ embeds: [embed] });
   },
 };

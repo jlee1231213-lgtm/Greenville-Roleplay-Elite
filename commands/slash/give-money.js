@@ -16,6 +16,7 @@ module.exports = {
         .setRequired(true)),
 
   async execute(interaction) {
+    await interaction.deferReply({ });
     const { guild, member } = interaction;
     const targetUser = interaction.options.getUser('user');
     const amount = interaction.options.getNumber('amount');
@@ -24,47 +25,43 @@ module.exports = {
     const embedColor = '#368f4c';
 
     if (!settings?.civiRoleId || !member.roles.cache.has(settings.civiRoleId)) {
-      return interaction.reply({
+      return interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setColor(embedColor)
             .setDescription("You must have the **Civilian** role to use this command.")
-        ],
-        ephemeral: true
+        ]
       });
     }
 
     if (targetUser.bot) {
-      return interaction.reply({
+      return interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setColor(embedColor)
             .setDescription("You cannot give money to bots.")
-        ],
-        ephemeral: true
+        ]
       });
     }
 
     if (amount <= 0) {
-      return interaction.reply({
+      return interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setColor(embedColor)
             .setDescription("The amount must be greater than 0.")
-        ],
-        ephemeral: true
+        ]
       });
     }
 
     let senderEco = await Eco.findOne({ userId: interaction.user.id });
     if (!senderEco || senderEco.cash < amount) {
-      return interaction.reply({
+      return interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setColor(embedColor)
             .setDescription("You do not have enough cash to give.")
-        ],
-        ephemeral: true
+        ]
       });
     }
 
@@ -82,6 +79,6 @@ module.exports = {
       .setTitle('Money Transferred')
       .setDescription(`Successfully transferred **$${amount}** to ${targetUser}.`);
 
-    return interaction.reply({ embeds: [embed] });
+    return interaction.editReply({ embeds: [embed] });
   }
 };

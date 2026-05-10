@@ -14,22 +14,21 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    await interaction.deferReply({ });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const allowedRoleIds = [settings?.staffRoleId, settings?.adminRoleId].filter(Boolean);
 
     if (!interaction.member.roles.cache.some(role => allowedRoleIds.includes(role.id))) {
-      return interaction.reply({
+      return interaction.editReply({
         content: 'You do not have the required role to use this command.',
-        flags: MessageFlags.Ephemeral,
       });
     }
 
     const targetUser = interaction.options.getUser('user');
     startupCooldowns.delete(targetUser.id);
 
-    return interaction.reply({
+    return interaction.editReply({
       content: `Reset startup cooldown for <@${targetUser.id}>.`,
-      flags: MessageFlags.Ephemeral,
     });
   }
 };

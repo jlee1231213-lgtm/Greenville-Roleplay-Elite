@@ -14,12 +14,11 @@ module.exports = {
     .setName('cohost-end')
     .setDescription('End a cohost session'),
   async execute(interaction) {
+    await interaction.deferReply({ });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#368f4c';
     const allowedRoleIds = [settings?.staffRoleId, settings?.adminRoleId].filter(Boolean);
-    if (!interaction.member.roles.cache.some(role => allowedRoleIds.includes(role.id))) return interaction.reply({ embeds: [new EmbedBuilder().setDescription('You do not have the required role to use this command.').setColor(embedColor)], ephemeral: true });
-
-    await interaction.deferReply({ ephemeral: true });
+    if (!interaction.member.roles.cache.some(role => allowedRoleIds.includes(role.id))) return interaction.editReply({ embeds: [new EmbedBuilder().setDescription('You do not have the required role to use this command.').setColor(embedColor)] });
     const userId = interaction.user.id;
 
     const sessionEntry = [...activeStartupSessions.entries()]
@@ -47,6 +46,6 @@ module.exports = {
     if (originalCohostMessage && originalCohostMessage.reply) await originalCohostMessage.reply({ embeds: [endEmbed] });
     else await interaction.channel.send({ embeds: [endEmbed] });
 
-    await interaction.editReply({ content: 'Command executed successfully', ephemeral: true });
+    await interaction.editReply({ content: 'Command executed successfully' });
   }
 };

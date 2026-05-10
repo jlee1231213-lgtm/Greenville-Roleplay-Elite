@@ -7,6 +7,7 @@ module.exports = {
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
     .setDescription('Open a ticket support dropdown.'),
   async execute(interaction) {
+    await interaction.deferReply({ });
     const channelid = `${interaction.channel.id}`
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = settings?.embedcolor || '#368f4c';
@@ -60,9 +61,9 @@ Please include clear evidence and a detailed description of the incident to help
     const supportChannel = interaction.guild.channels.cache.get(`${channelid}`);
     if (supportChannel) {
       await supportChannel.send({ embeds: [embed], components: [row] });
-      await interaction.reply({ content: 'The support ticket options have been sent.', ephemeral: true });
+      await interaction.editReply({ content: 'The support ticket options have been sent.' });
     } else {
-      await interaction.reply({ content: 'Unable to find the support channel.', ephemeral: true });
+      await interaction.editReply({ content: 'Unable to find the support channel.' });
     }
   },
 };

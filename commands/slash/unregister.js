@@ -13,6 +13,7 @@ module.exports = {
                 .setRequired(true)
                 .setAutocomplete(true)),
     async execute(interaction) {
+    await interaction.deferReply();
         const guildId = interaction.guild.id;
         const settings = await Settings.findOne({ guildId });
         const embedColor = '#368f4c';
@@ -29,13 +30,12 @@ module.exports = {
             ]
         });
 
-        if (!vehicle) return interaction.reply({
+        if (!vehicle) return interaction.editReply({
             embeds: [
                 new EmbedBuilder()
                     .setColor(embedColor)
                     .setDescription('You do not own this vehicle.')
-            ],
-            ephemeral: true
+            ]
         });
 
         await vehicle.deleteOne();
@@ -45,6 +45,6 @@ module.exports = {
             .setTitle('Vehicle Unregistered')
             .setDescription(`Vehicle **${vehicle.brand} ${vehicle.model} (${vehicle.year})** has been unregistered successfully.`);
 
-        return interaction.reply({ embeds: [embed], ephemeral: false });
+        return interaction.editReply({ embeds: [embed], });
     }
 };

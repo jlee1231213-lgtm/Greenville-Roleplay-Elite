@@ -20,12 +20,13 @@ module.exports = {
         .setRequired(true)),
 
   async execute(interaction) {
+    await interaction.deferReply({ });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
-    if (!settings) return interaction.reply({ content: 'Server settings not found.', flags: MessageFlags.Ephemeral });
+    if (!settings) return interaction.editReply({ content: 'Server settings not found.' });
 
     const staffRoleId = settings.staffRoleId;
     if (staffRoleId && !interaction.member.roles.cache.has(staffRoleId)) {
-      return interaction.reply({ content: 'You must have the Staff role to use this command.', flags: MessageFlags.Ephemeral });
+      return interaction.editReply({ content: 'You must have the Staff role to use this command.' });
     }
 
     const target = interaction.options.getUser('user');
@@ -33,8 +34,8 @@ module.exports = {
     const reason = interaction.options.getString('reason');
     const guildMember = await interaction.guild.members.fetch(target.id).catch(() => null);
 
-    if (!guildMember) return interaction.reply({ content: 'User not found in the server.', flags: MessageFlags.Ephemeral });
-    if (!guildMember.moderatable) return interaction.reply({ content: 'I cannot mute that user.', flags: MessageFlags.Ephemeral });
+    if (!guildMember) return interaction.editReply({ content: 'User not found in the server.' });
+    if (!guildMember.moderatable) return interaction.editReply({ content: 'I cannot mute that user.' });
 
     const ms = duration * 60 * 1000;
     await guildMember.timeout(ms, reason);
@@ -50,6 +51,6 @@ module.exports = {
       .setColor(embedColor)
       .setTimestamp();
 
-    return interaction.reply({ embeds: [embed], flags: MessageFlags.Ephemeral });
+    return interaction.editReply({ embeds: [embed] });
   },
 };

@@ -95,26 +95,24 @@ module.exports = {
     ),
 
   async execute(interaction) {
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#368f4c';
     const allowedRoleIds = [settings?.staffRoleId, settings?.adminRoleId].filter(Boolean);
 
     if (!interaction.member.roles.cache.some(role => allowedRoleIds.includes(role.id))) {
-      return interaction.reply({
+      return interaction.editReply({
         content: 'You do not have the required role to use this command.',
-        flags: MessageFlags.Ephemeral,
       });
     }
 
     const overCooldownUntil = overCooldowns.get(interaction.user.id);
     if (overCooldownUntil && overCooldownUntil > Date.now()) {
-      return interaction.reply({
+      return interaction.editReply({
         content: `You can use /over again in ${formatCooldown(overCooldownUntil - Date.now())}.`,
-        flags: MessageFlags.Ephemeral,
       });
     }
-
-    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
     const userId = interaction.user.id;
     const note = interaction.options.getString('notes') || 'None provided.';

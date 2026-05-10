@@ -15,12 +15,11 @@ module.exports = {
     .setName('cohost')
     .setDescription('Cohost a session'),
   async execute(interaction) {
+    await interaction.deferReply({ });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#368f4c';
     const allowedRoleId = settings?.staffRoleId;
-    if (!allowedRoleId || !interaction.member.roles.cache.has(allowedRoleId)) return interaction.reply({ content: 'No permission', ephemeral: true });
-
-    await interaction.deferReply({ ephemeral: true });
+    if (!allowedRoleId || !interaction.member.roles.cache.has(allowedRoleId)) return interaction.editReply({ content: 'No permission' });
     const userId = interaction.user.id;
     const timestamp = new Date();
     const sessionId = uuidv4();
@@ -69,6 +68,6 @@ module.exports = {
     if (replyTarget && replyTarget.reply) await replyTarget.reply({ embeds: [cohostEmbed] });
     else await interaction.channel.send({ embeds: [cohostEmbed] });
 
-    await interaction.editReply({ content: 'Cohost registered successfully.', ephemeral: true });
+    await interaction.editReply({ content: 'Cohost registered successfully.' });
   }
 };
