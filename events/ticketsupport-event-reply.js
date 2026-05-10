@@ -207,8 +207,8 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
 
         try {
-          await interaction.channel.permissionOverwrites.edit(ticketData.roleId, { ViewChannel: false });
-          await interaction.channel.permissionOverwrites.edit(interaction.user.id, { ViewChannel: true, SendMessages: true });
+          await interaction.channel.permissionOverwrites.edit(ticketData.roleId, { deny: [PermissionsBitField.Flags.ViewChannel] });
+          await interaction.channel.permissionOverwrites.edit(interaction.user.id, { allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages] });
 
           const row = new ActionRowBuilder()
             .addComponents(
