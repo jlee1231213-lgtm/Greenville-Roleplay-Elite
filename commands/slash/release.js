@@ -7,6 +7,16 @@ const DEFAULT_RELEASE_EMBED = {
   image: 'https://media.discordapp.net/attachments/1492958669200031814/1502813548236111892/image.png?ex=6a0113ae&is=69ffc22e&hm=d499cd0ed6f25c701eeeb4b32a925e587c4a9b393b97114477f3b8c2495cfed2&=&format=webp&quality=lossless&width=1450&height=540',
 };
 
+function applyReleaseTokens(text, userId, ptStatus, frpLimit, sessionLink) {
+  if (!text) return text;
+  return text
+    .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
+    .replace(/\{\{pt\}\}|\$pt/g, ptStatus)
+    .replace(/\{\{frplimit\}\}|\$frplimit/g, frpLimit)
+    .replace(/\{\{link\}\}|\$link/g, sessionLink)
+    .replace(/\\n/g, '\n');
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("release")
@@ -59,13 +69,23 @@ module.exports = {
     const releaseTemplate = settings?.releaseEmbed || DEFAULT_RELEASE_EMBED;
 
     const embed = new EmbedBuilder()
-      .setTitle(releaseTemplate.title || DEFAULT_RELEASE_EMBED.title)
+      .setTitle(
+        applyReleaseTokens(
+          releaseTemplate.title || DEFAULT_RELEASE_EMBED.title,
+          interaction.user.id,
+          ptStatus,
+          frpLimit,
+          sessionLink
+        )
+      )
       .setDescription(
-        (releaseTemplate.description || DEFAULT_RELEASE_EMBED.description)
-          .replace(/\{\{user\}\}|\$user/g, `<@${interaction.user.id}>`)
-          .replace(/\{\{pt\}\}|\$pt/g, ptStatus)
-          .replace(/\{\{frplimit\}\}|\$frplimit/g, frpLimit)
-          .replace(/\{\{link\}\}|\$link/g, sessionLink)
+        applyReleaseTokens(
+          releaseTemplate.description || DEFAULT_RELEASE_EMBED.description,
+          interaction.user.id,
+          ptStatus,
+          frpLimit,
+          sessionLink
+        )
       )
       .setColor(embedColor)
       .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
