@@ -8,7 +8,7 @@ const startupCooldowns = new Map();
 const STARTUP_COOLDOWN_MS = 20 * 60 * 1000;
 
 const DEFAULT_STARTUP_EMBED = {
-  title: '## > <a:beatinghearts:1500587804445638897>   *__Greenville Roleplay Elite — Startup__* <a:beatinghearts:1500587804445638897>',
+  title: '## <a:beatinghearts:1500587804445638897>   *__Greenville Roleplay Elite — Startup__* <a:beatinghearts:1500587804445638897>',
   description: `<a:animatedarrow:1500579646725558352>  {{user}} is currently hosting a **Greenville Roleplay Elite session**. Before joining, please make sure you have reviewed the information in the ⁠**Comminty Dropdowns** channel and carefully read all guidelines listed below.\n\n<:dot:1500584469906591971> In order for this session to officially begin, we must reach **__{{reactions}}+__ reactions** on this startup message.\n\n<a:animatedarrow:1500968506114572359>  Review the **Restricted Vehicles List** to avoid any rule violations.\n<a:animatedarrow:1500968506114572359>  Make sure all of your vehicles are properly registered using the Greenville Roleplay Elite system bot!\n<a:animatedarrow:1500968506114572359>  Enable your Roblox privacy settings so that **'Everyone' can invite you to private servers!**`,
   image: 'https://media.discordapp.net/attachments/1492958669200031814/1502813547971874866/image.png?ex=6a0113ae&is=69ffc22e&hm=98d9ab691999e7822a7e00df0cdac135ffa45f20a447148cc4503ef157753efc&=&format=webp&quality=lossless&width=1992&height=720'
 };

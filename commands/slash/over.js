@@ -19,7 +19,7 @@ const overCooldowns = new Map();
 const OVER_COOLDOWN_MS = 20 * 60 * 1000;
 
 const DEFAULT_OVER_EMBED = {
-  title: '<a:beatinghearts:1500587804445638897> *__Greenville Roleplay Elite  - Session Concluded!__* <a:beatinghearts:1500587804445638897>',
+  title: '## <a:beatinghearts:1500587804445638897> *__Greenville Roleplay Elite  - Session Concluded!__* <a:beatinghearts:1500587804445638897>',
   description: '<:dot:1500584469906591971> {{user}} has officially **concluded the current session!** If there was issues within the session, feel free to open a ticket! Ensure you maximize your fun within the session!\n\n> `Start Time:` {{starttime}}\n> `End time:` {{endtime}}\n> Additional Notes: {{notes}}',
   image: 'https://media.discordapp.net/attachments/1492958669200031814/1502813548508745898/image.png?ex=6a0113ae&is=69ffc22e&hm=b629081c0601212faea30a418d85fc2ffc457541d1a3e64d69300c9571f30c01&=&format=webp&quality=lossless&width=1800&height=652',
 };

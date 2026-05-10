@@ -5,7 +5,7 @@ const { activeStartupSessions } = require('./startup');
 const { v4: uuidv4 } = require('uuid');
 
 const DEFAULT_COHOST_EMBED = {
-  title: '## > <a:beatinghearts:1500587804445638897>  *__Greenville Roleplay Elite - Session Co-host__* <a:beatinghearts:1500587804445638897>',
+  title: '## <a:beatinghearts:1500587804445638897>  *__Greenville Roleplay Elite - Session Co-host__* <a:beatinghearts:1500587804445638897>',
   description: '<:dot:1500584469906591971> {{user}} is co-hosting the current session, please redirect to co-host for any concerns or questions, if host isnt available.',
   image: null,
 };

@@ -31,7 +31,7 @@ module.exports = {
     const userMention = `<@${interaction.user.id}>`;
     const whitelistMentions = allowedRoleIds.map(roleId => `<@&${roleId}>`).join(' ');
     const eaMessageBody = [
-      '## > <a:beatinghearts:1500587804445638897> *__Greenville Roleplay Elite - Early Access__* <a:beatinghearts:1500587804445638897>',
+      '## <a:beatinghearts:1500587804445638897> *__Greenville Roleplay Elite - Early Access__* <a:beatinghearts:1500587804445638897>',
       `<a:animatedarrow:1500968506114572359> ${userMention} has released **Early Access.** If you have reacted, and have permission to join, please click the button below.`,
       '',
       '> <a:animatedarrow:1500968506114572359> Reminder; leaking this link will result in a **termination** alongside **moderation.**'

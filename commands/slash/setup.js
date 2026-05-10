@@ -3,7 +3,7 @@ const Settings = require('../../models/settings');
 const { activeStartupSessions } = require('./startup');
 
 const DEFAULT_SETUP_EMBED = {
-  title: '## > :loading: *__Greenville Roleplay Elite - Session Preparation!__* :loading:',
+  title: '## :loading: *__Greenville Roleplay Elite - Session Preparation!__* :loading:',
   description: '<:dot:1500584469906591971> {{user}} is officially setting up their session! While you wait for **EA & Release**, make sure you registered a **vehicle**.\n**Please don\'t ping the host** during this time, setup takes **5-10 minutes.**',
   image: null,
 };

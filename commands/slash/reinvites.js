@@ -2,7 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const Settings = require('../../models/settings');
 
 const DEFAULT_REINVITES_EMBED = {
-  title: '## > :beatinghearts: *__Greenville Roleplay Elite - Re-invites Released__*',
+  title: '## :beatinghearts: *__Greenville Roleplay Elite - Re-invites Released__*',
   description: ':animatedarrow: {{user}} has released reinvites. If you missed the gran opening, please join by clicking the button below!\n\n:animatedarrow: FRP Speed: {{frplimit}}\n:animatedarrow: LEO Status: {{pt}}\n:animatedarrow: Host: {{user}}\n:animatedarrow: Session link: {{link}}',
   image: 'https://media.discordapp.net/attachments/1492958669200031814/1503075550858711070/image.png?ex=6a0207b1&is=6a00b631&hm=ab6a788a316838df91aa02a88559f60bb33686d1adb90e09b5cbca1e7d9ae821&=&format=webp&quality=lossless&width=2330&height=764',
 };
