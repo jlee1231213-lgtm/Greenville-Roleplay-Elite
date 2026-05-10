@@ -54,7 +54,7 @@ const handleCommands = async () => {
   }
 
   const clientId = process.env.clientId || Buffer.from(token.split(".")[0], "base64").toString("utf8");
-  const guildId = "1490472044213829864";
+  const guildId = "1500582461703327754";
   const rest = new REST({ version: "10" }).setToken(token);
 
   try {
