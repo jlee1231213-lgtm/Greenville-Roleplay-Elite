@@ -14,7 +14,7 @@ module.exports = {
     .setName('cohost-end')
     .setDescription('End a cohost session'),
   async execute(interaction) {
-    await interaction.deferReply({ });
+    await interaction.deferReply({ ephemeral: true });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#368f4c';
     const allowedRoleIds = [settings?.staffRoleId, settings?.adminRoleId].filter(Boolean);

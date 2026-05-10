@@ -96,7 +96,7 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+    await interaction.deferReply({ ephemeral: true });
 
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#368f4c';

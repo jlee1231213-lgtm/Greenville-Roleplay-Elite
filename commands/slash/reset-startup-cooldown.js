@@ -14,7 +14,7 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    await interaction.deferReply({ });
+    await interaction.deferReply({ ephemeral: true });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const allowedRoleIds = [settings?.staffRoleId, settings?.adminRoleId].filter(Boolean);
 
