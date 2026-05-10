@@ -23,19 +23,19 @@ module.exports = {
     .setDescription("Post reinvites for a session"),
 
   async execute(interaction) {
+    await interaction.deferReply({ ephemeral: true });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#368f4c';
     const staffRoleId = settings?.staffRoleId;
 
     if (!staffRoleId || !interaction.member.roles.cache.has(staffRoleId)) {
-      return interaction.reply({
+      return interaction.editReply({
         embeds: [
           new EmbedBuilder()
             .setTitle('Data not found')
             .setDescription('You do not have permission to use this command or data is not configured. Please use `/settings` to configure the Embed.')
             .setColor(embedColor)
         ],
-        ephemeral: true
       });
     }
 
@@ -76,7 +76,7 @@ module.exports = {
 
     const reinviteMessage = await interaction.channel.send({ embeds: [embed] });
     await reinviteMessage.react('beatinghearts:1500587804445638897').catch(() => {});
-    await interaction.reply({ content: 'Reinvites sent successfully.', ephemeral: true });
+    await interaction.editReply({ content: 'Reinvites sent successfully.' });
 
     let logChannel;
     try { logChannel = await interaction.client.channels.fetch(settings?.logChannelId || '1419318345731411968'); } catch { logChannel = null; }

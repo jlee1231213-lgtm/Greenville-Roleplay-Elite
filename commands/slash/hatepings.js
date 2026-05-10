@@ -13,15 +13,13 @@ module.exports = {
     .setDescription('Post the hate pings info embed.'),
 
   async execute(interaction) {
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const staffRoleId = settings?.staffRoleId;
     const hatePingsTemplate = settings?.hatepingsEmbed || DEFAULT_HATEPINGS_EMBED;
 
     if (staffRoleId && !interaction.member.roles.cache.has(staffRoleId)) {
-      return interaction.reply({
-        content: 'You must have the Staff role to use this command.',
-        flags: MessageFlags.Ephemeral,
-      });
+      return interaction.editReply({ content: 'You must have the Staff role to use this command.' });
     }
 
     const embed = new EmbedBuilder()
@@ -32,6 +30,6 @@ module.exports = {
     if (hatePingsTemplate.image?.startsWith('http')) embed.setImage(hatePingsTemplate.image);
 
     await interaction.channel.send({ embeds: [embed] });
-    return interaction.reply({ content: 'Hate pings embed sent.', flags: MessageFlags.Ephemeral });
+    return interaction.editReply({ content: 'Hate pings embed sent.' });
   },
 };
