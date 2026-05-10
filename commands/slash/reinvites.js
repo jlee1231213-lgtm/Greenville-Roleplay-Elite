@@ -2,10 +2,17 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const Settings = require('../../models/settings');
 
 const DEFAULT_REINVITES_EMBED = {
-  title: '## > <a:beatinghearts:1500587804445638897>   *__Greenville Roleplay Elite - Re-invites!__* <a:beatinghearts:1500587804445638897>',
-  description: '<:dot:1500584469906591971> Welcome to reinivites. Please make sure if you were late to joining the session, you react here. for this to commence this message needs **__3+ reactions!__**',
-  image: 'https://media.discordapp.net/attachments/1492958669200031814/1502813571040415894/image.png?ex=6a0113b4&is=69ffc234&hm=efb531f3868add4b148fde6a1189c155f574360747fff83635f67036589c1586&=&format=webp&quality=lossless&width=2330&height=764',
+  title: '## > :beatinghearts: *__Greenville Roleplay Elite - Re-invites Released__*',
+  description: ':animatedarrow: {{user}} has released reinvites. If you missed the gran opening, please join by clicking the button below!\n\n:animatedarrow: FRP Speed:\n:animatedarrow: LEO Status:\n:animatedarrow: Host:\n:animatedarrow: Session link:',
+  image: 'https://media.discordapp.net/attachments/1492958669200031814/1503075550858711070/image.png?ex=6a0207b1&is=6a00b631&hm=ab6a788a316838df91aa02a88559f60bb33686d1adb90e09b5cbca1e7d9ae821&=&format=webp&quality=lossless&width=2330&height=764',
 };
+
+function applyReinvitesTokens(text, userId) {
+  if (!text) return text;
+  return text
+    .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
+    .replace(/\\n/g, '\n');
+}
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -38,8 +45,8 @@ module.exports = {
     const userToPing = interaction.user.id;
 
     const embed = new EmbedBuilder()
-      .setTitle(reinvitesTemplate.title || DEFAULT_REINVITES_EMBED.title)
-      .setDescription(reinvitesTemplate.description || DEFAULT_REINVITES_EMBED.description)
+      .setTitle(applyReinvitesTokens(reinvitesTemplate.title || DEFAULT_REINVITES_EMBED.title, interaction.user.id))
+      .setDescription(applyReinvitesTokens(reinvitesTemplate.description || DEFAULT_REINVITES_EMBED.description, interaction.user.id))
       .setColor(embedColor)
       .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
 
