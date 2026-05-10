@@ -43,8 +43,10 @@ module.exports = {
     }
 
     const setupTemplate = settings?.setupEmbed || DEFAULT_SETUP_EMBED;
+    const setupTitle = (setupTemplate.title || DEFAULT_SETUP_EMBED.title || '').trim();
+    const normalizedSetupTitle = setupTitle.startsWith('##') ? setupTitle : '## ' + setupTitle;
     const setupEmbed = new EmbedBuilder()
-      .setTitle(setupTemplate.title || DEFAULT_SETUP_EMBED.title)
+      .setTitle(normalizedSetupTitle)
       .setDescription(
         (setupTemplate.description || DEFAULT_SETUP_EMBED.description)
           .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)

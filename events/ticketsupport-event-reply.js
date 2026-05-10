@@ -163,7 +163,7 @@ module.exports = {
       const closeBtn = new ButtonBuilder().setCustomId('closeTicket').setLabel('Close').setStyle(ButtonStyle.Danger);
       const row = new ActionRowBuilder().addComponents(claimBtn, closeBtn);
 
-      const msg = await ticketChannel.send({ content: `<@${ownerId}> <@&${roleId}>`, embeds: [embed], components: [row] });
+      const msg = await ticketChannel.send({ content: `<@${ownerId}> <@1501214256442380470>`, embeds: [embed], components: [row] });
       await msg.pin();
 
       await Ticket.create({
