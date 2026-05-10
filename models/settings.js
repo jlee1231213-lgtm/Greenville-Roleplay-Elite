@@ -10,6 +10,7 @@ const settingsSchema = new mongoose.Schema({
   eaRoleId: { type: String, default: null },
   staffRoleId: { type: String, default: null },
   adminRoleId: { type: String, default: null },
+  staffingDepartmentRoleId: { type: String, default: null },
 
   embedcolor: { type: String, default: '#368f4c' },
 
