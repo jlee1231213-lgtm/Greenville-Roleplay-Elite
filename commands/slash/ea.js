@@ -30,18 +30,19 @@ module.exports = {
     const sessionLink = interaction.options.getString('link');
     const userMention = `<@${interaction.user.id}>`;
     const whitelistMentions = allowedRoleIds.map(roleId => `<@&${roleId}>`).join(' ');
-    const eaMessageBody = [
-      '## <a:beatinghearts:1500587804445638897> *__Greenville Roleplay Elite - Early Access__* <a:beatinghearts:1500587804445638897>',
-      `<a:animatedarrow:1500968506114572359> ${userMention} has released **Early Access.** If you have reacted, and have permission to join, please click the button below.`,
-      '',
-      '> <a:animatedarrow:1500968506114572359> Reminder; leaking this link will result in a **termination** alongside **moderation.**'
-    ].join('\n');
 
     const button = new ButtonBuilder().setCustomId('get_ealink').setLabel('Get Link').setStyle(ButtonStyle.Success);
     const row = new ActionRowBuilder().addComponents(button);
 
+    const eaEmbed = new EmbedBuilder()
+      .setTitle('<a:beatinghearts:1500587804445638897>  *__Greenville Roleplay Elite - Early Access__*  <a:beatinghearts:1500587804445638897>')
+      .setDescription(`<a:animatedarrow:1500968506114572359> ${userMention} has released **Early Access.** If you have reacted, and have permission to join, please click the button below.\n\n> <a:animatedarrow:1500968506114572359> Reminder; leaking this link will result in a **termination** alongside **moderation.**`)
+      .setColor(embedColor)
+      .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
+
     const earlyAccessMessage = await interaction.channel.send({
-      content: `${whitelistMentions}\n\n${eaMessageBody}`,
+      content: whitelistMentions,
+      embeds: [eaEmbed],
       components: [row],
       allowedMentions: { roles: allowedRoleIds }
     });
