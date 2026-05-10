@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const Settings = require('../../models/settings');
+const StartupSession = require('../../models/startupsession');
 const { activeStartupSessions } = require('./startup');
 const { v4: uuidv4 } = require('uuid');
 
@@ -25,15 +26,32 @@ module.exports = {
     const sessionId = uuidv4();
     activeStartupSessions.set(sessionId, { userId, timestamp, type: 'cohost' });
 
-    const latestStartup = [...activeStartupSessions.entries()]
-      .filter(([id, data]) => data.type === 'session')
-      .sort((a, b) => b[1].timestamp - a[1].timestamp)[0];
+    let replyTarget = null;
 
-    let replyTarget;
-    if (latestStartup) {
-      const [id, data] = latestStartup;
-      if (data.messageId) {
-        try { replyTarget = await interaction.channel.messages.fetch(data.messageId); } catch { replyTarget = null; }
+    const startupFromDb = await StartupSession.findOne({ guildId: interaction.guild.id }).sort({ createdAt: -1 });
+    if (startupFromDb) {
+      try {
+        const startupChannel = await interaction.client.channels.fetch(startupFromDb.channelId);
+        replyTarget = await startupChannel.messages.fetch(startupFromDb.messageId);
+      } catch {
+        replyTarget = null;
+      }
+    }
+
+    if (!replyTarget) {
+      const latestStartup = [...activeStartupSessions.entries()]
+        .filter(([id, data]) => data.type === 'session')
+        .sort((a, b) => b[1].timestamp - a[1].timestamp)[0];
+
+      if (latestStartup) {
+        const [id, data] = latestStartup;
+        if (data.messageId) {
+          try {
+            replyTarget = await interaction.channel.messages.fetch(data.messageId);
+          } catch {
+            replyTarget = null;
+          }
+        }
       }
     }
 
