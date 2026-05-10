@@ -1,0 +1,101 @@
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { v4: uuidv4 } = require('uuid');
+const StartupSession = require('../../models/startupsession');
+const Settings = require('../../models/settings');
+
+const activeStartupSessions = new Map();
+
+const DEFAULT_STARTUP_EMBED = {
+  title: '## > <a:beatinghearts:1500587804445638897>   *__Greenville Roleplay Elite — Startup__* <a:beatinghearts:1500587804445638897>',
+  description: `<a:animatedarrow:1500579646725558352>  {{user}} is currently hosting a **Greenville Roleplay Elite session**. Before joining, please make sure you have reviewed the information in the ⁠**Comminty Dropdowns** channel and carefully read all guidelines listed below.\n\n<:dot:1500584469906591971> In order for this session to officially begin, we must reach **__{{reactions}}+__ reactions** on this startup message.\n\n<a:animatedarrow:1500968506114572359>  Review the **Restricted Vehicles List** to avoid any rule violations.\n<a:animatedarrow:1500968506114572359>  Make sure all of your vehicles are properly registered using the Greenville Roleplay Elite system bot!\n<a:animatedarrow:1500968506114572359>  Enable your Roblox privacy settings so that **'Everyone' can invite you to private servers!**`,
+  image: 'https://media.discordapp.net/attachments/1492958669200031814/1502813547971874866/image.png?ex=6a0113ae&is=69ffc22e&hm=98d9ab691999e7822a7e00df0cdac135ffa45f20a447148cc4503ef157753efc&=&format=webp&quality=lossless&width=1992&height=720'
+};
+
+function applyStartupTokens(text, userId, now, reactionsRequired) {
+  if (!text) return text;
+  return text
+    .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
+    .replace(/\{\{date\}\}|\$date/g, now.toLocaleString())
+    .replace(/\{\{reactions\}\}|\$reactions/g, String(reactionsRequired));
+}
+
+module.exports = {
+  data: new SlashCommandBuilder()
+    .setName('startup')
+    .setDescription('Start a session')
+    .addIntegerOption(option =>
+      option.setName('reactions')
+        .setDescription('Amount of reactions needed to start')
+        .setRequired(true)
+    ),
+
+  async execute(interaction) {
+    await interaction.deferReply({ ephemeral: true });
+
+    let settings = await Settings.findOne({ guildId: interaction.guild.id });
+    if (!settings) return interaction.editReply({ content: 'Settings not found', ephemeral: true });
+
+    const staffRoleId = settings.staffRoleId;
+    if (!staffRoleId || !interaction.member.roles.cache.has(staffRoleId)) {
+      return interaction.editReply({ content: 'You must have the Staff role', ephemeral: true });
+    }
+
+    const reactionsRequired = interaction.options.getInteger('reactions');
+    const userId = interaction.user.id;
+    const now = new Date();
+    const embedColor = '#368f4c';
+
+    // Force update startup embed in settings to the new default every time this command is run.
+    settings.startupEmbed = DEFAULT_STARTUP_EMBED;
+    await settings.save();
+    // Reload settings in case of any DB triggers/middleware.
+    settings = await Settings.findOne({ guildId: interaction.guild.id });
+
+    const startupTemplate = settings.startupEmbed || DEFAULT_STARTUP_EMBED;
+    const setupTemplate = settings.setupEmbed || {};
+
+    let embedDescription = applyStartupTokens(startupTemplate.description, userId, now, reactionsRequired) || 'Data was not found, please use `/settings` to configure the Embed';
+    embedDescription = embedDescription.replace(/@everyone/g, '');
+    const embed = new EmbedBuilder()
+      .setTitle(applyStartupTokens(startupTemplate.title, userId, now, reactionsRequired) || 'Data not found')
+      .setDescription(embedDescription)
+      .setColor(embedColor)
+      .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
+
+    if (startupTemplate.image && startupTemplate.image.startsWith('http')) embed.setImage(startupTemplate.image);
+
+    const message = await interaction.channel.send({ content: '@everyone', embeds: [embed] });
+    await message.react('✅');
+
+    const sessionId = uuidv4();
+    activeStartupSessions.set(sessionId, { userId, timestamp: now, type: 'session', messageId: message.id });
+
+    await StartupSession.create({ guildId: interaction.guild.id, channelId: interaction.channel.id, messageId: message.id, createdAt: now });
+
+    await interaction.editReply({ content: 'Session started successfully.', ephemeral: true });
+
+    const filter = (reaction, user) => reaction.emoji.name === '✅' && !user.bot;
+    const collector = message.createReactionCollector({ filter, max: reactionsRequired, time: 1000 * 60 * 60 }); 
+
+    collector.on('collect', async () => {
+      if (message.reactions.cache.get('✅')?.count - 1 >= reactionsRequired) {
+        collector.stop();
+
+        const setupEmbed = new EmbedBuilder()
+          .setTitle(setupTemplate.title?.replace(/\$user/g, `<@${userId}>`) || 'Data not found')
+          .setDescription(setupTemplate.description?.replace(/\$user/g, `<@${userId}>`) || 'Data was not found, please use `/settings` to configure the Embed')
+          .setColor(embedColor);
+
+        if (setupTemplate.image && setupTemplate.image.startsWith('http')) setupEmbed.setImage(setupTemplate.image);
+
+        await message.reply({ embeds: [setupEmbed] });
+      }
+    });
+
+    collector.on('end', collected => {
+      console.log(`Reaction collector ended. Total collected: ${collected.size}`);
+    });
+  }
+};
+
+module.exports.activeStartupSessions = activeStartupSessions;
