@@ -11,6 +11,7 @@ const {
   ComponentType,
 } = require('discord.js');
 const SessionLog = require('../../models/sessionlog');
+const StartupSession = require('../../models/startupsession');
 const Settings = require('../../models/settings');
 const { activeStartupSessions } = require('../slash/startup');
 
@@ -32,6 +33,44 @@ function clip(value, max = 1024) {
 function normalizeTemplateText(text) {
   if (!text) return text;
   return text.replace(/\\n/g, '\n');
+}
+
+async function purgeChannelExceptPinned(channel) {
+  if (!channel?.isTextBased?.()) return 0;
+
+  let deletedCount = 0;
+  let before;
+  const fourteenDaysMs = 14 * 24 * 60 * 60 * 1000;
+
+  while (true) {
+    const messages = await channel.messages.fetch({ limit: 100, ...(before ? { before } : {}) });
+    if (!messages.size) break;
+
+    const nonPinned = messages.filter(msg => !msg.pinned);
+    const now = Date.now();
+    const recentIds = [];
+    const oldMessages = [];
+
+    for (const message of nonPinned.values()) {
+      if (now - message.createdTimestamp < fourteenDaysMs) recentIds.push(message.id);
+      else oldMessages.push(message);
+    }
+
+    if (recentIds.length) {
+      const bulkDeleted = await channel.bulkDelete(recentIds, true).catch(() => null);
+      deletedCount += bulkDeleted?.size || 0;
+    }
+
+    for (const message of oldMessages) {
+      const removed = await message.delete().then(() => 1).catch(() => 0);
+      deletedCount += removed;
+    }
+
+    before = messages.last()?.id;
+    if (!before) break;
+  }
+
+  return deletedCount;
 }
 
 module.exports = {
@@ -109,7 +148,20 @@ module.exports = {
       .setStyle(ButtonStyle.Success);
     const actionRow = new ActionRowBuilder().addComponents(feedbackButton);
 
-    const sessionEndedMessage = await interaction.channel.send({ embeds: [embed], components: [actionRow] });
+    let startupChannel = interaction.channel;
+    const startupFromDb = await StartupSession.findOne({ guildId: interaction.guild.id }).sort({ createdAt: -1 });
+    if (startupFromDb) {
+      try {
+        const fetchedChannel = await interaction.client.channels.fetch(startupFromDb.channelId);
+        if (fetchedChannel?.isTextBased?.()) startupChannel = fetchedChannel;
+      } catch {
+        startupChannel = interaction.channel;
+      }
+    }
+
+    await purgeChannelExceptPinned(startupChannel);
+
+    const sessionEndedMessage = await startupChannel.send({ embeds: [embed], components: [actionRow] });
 
     const collector = sessionEndedMessage.createMessageComponentCollector({
       componentType: ComponentType.Button,
@@ -214,7 +266,7 @@ module.exports = {
     });
 
     return interaction.editReply({
-      content: 'Session concluded successfully.',
+      content: `Session concluded successfully. Purged non-pinned messages in <#${startupChannel.id}>.`,
     });
   },
 };
