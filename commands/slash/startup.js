@@ -118,3 +118,4 @@ module.exports = {
 };
 
 module.exports.activeStartupSessions = activeStartupSessions;
+module.exports.startupCooldowns = startupCooldowns;

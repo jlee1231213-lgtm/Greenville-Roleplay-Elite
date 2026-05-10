@@ -83,6 +83,7 @@ async function purgeChannelExceptPinned(channel) {
   return deletedCount;
 }
 
+module.exports.overCooldowns = overCooldowns;
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('over')
