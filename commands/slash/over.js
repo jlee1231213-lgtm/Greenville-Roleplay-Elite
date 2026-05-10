@@ -25,7 +25,8 @@ const DEFAULT_OVER_EMBED = {
 };
 
 function formatDateTime(date) {
-  return new Date(date).toLocaleString();
+  const timestamp = Math.floor(new Date(date).getTime() / 1000);
+  return `<t:${timestamp}:F>`;
 }
 
 function clip(value, max = 1024) {
