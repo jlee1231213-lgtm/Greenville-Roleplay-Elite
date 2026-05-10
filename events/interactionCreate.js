@@ -13,9 +13,13 @@ module.exports = {
                 console.error(error);
 
                 const isDatabaseIssue = /before initial connection is complete|bad auth|Mongo/i.test(error.message || '');
-                const content = isDatabaseIssue
+                const baseContent = isDatabaseIssue
                     ? 'Database is currently unavailable. Please try again shortly.'
                     : 'There was an error while executing this command!';
+                const details = !isDatabaseIssue && error?.message
+                    ? `\n\`/${interaction.commandName}\` failed: ${String(error.message).slice(0, 120)}`
+                    : '';
+                const content = `${baseContent}${details}`;
 
                 if (interaction.deferred) {
                     await interaction.editReply({ content });

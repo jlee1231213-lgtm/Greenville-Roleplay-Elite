@@ -44,18 +44,17 @@ module.exports = {
     await interaction.deferReply({ ephemeral: true });
 
     let settings = await Settings.findOne({ guildId: interaction.guild.id });
-    if (!settings) return interaction.editReply({ content: 'Settings not found', ephemeral: true });
+    if (!settings) return interaction.editReply({ content: 'Settings not found' });
 
     const staffRoleId = settings.staffRoleId;
     if (!staffRoleId || !interaction.member.roles.cache.has(staffRoleId)) {
-      return interaction.editReply({ content: 'You must have the Staff role', ephemeral: true });
+      return interaction.editReply({ content: 'You must have the Staff role' });
     }
 
     const startupCooldownUntil = startupCooldowns.get(interaction.user.id);
     if (startupCooldownUntil && startupCooldownUntil > Date.now()) {
       return interaction.editReply({
         content: `You can use /startup again in ${formatCooldown(startupCooldownUntil - Date.now())}.`,
-        ephemeral: true,
       });
     }
 
@@ -78,7 +77,7 @@ module.exports = {
     if (startupTemplate.image && startupTemplate.image.startsWith('http')) embed.setImage(startupTemplate.image);
 
     const message = await interaction.channel.send({ content: '@everyone', embeds: [embed] });
-    await message.react(STARTUP_REACTION_EMOJI_TAG);
+    await message.react(STARTUP_REACTION_EMOJI_TAG).catch(() => null);
 
     startupCooldowns.set(interaction.user.id, Date.now() + STARTUP_COOLDOWN_MS);
 
@@ -87,7 +86,7 @@ module.exports = {
 
     await StartupSession.create({ guildId: interaction.guild.id, channelId: interaction.channel.id, messageId: message.id, createdAt: now });
 
-    await interaction.editReply({ content: 'Session started successfully.', ephemeral: true });
+    await interaction.editReply({ content: 'Session started successfully.' });
 
     const filter = (reaction, user) => reaction.emoji.id === STARTUP_REACTION_EMOJI_ID && !user.bot;
     const collector = message.createReactionCollector({ filter, max: reactionsRequired, time: 1000 * 60 * 60 }); 
