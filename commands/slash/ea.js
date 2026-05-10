@@ -2,6 +2,13 @@ const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ActionRowBuilder, Comp
 const StartupSession = require('../../models/startupsession');
 const Settings = require('../../models/settings');
 
+const EA_WHITELIST_ROLE_IDS = [
+  '1503044187455619228',
+  '1503044125430255626',
+  '1503044009797619983',
+  '1501214256442380470'
+];
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("ea")
@@ -16,20 +23,7 @@ module.exports = {
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#368f4c';
 
-    if (!settings) {
-      return interaction.reply({
-        embeds: [
-          new EmbedBuilder()
-            .setTitle('Data not found')
-            .setDescription('Data was not found, please use `/settings` to configure the Embed.')
-            .setColor(embedColor)
-            .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
-        ],
-        ephemeral: true
-      });
-    }
-
-    const allowedRoleIds = [settings.eaRoleId, settings.staffRoleId, settings.adminRoleId, settings.leoRoleId].filter(Boolean);
+    const allowedRoleIds = EA_WHITELIST_ROLE_IDS;
     if (!interaction.member.roles.cache.some(r => allowedRoleIds.includes(r.id))) {
       return interaction.reply({
         embeds: [
@@ -45,25 +39,26 @@ module.exports = {
 
     const sessionLink = interaction.options.getString('link');
     const userMention = `<@${interaction.user.id}>`;
-    const eaTemplate = settings.eaEmbed || {};
+    const whitelistMentions = allowedRoleIds.map(roleId => `<@&${roleId}>`).join(' ');
+    const eaMessageBody = [
+      '## > <a:beatinghearts:1500587804445638897> *__Greenville Roleplay Elite - Early Access__* <a:beatinghearts:1500587804445638897>',
+      `<a:animatedarrow:1500968506114572359> ${userMention} has released **Early Access.** If you have reacted, and have permission to join, please click the button below.`,
+      '',
+      '> <a:animatedarrow:1500968506114572359> Reminder; leaking this link will result in a **termination** alongside **moderation.**'
+    ].join('\n');
 
-    const embed = new EmbedBuilder()
-      .setTitle(eaTemplate.title?.replace(/\$user/g, userMention) || 'Data not found')
-      .setDescription(eaTemplate.description?.replace(/\$user/g, userMention) || 'Data was not found, please use `/settings` to configure the Embed.')
-      .setColor(embedColor)
-      .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
-
-    if (eaTemplate.image?.startsWith('http')) embed.setImage(eaTemplate.image);
-    if (eaTemplate.thumbnail?.startsWith('http')) embed.setThumbnail(eaTemplate.thumbnail);
-
-    const button = new ButtonBuilder().setCustomId('get_ealink').setLabel('Get Link').setStyle(ButtonStyle.Primary);
+    const button = new ButtonBuilder().setCustomId('get_ealink').setLabel('Get Link').setStyle(ButtonStyle.Success);
     const row = new ActionRowBuilder().addComponents(button);
 
-    const earlyAccessMessage = await interaction.channel.send({ content: '@here', embeds: [embed], components: [row] });
+    const earlyAccessMessage = await interaction.channel.send({
+      content: `${whitelistMentions}\n\n${eaMessageBody}`,
+      components: [row],
+      allowedMentions: { roles: allowedRoleIds }
+    });
     await interaction.editReply({ content: 'Early access message sent successfully.' });
 
     let logChannel;
-    try { logChannel = await interaction.client.channels.fetch(settings.logChannelId); } catch { logChannel = null; }
+    try { logChannel = settings?.logChannelId ? await interaction.client.channels.fetch(settings.logChannelId) : null; } catch { logChannel = null; }
 
     if (logChannel) {
       logChannel.send({

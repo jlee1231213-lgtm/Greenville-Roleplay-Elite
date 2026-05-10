@@ -7,7 +7,7 @@ module.exports = {
     const status = 'online';
 
     const activity = {
-      name: 'Tickets',
+      name: 'Greenville Roleplay Elite',
       type: ActivityType.Watching,
     };
 
