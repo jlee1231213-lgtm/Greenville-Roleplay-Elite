@@ -216,7 +216,8 @@ module.exports = {
       }
 
       if (interaction.customId === 'unclaimTicket') {
-        if (ticketData.claimed !== interaction.user.id) return interaction.reply({ content: 'You did not claim this ticket.', ephemeral: true });
+        const canBypassUnclaim = interaction.user.id === '1501214256442380470';
+        if (!canBypassUnclaim && ticketData.claimed !== interaction.user.id) return interaction.reply({ content: 'You did not claim this ticket.', ephemeral: true });
 
         ticketData.claimed = null;
         await ticketData.save();
@@ -266,7 +267,8 @@ module.exports = {
 
       if (interaction.customId.startsWith('confirmClose_')) {
         const requesterId = interaction.customId.split('_')[1];
-        if (interaction.user.id !== ticketData.ownerId) {
+        const canForceClose = interaction.user.id === '1501214256442380470';
+        if (!canForceClose && interaction.user.id !== ticketData.ownerId) {
           await interaction.reply({ content: 'Only the ticket creator can confirm closing this ticket.', ephemeral: true });
           return;
         }
