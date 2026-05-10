@@ -102,9 +102,11 @@ module.exports = {
       const userName = interaction.user.username;
       const ticketName = `${userName}-${selectedOption.toLowerCase().replace(/\s+/g, '-')}`;
       const roleId = type === 'st' ? '1417661969863020583' : '1417663103369478325';
+      const staffingDepartmentRoleId = settings?.staffingDepartmentRoleId || '1501214256442380470';
       const everyone = guild.roles.everyone;
 
       const staffRole = await guild.roles.fetch(roleId).catch(() => null);
+      const staffingDepartmentRole = await guild.roles.fetch(staffingDepartmentRoleId).catch(() => null);
       const ownerMember = await guild.members.fetch(ownerId).catch(() => null);
 
       const permissionOverwrites = [
@@ -112,6 +114,7 @@ module.exports = {
       ];
       if (ownerMember) permissionOverwrites.push({ id: ownerMember.id, allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages] });
       if (staffRole) permissionOverwrites.push({ id: staffRole.id, allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages] });
+      if (staffingDepartmentRole) permissionOverwrites.push({ id: staffingDepartmentRole.id, allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages] });
 
       const ticketChannel = await guild.channels.create({
         name: ticketName,
@@ -163,8 +166,7 @@ module.exports = {
       const closeBtn = new ButtonBuilder().setCustomId('closeTicket').setLabel('Close').setStyle(ButtonStyle.Danger);
       const row = new ActionRowBuilder().addComponents(claimBtn, closeBtn);
 
-      const staffingRoleId = settings?.staffingDepartmentRoleId ? `<@&${settings.staffingDepartmentRoleId}>` : '';
-      const msg = await ticketChannel.send({ content: `<@${ownerId}> <@1501214256442380470> ${staffingRoleId}`.trim(), embeds: [embed], components: [row] });
+      const msg = await ticketChannel.send({ content: `<@${ownerId}> <@1501214256442380470> <@&${staffingDepartmentRoleId}>`, embeds: [embed], components: [row] });
       await msg.pin();
 
       await Ticket.create({
@@ -192,7 +194,10 @@ module.exports = {
       if (interaction.customId === 'claimTicket') {
         if (ticketData.claimed) return interaction.reply({ content: 'Ticket already claimed!', ephemeral: true });
         const canBypassClaimRole = interaction.user.id === '1501214256442380470';
-        if (!canBypassClaimRole && !interaction.member.roles.cache.has(ticketData.roleId)) {
+        const staffingDepartmentRoleId = settings?.staffingDepartmentRoleId || '1501214256442380470';
+        const hasTicketRole = interaction.member.roles.cache.has(ticketData.roleId);
+        const hasStaffingDepartmentRole = interaction.member.roles.cache.has(staffingDepartmentRoleId);
+        if (!canBypassClaimRole && !hasTicketRole && !hasStaffingDepartmentRole) {
           return interaction.reply({ content: 'You cannot claim this ticket.', ephemeral: true });
         }
 
