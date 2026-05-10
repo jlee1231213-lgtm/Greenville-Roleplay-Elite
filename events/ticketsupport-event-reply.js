@@ -97,6 +97,7 @@ module.exports = {
         'ma': 'Civilian Report'
       };
       const selectedOption = typeLabels[type];
+      const ticketCategoryId = '1500623796594282566';
       
       // Create ticket name with user and selected option
       const userName = interaction.user.username;
@@ -119,6 +120,7 @@ module.exports = {
       const ticketChannel = await guild.channels.create({
         name: ticketName,
         type: 0,
+        parent: ticketCategoryId,
         permissionOverwrites,
       });
 
@@ -223,12 +225,15 @@ module.exports = {
           await interaction.editReply({ content: 'Ticket claimed successfully.' });
           if (logChannel) logChannel.send({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription(`<@${interaction.user.id}> claimed ticket <#${interaction.channel.id}>.`)] });
         } catch (error) {
-          console.error('Error claiming ticket:', error);
+          console.error('Error claiming ticket:', error.message, error.code);
           if (ticketData.claimed === interaction.user.id) {
             ticketData.claimed = null;
             await ticketData.save().catch(() => null);
           }
-          await interaction.editReply({ content: 'Failed to claim this ticket. Please check bot channel permissions and try again.' });
+          const errorMsg = error.code === 'MissingPermissions' 
+            ? `Missing permissions: ${error.message}. Please ensure the bot has MANAGE_CHANNELS and SEND_MESSAGES in this channel.`
+            : `Failed to claim this ticket (${error.code || 'Unknown error'}). Please check bot permissions and try again.`;
+          await interaction.editReply({ content: errorMsg });
         }
         return;
       }
