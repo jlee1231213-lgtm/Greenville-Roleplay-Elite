@@ -32,7 +32,7 @@ module.exports = {
                     case 'roles': {
                         const embed = new EmbedBuilder()
                             .setTitle('Roles Configuration')
-                            .setDescription('Select a role category to configure (up to 4 roles, first required)')
+                            .setDescription('Select a role category to configure (single role ID per category)')
                             .setColor(color);
                         const row = new ActionRowBuilder().addComponents(
                             new StringSelectMenuBuilder()
@@ -44,6 +44,7 @@ module.exports = {
                                     { label: 'Early Access', value: 'eaRoleId' },
                                     { label: 'Staff', value: 'staffRoleId' },
                                     { label: 'Administrators', value: 'adminRoleId' },
+                                    { label: 'Staffing Department', value: 'staffingDepartmentRoleId' },
                                 ])
                         );
                         return interaction.update({ embeds: [embed], components: [row], ephemeral: true });
@@ -144,21 +145,19 @@ module.exports = {
                 }
             }
 
-            const roleFields = ['leoRoleId','civiRoleId','eaRoleId','staffRoleId','adminRoleId'];
+            const roleFields = ['leoRoleId','civiRoleId','eaRoleId','staffRoleId','adminRoleId','staffingDepartmentRoleId'];
             if (roleFields.includes(interaction.values[0])) {
                 const field = interaction.values[0];
-                const modal = new ModalBuilder().setCustomId(`role_modal_${field}`).setTitle('Set Roles');
-                for (let i = 1; i <= 4; i++) {
-                    modal.addComponents(
-                        new ActionRowBuilder().addComponents(
-                            new TextInputBuilder()
-                                .setCustomId(`role_input_${i}`)
-                                .setLabel(`Role ID ${i}${i===1?' (Required)':''}`)
-                                .setStyle(TextInputStyle.Short)
-                                .setRequired(i===1)
-                        )
-                    );
-                }
+                const modal = new ModalBuilder().setCustomId(`role_modal_${field}`).setTitle('Set Role ID');
+                modal.addComponents(
+                    new ActionRowBuilder().addComponents(
+                        new TextInputBuilder()
+                            .setCustomId('role_input_1')
+                            .setLabel('Role ID')
+                            .setStyle(TextInputStyle.Short)
+                            .setRequired(true)
+                    )
+                );
                 return interaction.showModal(modal);
             }
 
@@ -219,14 +218,10 @@ module.exports = {
         if (interaction.isModalSubmit()) {
             if (interaction.customId.startsWith('role_modal_')) {
                 const field = interaction.customId.replace('role_modal_','');
-                const roles = [];
-                for (let i = 1; i <= 4; i++) {
-                    const value = interaction.fields.getTextInputValue(`role_input_${i}`)?.trim();
-                    if (value) roles.push(value);
-                }
-                if (roles.length === 0) return interaction.reply({ content: 'At least one role is required!', ephemeral: true });
-                await updateSetting(guildId, field, roles.join(','));
-                return interaction.reply({ content: 'Roles updated successfully!', ephemeral: true });
+                const roleId = interaction.fields.getTextInputValue('role_input_1')?.trim();
+                if (!roleId) return interaction.reply({ content: 'A role ID is required!', ephemeral: true });
+                await updateSetting(guildId, field, roleId);
+                return interaction.reply({ content: 'Role updated successfully!', ephemeral: true });
             }
 
             if (interaction.customId === 'welcome_message_modal') {

@@ -8,6 +8,8 @@ const { token, mongodb } = process.env;
 
 const SOURCE_GUILD_ID = "1490472044213829864";
 const TARGET_GUILD_ID = "1500582461703327754";
+const ENABLE_GUILD_SETTINGS_SYNC = process.env.ENABLE_GUILD_SETTINGS_SYNC === "true";
+const ROLE_ID_FIELDS = ["leoRoleId", "civiRoleId", "eaRoleId", "staffRoleId", "adminRoleId", "staffingDepartmentRoleId"];
 
 mongoose.set("bufferCommands", false);
 
@@ -96,6 +98,37 @@ async function syncGuildSettings(sourceGuildId, targetGuildId) {
   console.log(`Settings synced from ${sourceGuildId} to ${targetGuildId}.`);
 }
 
+async function normalizeRoleIdSettings() {
+  const settingsDocs = await Settings.find({});
+  let normalizedCount = 0;
+
+  for (const doc of settingsDocs) {
+    let changed = false;
+
+    for (const field of ROLE_ID_FIELDS) {
+      const rawValue = doc[field];
+      if (typeof rawValue !== "string" || !rawValue.includes(",")) continue;
+
+      const firstRoleId = rawValue
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean)[0] || null;
+
+      doc[field] = firstRoleId;
+      changed = true;
+    }
+
+    if (changed) {
+      await doc.save();
+      normalizedCount += 1;
+    }
+  }
+
+  if (normalizedCount > 0) {
+    console.log(`Normalized role settings for ${normalizedCount} guild(s).`);
+  }
+}
+
 client.handleEvents = handleEvents;
 client.handleCommands = handleCommands;
 
@@ -103,8 +136,10 @@ client.handleCommands = handleCommands;
   try {
     try {
       await connectDatabase();
-      await Settings.updateMany({}, { $set: { embedcolor: '#368f4c' } });
-      await syncGuildSettings(SOURCE_GUILD_ID, TARGET_GUILD_ID);
+      await normalizeRoleIdSettings();
+      if (ENABLE_GUILD_SETTINGS_SYNC) {
+        await syncGuildSettings(SOURCE_GUILD_ID, TARGET_GUILD_ID);
+      }
     } catch (dbError) {
       console.error("MongoDB unavailable. Starting in degraded mode:", dbError.message);
     }

@@ -201,23 +201,35 @@ module.exports = {
           return interaction.reply({ content: 'You cannot claim this ticket.', ephemeral: true });
         }
 
-        ticketData.claimed = interaction.user.id;
-        await ticketData.save();
+        await interaction.deferReply({ ephemeral: true });
 
-        await interaction.channel.permissionOverwrites.edit(ticketData.roleId, { ViewChannel: false });
-        await interaction.channel.permissionOverwrites.edit(interaction.user.id, { ViewChannel: true, SendMessages: true });
+        try {
+          await interaction.channel.permissionOverwrites.edit(ticketData.roleId, { ViewChannel: false });
+          await interaction.channel.permissionOverwrites.edit(interaction.user.id, { ViewChannel: true, SendMessages: true });
 
-        const row = new ActionRowBuilder()
-          .addComponents(
-            new ButtonBuilder().setCustomId('unclaimTicket').setLabel('Unclaim').setStyle(ButtonStyle.Secondary),
-            new ButtonBuilder().setCustomId('closeTicket').setLabel('Close').setStyle(ButtonStyle.Danger)
-          );
+          const row = new ActionRowBuilder()
+            .addComponents(
+              new ButtonBuilder().setCustomId('unclaimTicket').setLabel('Unclaim').setStyle(ButtonStyle.Secondary),
+              new ButtonBuilder().setCustomId('closeTicket').setLabel('Close').setStyle(ButtonStyle.Danger)
+            );
 
-        const msg = await interaction.channel.messages.fetch({ limit: 10 }).then(ms => ms.find(m => m.embeds.length));
-        if (msg) msg.edit({ components: [row] });
+          const msg = await interaction.channel.messages.fetch({ limit: 10 }).then(ms => ms.find(m => m.embeds.length));
+          if (msg) await msg.edit({ components: [row] });
 
-        await interaction.reply({ content: `<@${interaction.user.id}> claimed the ticket.`, ephemeral: false });
-        if (logChannel) logChannel.send({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription(`<@${interaction.user.id}> claimed ticket <#${interaction.channel.id}>.`)] });
+          ticketData.claimed = interaction.user.id;
+          await ticketData.save();
+
+          await interaction.channel.send({ content: `<@${interaction.user.id}> claimed the ticket.` });
+          await interaction.editReply({ content: 'Ticket claimed successfully.' });
+          if (logChannel) logChannel.send({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription(`<@${interaction.user.id}> claimed ticket <#${interaction.channel.id}>.`)] });
+        } catch (error) {
+          console.error('Error claiming ticket:', error);
+          if (ticketData.claimed === interaction.user.id) {
+            ticketData.claimed = null;
+            await ticketData.save().catch(() => null);
+          }
+          await interaction.editReply({ content: 'Failed to claim this ticket. Please check bot channel permissions and try again.' });
+        }
         return;
       }
 
