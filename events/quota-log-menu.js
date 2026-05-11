@@ -68,7 +68,7 @@ module.exports = {
         `<a:animatedarrow:1500968506114572359> Added points: **${pointsToAdd}**`,
       ].join('\n'));
 
-    const logChannel = interaction.guild.channels.cache.get(settings?.logChannelId);
+    const logChannel = interaction.guild.channels.cache.get('1501033146941050920');
     if (logChannel?.isTextBased?.()) {
       await logChannel.send({ embeds: [logEmbed] }).catch(() => null);
     }
