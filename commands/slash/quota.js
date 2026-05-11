@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
 const Settings = require('../../models/settings');
 const Quota = require('../../models/quota');
 
@@ -99,12 +99,7 @@ module.exports = {
     .addSubcommand(subcommand =>
       subcommand
         .setName('log')
-        .setDescription('View recent quota logs for a user')
-        .addUserOption(option =>
-          option.setName('user')
-            .setDescription('User to view logs for')
-            .setRequired(true)
-        )
+        .setDescription('Log quota activity and add points')
     ),
 
   async execute(interaction) {
@@ -270,44 +265,24 @@ module.exports = {
     }
 
     if (subcommand === 'log') {
-      const user = interaction.options.getUser('user', true);
-      const quotaDoc = await Quota.findOne({ guildId, userId: user.id }).lean();
-      const logs = quotaDoc?.logs || [];
-      const currentPoints = quotaDoc?.amount || 0;
+      const userId = interaction.user.id;
+      
+      const selectMenu = new StringSelectMenuBuilder()
+        .setCustomId(`quotalog_${userId}`)
+        .setPlaceholder('Select activity type to log')
+        .addOptions([
+          { label: 'Host', value: 'host', description: '+2 points' },
+          { label: 'Co-Host', value: 'cohost', description: '+1 point' },
+          { label: 'Partnership', value: 'partnership', description: '+0.5 points' },
+          { label: 'Supervise', value: 'supervise', description: '+1 point' },
+        ]);
 
-      if (!logs.length) {
-        return interaction.editReply({ content: `No quota logs found for <@${user.id}>.` });
-      }
-
-      const lastLog = logs[logs.length - 1];
-      const pointsAdded = lastLog?.amount || 0;
-
-      const logEmbed = new EmbedBuilder()
-        .setColor(embedColor)
-        .setDescription([
-          '## > <a:beatinghearts:1500587804445638897> *__Greenville Roleplay Elite - Quota logged!__* <a:beatinghearts:1500587804445638897>',
-          `<a:animatedarrow:1500968506114572359> <@${user.id}> has logged (${lastLog?.reason || 'No reason'})`,
-          `<a:animatedarrow:1500968506114572359> Current points: **${currentPoints}**`,
-          `<a:animatedarrow:1500968506114572359> Added points: **${pointsAdded}**`,
-        ].join('\n'));
-
-      const logChannel = interaction.guild.channels.cache.get(settings?.logChannelId);
-      if (logChannel?.isTextBased?.()) {
-        await logChannel.send({ embeds: [logEmbed] }).catch(() => null);
-      }
-
-      const recentLogs = [...logs].slice(-10).reverse();
-      const formatted = recentLogs.map((entry, index) => {
-        const timestamp = Math.floor(new Date(entry.createdAt).getTime() / 1000);
-        return `${index + 1}. **${entry.action.toUpperCase()}** ${entry.amount} by <@${entry.moderatorId}> <t:${timestamp}:R>\nReason: ${entry.reason}`;
-      }).join('\n\n');
-
-      const profileEmbed = new EmbedBuilder()
-        .setColor(embedColor)
-        .setTitle(`Quota Logs - ${user.tag}`)
-        .setDescription(formatted);
-
-      return interaction.editReply({ embeds: [profileEmbed] });
+      const row = new ActionRowBuilder().addComponents(selectMenu);
+      
+      return interaction.editReply({
+        content: 'Select the activity type to log:',
+        components: [row],
+      });
     }
 
     return interaction.editReply({ content: 'Invalid quota subcommand.' });
