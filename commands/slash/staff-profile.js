@@ -2,6 +2,14 @@ const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, Butt
 const Settings = require('../../models/settings');
 const SessionLog = require('../../models/sessionlog');
 const ModLog = require('../../models/modlogs');
+const Quota = require('../../models/quota');
+
+const POINT_VALUES = {
+  host: 2,
+  cohost: 1,
+  partnership: 0.5,
+  supervise: 1,
+};
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -45,6 +53,10 @@ module.exports = {
       new ButtonBuilder()
         .setCustomId(`staffprofile_supervise_${user.id}`)
         .setLabel('Super-vised Session(s)')
+        .setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder()
+        .setCustomId(`staffprofile_partnership_${user.id}`)
+        .setLabel('Partnership')
         .setStyle(ButtonStyle.Secondary)
     );
 

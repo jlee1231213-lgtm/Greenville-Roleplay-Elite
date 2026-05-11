@@ -1,6 +1,14 @@
 const { EmbedBuilder } = require('discord.js');
 const Settings = require('../models/settings');
 const SessionLog = require('../models/sessionlog');
+const Quota = require('../models/quota');
+
+const POINT_VALUES = {
+  host: 2,
+  cohost: 1,
+  partnership: 0.5,
+  supervise: 1,
+};
 
 module.exports = {
   name: 'interactionCreate',
@@ -73,6 +81,30 @@ module.exports = {
         .setTitle(`Supervise Sessions (${supervises.length})`)
         .setDescription(description)
         .setColor(embedColor);
+
+      await interaction.editReply({ embeds: [embed] });
+    }
+
+    if (type === 'partnership') {
+      const hostSessions = await SessionLog.countDocuments({ userId, sessiontype: 'session' });
+      const cohostSessions = await SessionLog.countDocuments({ userId, sessiontype: 'cohost' });
+      const superviseSessions = await SessionLog.countDocuments({ userId, sessiontype: 'supervise' });
+      const quotaDoc = await Quota.findOne({ guildId: interaction.guild.id, userId }).lean();
+      
+      const totalQuotaPoints = quotaDoc?.amount || 0;
+      const calculatedPoints = 
+        (hostSessions * POINT_VALUES.host) +
+        (cohostSessions * POINT_VALUES.cohost) +
+        (superviseSessions * POINT_VALUES.supervise);
+
+      const embed = new EmbedBuilder()
+        .setTitle(`Partnership Info - ${interaction.user.tag}`)
+        .setColor(embedColor)
+        .addFields(
+          { name: 'Point Values', value: `🎮 Host: ${POINT_VALUES.host}\n👥 Co-Host: ${POINT_VALUES.cohost}\n👁️ Supervise: ${POINT_VALUES.supervise}\n🤝 Partnership: ${POINT_VALUES.partnership}`, inline: false },
+          { name: 'Sessions Count', value: `🎮 Hosted: ${hostSessions}\n👥 Co-Hosted: ${cohostSessions}\n👁️ Supervised: ${superviseSessions}`, inline: false },
+          { name: 'Quota Points', value: `**Total: ${totalQuotaPoints}**`, inline: false }
+        );
 
       await interaction.editReply({ embeds: [embed] });
     }

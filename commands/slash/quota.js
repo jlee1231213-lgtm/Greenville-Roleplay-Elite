@@ -3,6 +3,12 @@ const Settings = require('../../models/settings');
 const Quota = require('../../models/quota');
 
 const MAX_LOGS_PER_USER = 20;
+const POINT_VALUES = {
+  host: 2,
+  cohost: 1,
+  partnership: 0.5,
+  supervise: 1,
+};
 
 function hasAllowedRole(interaction, settings) {
   const allowedRoleIds = [settings?.staffRoleId, settings?.adminRoleId].filter(Boolean);
@@ -262,9 +268,27 @@ module.exports = {
       const user = interaction.options.getUser('user', true);
       const quotaDoc = await Quota.findOne({ guildId, userId: user.id }).lean();
       const logs = quotaDoc?.logs || [];
+      const currentPoints = quotaDoc?.amount || 0;
 
       if (!logs.length) {
         return interaction.editReply({ content: `No quota logs found for <@${user.id}>.` });
+      }
+
+      const lastLog = logs[logs.length - 1];
+      const pointsAdded = lastLog?.amount || 0;
+
+      const logEmbed = new EmbedBuilder()
+        .setColor(embedColor)
+        .setDescription([
+          '## > <a:beatinghearts:1500587804445638897> *__Greenville Roleplay Elite - Quota logged!__* <a:beatinghearts:1500587804445638897>',
+          `<a:animatedarrow:1500968506114572359> <@${user.id}> has logged (${lastLog?.reason || 'No reason'})`,
+          `<a:animatedarrow:1500968506114572359> Current points: **${currentPoints}**`,
+          `<a:animatedarrow:1500968506114572359> Added points: **${pointsAdded}**`,
+        ].join('\n'));
+
+      const logChannel = interaction.guild.channels.cache.get(settings?.logChannelId);
+      if (logChannel?.isTextBased?.()) {
+        await logChannel.send({ embeds: [logEmbed] }).catch(() => null);
       }
 
       const recentLogs = [...logs].slice(-10).reverse();
@@ -273,12 +297,12 @@ module.exports = {
         return `${index + 1}. **${entry.action.toUpperCase()}** ${entry.amount} by <@${entry.moderatorId}> <t:${timestamp}:R>\nReason: ${entry.reason}`;
       }).join('\n\n');
 
-      const embed = new EmbedBuilder()
+      const profileEmbed = new EmbedBuilder()
         .setColor(embedColor)
         .setTitle(`Quota Logs - ${user.tag}`)
         .setDescription(formatted);
 
-      return interaction.editReply({ embeds: [embed] });
+      return interaction.editReply({ embeds: [profileEmbed] });
     }
 
     return interaction.editReply({ content: 'Invalid quota subcommand.' });
