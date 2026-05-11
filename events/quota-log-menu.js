@@ -17,7 +17,7 @@ const ACTIVITY_LABELS = {
 };
 
 function formatLoggedTitle(activityLabel) {
-  return `Greenville Roleplay Association, ${activityLabel} Logged`;
+  return `## > *__Greenville Roleplaye Elite, ${activityLabel} logged__*`;
 }
 
 module.exports = {
@@ -66,8 +66,10 @@ module.exports = {
     const activityLabel = ACTIVITY_LABELS[activityType];
     const logEmbed = new EmbedBuilder()
       .setColor(embedColor)
-      .setTitle(formatLoggedTitle(activityLabel))
-      .setDescription(`<a:animatedarrow:1500968506114572359> <@${userId}> logged a ${activityLabel.toLowerCase()}`)
+      .setDescription([
+        formatLoggedTitle(activityLabel),
+        `<a:animatedarrow:1500968506114572359> <@${userId}> logged a ${activityLabel.toLowerCase()}`,
+      ].join('\n'))
       .addFields(
         { name: 'User', value: interaction.user.username, inline: true },
         { name: 'Points', value: `+${pointsToAdd}`, inline: true },
