@@ -18,7 +18,7 @@ module.exports = {
             return interaction.reply({ content: 'This command can only be used in a server.', ephemeral: true });
         }
 
-        await interaction.reply({ content: 'Starting to send DMs to all members...', ephemeral: true });
+        await interaction.deferReply({ ephemeral: true });
 
         const members = await guild.members.fetch();
         let successCount = 0;
@@ -27,15 +27,17 @@ module.exports = {
         for (const [id, member] of members) {
             if (!member.user.bot) {
                 try {
-                    await member.send(message);
+                    await member.user.send(message);
                     successCount++;
                 } catch (error) {
-                    console.error(`Failed to DM ${member.user.tag}:`, error);
+                    console.error(`Failed to DM ${member.user.tag}:`, error.code || error.message);
                     failureCount++;
                 }
+                // Add a small delay to avoid rate limiting
+                await new Promise(resolve => setTimeout(resolve, 100));
             }
         }
 
-        await interaction.followUp({ content: `DMs sent successfully to ${successCount} members. Failed to send to ${failureCount} members.`, ephemeral: true });
+        await interaction.editReply({ content: `DMs sent successfully to ${successCount} members. Failed to send to ${failureCount} members.` });
     },
 };
