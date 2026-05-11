@@ -139,6 +139,11 @@ module.exports = {
           ...lines,
         ].join('\n'));
 
+      const logChannel = interaction.guild.channels.cache.get(settings?.logChannelId);
+      if (logChannel?.isTextBased?.()) {
+        await logChannel.send({ embeds: [embed] }).catch(() => null);
+      }
+
       return interaction.editReply({ embeds: [embed] });
     }
 
