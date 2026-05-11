@@ -125,9 +125,9 @@ module.exports = {
             .then(user => user.username)
             .catch(() => `<@${entry.userId}>`);
           const pointLabel = entry.amount === 1 ? 'point' : 'points';
-          lines.push(`• **${i + 1}.** ${userTag} - ${entry.amount} ${pointLabel}`);
+          lines.push(`<a:animatedarrow:1500968506114572359> **${i + 1}.** ${userTag} - ${entry.amount} ${pointLabel}`);
         } else {
-          lines.push(`• **${i + 1}.** N/A`);
+          lines.push(`<a:animatedarrow:1500968506114572359> **${i + 1}.** N/A`);
         }
       }
 
