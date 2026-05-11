@@ -65,7 +65,7 @@ module.exports = {
       .setThumbnail(interaction.user.displayAvatarURL())
       .setDescription([
         '## > <a:beatinghearts:1500587804445638897> *__Greenville Roleplay Elite - Quota logged!__* <a:beatinghearts:1500587804445638897>',
-        `<a:animatedarrow:1500968506114572359> <@${userId}> has logged`,
+        `<a:animatedarrow:1500968506114572359> <@${userId}> has logged (${ACTIVITY_LABELS[activityType]})`,
         '',
         '',
         `<a:animatedarrow:1500968506114572359> Current points: **${quotaDoc.amount}**`,
