@@ -16,6 +16,10 @@ const ACTIVITY_LABELS = {
   supervise: 'Supervise',
 };
 
+function formatLoggedTitle(activityLabel) {
+  return `Greenville Roleplay Association, ${activityLabel} Logged`;
+}
+
 module.exports = {
   name: 'interactionCreate',
   async execute(interaction) {
@@ -59,20 +63,18 @@ module.exports = {
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
 
+    const activityLabel = ACTIVITY_LABELS[activityType];
     const logEmbed = new EmbedBuilder()
       .setColor(embedColor)
-      .setAuthor({ name: interaction.user.tag, iconURL: interaction.user.displayAvatarURL() })
+      .setTitle(formatLoggedTitle(activityLabel))
+      .setDescription(`<a:animatedarrow:1500968506114572359> <@${userId}> logged a ${activityLabel.toLowerCase()}`)
+      .addFields(
+        { name: 'User', value: interaction.user.username, inline: true },
+        { name: 'Points', value: `+${pointsToAdd}`, inline: true },
+        { name: 'Total', value: `${quotaDoc.amount}`, inline: true }
+      )
       .setThumbnail(interaction.user.displayAvatarURL())
-      .setDescription([
-        '## > <a:beatinghearts:1500587804445638897> *__Greenville Roleplay Elite - Quota logged!__* <a:beatinghearts:1500587804445638897>',
-        `<a:animatedarrow:1500968506114572359> <@${userId}> has logged ${ACTIVITY_LABELS[activityType]}`,
-        '',
-        '',
-        `<a:animatedarrow:1500968506114572359> Current points: **${quotaDoc.amount}**`,
-        '',
-        '',
-        `<a:animatedarrow:1500968506114572359> Added points: **${pointsToAdd}**`,
-      ].join('\n'));
+      .setFooter({ text: 'Greenville Roleplay Association™' });
 
     const logChannel = interaction.guild.channels.cache.get('1501033146941050920');
     if (logChannel?.isTextBased?.()) {
