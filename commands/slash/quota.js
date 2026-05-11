@@ -121,18 +121,21 @@ module.exports = {
       for (let i = 0; i < 5; i += 1) {
         const entry = topFive[i];
         if (entry) {
-          lines.push(`*__Top ${i + 1}__* <@${entry.userId}> - **${entry.amount}**`);
+          const userTag = await interaction.client.users.fetch(entry.userId)
+            .then(user => user.username)
+            .catch(() => `<@${entry.userId}>`);
+          const pointLabel = entry.amount === 1 ? 'point' : 'points';
+          lines.push(`• **${i + 1}.** ${userTag} - ${entry.amount} ${pointLabel}`);
         } else {
-          lines.push(`*__Top ${i + 1}__* N/A`);
+          lines.push(`• **${i + 1}.** N/A`);
         }
       }
 
       const embed = new EmbedBuilder()
         .setColor(embedColor)
-        .setDescription([
-          '## > :beatinghearts: *__Greenville Roleplay Elite - Quota Top 5 Leaderboard__*',
-          ...lines,
-        ].join('\n'));
+        .setTitle('Greenville Roleplay Elite, Quota Leaderboard - Top 5')
+        .setDescription(lines.join('\n'))
+        .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
 
       const logChannel = interaction.guild.channels.cache.get('1501033078389477436');
       if (logChannel?.isTextBased?.()) {
