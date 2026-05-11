@@ -271,7 +271,7 @@ module.exports = {
         .setCustomId(`quotalog_${userId}`)
         .setPlaceholder('Select activity type to log')
         .addOptions([
-          { label: 'Host', value: 'host', description: '+2 points' },
+          { label: 'Session Hosted', value: 'host', description: '+2 points' },
           { label: 'Co-Host', value: 'cohost', description: '+1 point' },
           { label: 'Partnership', value: 'partnership', description: '+0.5 points' },
           { label: 'Supervise', value: 'supervise', description: '+1 point' },
