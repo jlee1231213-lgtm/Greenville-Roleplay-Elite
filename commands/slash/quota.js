@@ -134,7 +134,7 @@ module.exports = {
           ...lines,
         ].join('\n'));
 
-      const logChannel = interaction.guild.channels.cache.get('1501033146941050920');
+      const logChannel = interaction.guild.channels.cache.get('1501033078389477436');
       if (logChannel?.isTextBased?.()) {
         await logChannel.send({ embeds: [embed] }).catch(() => null);
       }
