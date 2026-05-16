@@ -6,7 +6,8 @@ const EA_WHITELIST_ROLE_IDS = [
   '1503044187455619228',
   '1503044125430255626',
   '1503044009797619983',
-  '1501214256442380470'
+  '1501214256442380470',
+  '1503898816145789050' // Added unknown role
 ];
 const STARTUP_REACTION_EMOJI_ID = '1504244806803783717';
 
@@ -47,13 +48,14 @@ module.exports = {
     const userMention = `<@${interaction.user.id}>`;
     const whitelistMentions = allowedRoleIds.map(roleId => `<@&${roleId}>`).join(' ');
 
-    const button = new ButtonBuilder().setCustomId('get_ealink').setLabel('Get Link').setStyle(ButtonStyle.Success);
+    const button = new ButtonBuilder().setCustomId('get_ealink').setLabel('Session Link').setStyle(ButtonStyle.Success);
     const row = new ActionRowBuilder().addComponents(button);
 
     const eaEmbed = new EmbedBuilder()
       .setTitle('<a:GVH_beatinghearts:1504244806803783717>  *__Greenville Hub - Early Access__*  <a:GVH_beatinghearts:1504244806803783717>')
       .setDescription(`<a:GVH_animatedarrow:1504244827062010131> ${userMention} has released **Early Access.** If you have reacted, and have permission to join, please click the button below.\n\n> <a:GVH_animatedarrow:1504244827062010131> Reminder; leaking this link will result in a **termination** alongside **moderation.**`)
       .setColor(embedColor)
+      .setImage('https://media.discordapp.net/attachments/1492958669200031814/1505028855126294669/image.png?ex=6a0922d9&is=6a07d159&hm=d2fb8cea8f623d86f30dbf5d1d337082b328f50434f76184744175f215292b05&=&format=webp&quality=lossless&width=2294&height=464')
       .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
 
     const earlyAccessMessage = await interaction.channel.send({
@@ -88,7 +90,7 @@ module.exports = {
     collector.on('collect', async i => {
       if (!i.member.roles.cache.some(r => allowedRoleIds.includes(r.id))) {
         return i.reply({
-          embeds: [new EmbedBuilder().setDescription('You do not have the required role.').setColor(embedColor)],
+          embeds: [new EmbedBuilder().setDescription('You do not have the required role: <@&1503898816145789050>.').setColor(embedColor)],
           ephemeral: true
         });
       }
