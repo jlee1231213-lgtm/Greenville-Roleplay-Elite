@@ -17,6 +17,7 @@ const { activeStartupSessions } = require('../slash/startup');
 
 const overCooldowns = new Map();
 const OVER_COOLDOWN_MS = 20 * 60 * 1000;
+const FEEDBACK_CHANNEL_ID = '1503157968450097163';
 
 const DEFAULT_OVER_EMBED = {
   title: '## <a:GVH_beatinghearts:1504244806803783717> *__Greenville Hub  - Session Concluded!__* <a:GVH_beatinghearts:1504244806803783717>',
@@ -252,7 +253,7 @@ module.exports = {
 
         let logChannel;
         try {
-          logChannel = await interaction.client.channels.fetch(settings?.logChannelId || '1419318345731411968');
+          logChannel = await interaction.client.channels.fetch(FEEDBACK_CHANNEL_ID);
         } catch {
           logChannel = null;
         }
