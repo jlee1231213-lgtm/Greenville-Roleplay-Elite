@@ -14,17 +14,17 @@ module.exports = {
 
 
         const embed = new EmbedBuilder()
-      .setDescription(`# > <a:GVH_beatinghearts:1504244806803783717> *Greenville Hub - __Support Center__* GVH_beatinghearts:
+      .setDescription(`# > <a:GVH_beatinghearts:1504244806803783717> *Greenville Hub - __Support Center__* <a:GVH_beatinghearts:1504244806803783717>
 <a:GVH_animatedarrow:1504244827062010131> Welcome to the support section. To ensure your request is handled quickly and efficiently, please select the appropriate category below and provide clear, detailed information.
 
-<:green_management:1500587061525221616>  \`General Support\`
+<:green_management:1505053416630648832>   \`General Support\`
 Use this option for any general inquiries or assistance related to the server.
 
- <:former_staff:1500586001175675083> \`Staff Report\`
+ <:former_staff:1505053433659527290>  \`Staff Report\`
 Select this option if you need to report a staff member for misconduct or inappropriate behavior. 
 All reports are taken seriously and handled confidentially. Provide as much detail as possible, including evidence (screenshots, timestamps, etc.).
 
-<:Civilian:1500584557986975874> \`Civilian Report\`
+<:gvruuser:1505053458955505734>  \`Civilian Report\`
 Use this option to report a non-staff member (civilian) for breaking server rules.
 Please include clear evidence and a detailed description of the incident to help us review your report effectively.
 
@@ -38,7 +38,7 @@ Please include clear evidence and a detailed description of the incident to help
       .addComponents(
         new StringSelectMenuBuilder()
           .setCustomId('supportOptions')
-          .setPlaceholder('╭  • 🌱•  Elite, Selections')
+          .setPlaceholder('╭ •  Hub, Selection(s)')
           .addOptions([
             {
               label: 'General Support',
