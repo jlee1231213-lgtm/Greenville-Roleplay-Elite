@@ -25,7 +25,7 @@ module.exports = {
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#4C7C58';
 
-    const allowedRoleIds = EA_WHITELIST_ROLE_IDS;
+    const allowedRoleIds = EA_WHITELIST_ROLE_IDS.filter(roleId => interaction.guild.roles.cache.has(roleId));
 
     const rawSessionLink = interaction.options.getString('link').trim();
     const candidateLink = /^https?:\/\//i.test(rawSessionLink) ? rawSessionLink : `https://${rawSessionLink}`;
@@ -58,7 +58,7 @@ module.exports = {
       .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
 
     const earlyAccessMessage = await interaction.channel.send({
-      content: whitelistMentions,
+      content: whitelistMentions || null,
       embeds: [eaEmbed],
       components: [row],
       allowedMentions: { roles: allowedRoleIds }
