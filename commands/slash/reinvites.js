@@ -10,6 +10,8 @@ const DEFAULT_REINVITES_EMBED = {
 function applyReinvitesTokens(text, userId, ptStatus, frpLimit, sessionLink) {
   if (!text) return text;
   return text
+    .replace(/Greenville Roleplaye? Elite/gi, 'Greenville Hub')
+    .replace(/<:dot:1500584469906591971>|:dot:/g, '<a:GVH_animatedarrow:1504244827062010131>')
     .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
     .replace(/\{\{pt\}\}|\$pt/g, ptStatus)
     .replace(/\{\{frplimit\}\}|\$frplimit/g, frpLimit)

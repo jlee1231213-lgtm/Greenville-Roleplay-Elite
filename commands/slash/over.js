@@ -36,7 +36,10 @@ function clip(value, max = 1024) {
 
 function normalizeTemplateText(text) {
   if (!text) return text;
-  return text.replace(/\\n/g, '\n');
+  return text
+    .replace(/Greenville Roleplaye? Elite/gi, 'Greenville Hub')
+    .replace(/<:dot:1500584469906591971>|:dot:/g, '<a:GVH_animatedarrow:1504244827062010131>')
+    .replace(/\\n/g, '\n');
 }
 
 function formatCooldown(msRemaining) {
@@ -149,7 +152,7 @@ module.exports = {
 
     const embed = new EmbedBuilder()
       .setColor(embedColor)
-      .setTitle(overTemplate.title || DEFAULT_OVER_EMBED.title)
+      .setTitle(normalizeTemplateText(overTemplate.title || DEFAULT_OVER_EMBED.title))
       .setDescription(
         descriptionTemplate
           .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)

@@ -9,6 +9,13 @@ const DEFAULT_SETUP_EMBED = {
   image: null,
 };
 
+function normalizeEmbedText(text) {
+  if (!text) return text;
+  return text
+    .replace(/Greenville Roleplaye? Elite/gi, 'Greenville Hub')
+    .replace(/<:dot:1500584469906591971>|:dot:/g, '<a:GVH_animatedarrow:1504244827062010131>');
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('setup')
@@ -58,8 +65,8 @@ module.exports = {
     }
 
     const setupTemplate = settings?.setupEmbed || DEFAULT_SETUP_EMBED;
-    const setupTitle = (setupTemplate.title || DEFAULT_SETUP_EMBED.title || '').trim();
-    const setupDescription = (setupTemplate.description || DEFAULT_SETUP_EMBED.description)
+    const setupTitle = normalizeEmbedText(setupTemplate.title || DEFAULT_SETUP_EMBED.title || '').trim();
+    const setupDescription = normalizeEmbedText(setupTemplate.description || DEFAULT_SETUP_EMBED.description)
       .replace(/\{\{user\}\}|\{user\}|\$user/g, `<@${userId}>`)
       .replace(/\\n/g, '\n');
     const setupEndsAt = Math.floor((Date.now() + 10 * 60 * 1000) / 1000);

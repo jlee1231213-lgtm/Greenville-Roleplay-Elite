@@ -17,7 +17,9 @@ const DEFAULT_STARTUP_EMBED = {
 
 function normalizeBranding(text) {
   if (!text) return text;
-  return text.replace(/Greenville Roleplaye? Elite/gi, 'Greenville Hub');
+  return text
+    .replace(/Greenville Roleplaye? Elite/gi, 'Greenville Hub')
+    .replace(/<:dot:1500584469906591971>|:dot:/g, '<a:GVH_animatedarrow:1504244827062010131>');
 }
 
 function applyStartupTokens(text, userId, now, reactionsRequired) {

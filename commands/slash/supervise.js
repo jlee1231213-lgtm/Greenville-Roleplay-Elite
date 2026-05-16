@@ -10,6 +10,13 @@ const DEFAULT_SUPERVISE_EMBED = {
   image: null,
 };
 
+function normalizeEmbedText(text) {
+  if (!text) return text;
+  return text
+    .replace(/Greenville Roleplaye? Elite/gi, 'Greenville Hub')
+    .replace(/<:dot:1500584469906591971>|:dot:/g, '<a:GVH_animatedarrow:1504244827062010131>');
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('supervise')
@@ -56,9 +63,9 @@ module.exports = {
 
     const superviseTemplate = settings?.superviseEmbed || DEFAULT_SUPERVISE_EMBED;
     const superviseEmbed = new EmbedBuilder()
-      .setTitle(superviseTemplate.title || DEFAULT_SUPERVISE_EMBED.title)
+      .setTitle(normalizeEmbedText(superviseTemplate.title || DEFAULT_SUPERVISE_EMBED.title))
       .setDescription(
-        (superviseTemplate.description || DEFAULT_SUPERVISE_EMBED.description)
+        normalizeEmbedText(superviseTemplate.description || DEFAULT_SUPERVISE_EMBED.description)
           .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
       )
       .setColor(embedColor)

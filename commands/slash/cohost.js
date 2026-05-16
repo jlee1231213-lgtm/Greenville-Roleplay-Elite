@@ -10,6 +10,13 @@ const DEFAULT_COHOST_EMBED = {
   image: null,
 };
 
+function normalizeEmbedText(text) {
+  if (!text) return text;
+  return text
+    .replace(/Greenville Roleplaye? Elite/gi, 'Greenville Hub')
+    .replace(/<:dot:1500584469906591971>|:dot:/g, '<a:GVH_animatedarrow:1504244827062010131>');
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('cohost')
@@ -56,9 +63,9 @@ module.exports = {
 
     const cohostTemplate = settings?.cohostEmbed || DEFAULT_COHOST_EMBED;
     const cohostEmbed = new EmbedBuilder()
-      .setTitle(cohostTemplate.title || DEFAULT_COHOST_EMBED.title)
+      .setTitle(normalizeEmbedText(cohostTemplate.title || DEFAULT_COHOST_EMBED.title))
       .setDescription(
-        (cohostTemplate.description || DEFAULT_COHOST_EMBED.description)
+        normalizeEmbedText(cohostTemplate.description || DEFAULT_COHOST_EMBED.description)
           .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
       )
       .setColor(embedColor)
