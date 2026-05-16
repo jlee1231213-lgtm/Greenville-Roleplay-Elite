@@ -56,7 +56,7 @@ module.exports = {
       .setDescription(`<a:GVH_animatedarrow:1504244827062010131> ${userMention} has released **Early Access.** If you have reacted, and have permission to join, please click the button below.\n\n> <a:GVH_animatedarrow:1504244827062010131> Reminder; leaking this link will result in a **termination** alongside **moderation.**`)
       .setColor(embedColor)
       .setImage('https://media.discordapp.net/attachments/1492958669200031814/1505028855126294669/image.png?ex=6a0922d9&is=6a07d159&hm=d2fb8cea8f623d86f30dbf5d1d337082b328f50434f76184744175f215292b05&=&format=webp&quality=lossless&width=2294&height=464')
-      .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
+      .setFooter({ text: 'Greenville Hub™', iconURL: 'https://media.discordapp.net/attachments/1492958669200031814/1505251172150411466/kiaodogcircle_2_.png?ex=6a09f1e5&is=6a08a065&hm=cc710655fb31f9ddd95ec63a37b5b7d48d47ca0308917ecbf724b6415cc3b95d&=&format=webp&quality=lossless&width=818&height=818' });
 
     const earlyAccessMessage = await interaction.channel.send({
       content: whitelistMentions || null,

@@ -35,10 +35,11 @@ module.exports = {
 
         // Send the message to the channel
         const embed = new EmbedBuilder()
+          .setColor('#4c7c58')
           .setDescription(`# > <a:GVH_beatinghearts:1504244806803783717> *Greenville Hub - __Server Supporters__*
-<a:GVH_animatedarrow:1504244827062010131> Thank you for supporting **__Greenville Hub__** ${user}! You will **__recieve__** the <@&${supporterRoleId}> role!
+<a:GVH_animatedarrow:1504244827062010131> Thank you for supporting **__Greenville Hub__** ${user} You will **__recieve__** the <@&1505209789741797436> role for putting /gvhub in you status!
 
-> <a:GVH_animatedarrow:1504244827062010131> Want the <@&${supporterRoleId}> role...? Ensure to put /gvhub in your status & you will receive it!`);
+> <a:GVH_animatedarrow:1504244827062010131> Want the <@&1505209789741797436> role...? Ensure to put /gvhub in your status & you will receive it!`);
 
         await channel.send({ embeds: [embed] });
       } catch (error) {
