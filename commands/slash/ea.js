@@ -6,8 +6,7 @@ const EA_WHITELIST_ROLE_IDS = [
   '1503044187455619228',
   '1503044125430255626',
   '1503044009797619983',
-  '1501214256442380470',
-  '1503898816145789050' // Added unknown role
+  '1501214256442380470'
 ];
 const STARTUP_REACTION_EMOJI_ID = '1504244806803783717';
 
@@ -90,7 +89,7 @@ module.exports = {
     collector.on('collect', async i => {
       if (!i.member.roles.cache.some(r => allowedRoleIds.includes(r.id))) {
         return i.reply({
-          embeds: [new EmbedBuilder().setDescription('You do not have the required role: <@&1503898816145789050>.').setColor(embedColor)],
+          embeds: [new EmbedBuilder().setDescription('You do not have the required role.').setColor(embedColor)],
           ephemeral: true
         });
       }
