@@ -40,6 +40,7 @@ const connectDatabase = async () => {
 };
 
 const handleEvents = async () => {
+  client.setMaxListeners(20); // Prevent MaxListenersExceededWarning during reloads
   const eventFiles = fs.readdirSync("./events").filter((file) => file.endsWith(".js"));
   for (const file of eventFiles) {
     const event = require(`./events/${file}`);
@@ -60,15 +61,25 @@ const handleCommands = async () => {
   }
 
   const clientId = process.env.clientId || Buffer.from(token.split(".")[0], "base64").toString("utf8");
+  console.log(`Using Client ID: ${clientId}`);
   const rest = new REST({ version: "10" }).setToken(token);
-  const deploymentGuildIds = [SOURCE_GUILD_ID, TARGET_GUILD_ID];
+  const deploymentGuildIds = [TARGET_GUILD_ID];
 
   try {
     for (const guildId of deploymentGuildIds) {
-      await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
-        body: client.commandArray,
-      });
-      console.log(`Slash commands uploaded successfully for guild ${guildId}.`);
+      try {
+        await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+          body: client.commandArray,
+        });
+        console.log(`Slash commands uploaded successfully for guild ${guildId}.`);
+      } catch (guildError) {
+        console.error(`Error uploading commands for guild ${guildId}:`, guildError.message);
+        if (guildError.status === 401) {
+          console.error("⚠️  Bot token is invalid or expired. Check your .env token.");
+        } else if (guildError.status === 403) {
+          console.error("⚠️  Bot lacks permission. Ensure bot is in guild and has 'applications.commands' scope.");
+        }
+      }
     }
 
     console.log("Available commands:");
@@ -76,7 +87,7 @@ const handleCommands = async () => {
       console.log(`- ${name}`);
     });
   } catch (error) {
-    console.error("Error uploading slash commands:", error.stack);
+    console.error("Error uploading slash commands:", error.message);
   }
 };
 
