@@ -53,14 +53,16 @@ module.exports = {
 
 **How to pay the ticket?**
 To pay the ticket do /payticket and select the fine you would wish to pay. Make sure you do have enough money to pay for the fine in full.`)
-      .setColor('#4C7C58');
+      .setColor('#4C7C58')
+      .setFooter({ text: 'Greenville Hub™', iconURL: 'https://media.discordapp.net/attachments/1492958669200031814/1505251172150411466/kiaodogcircle_2_.png?ex=6a09f1e5&is=6a08a065&hm=cc710655fb31f9ddd95ec63a37b5b7d48d47ca0308917ecbf724b6415cc3b95d&=&format=webp&quality=lossless&width=818&height=818' });
 
     finedUser.send({ embeds: [dmEmbed] }).catch(() => null);
 
     const confirmationEmbed = new EmbedBuilder()
       .setTitle('Ticket Issued')
       .setDescription(`You have successfully issued a ticket to ${finedUser.tag}.\n**Offense:** ${offense}\n**Price:** $${price}`)
-      .setColor('#4C7C58');
+      .setColor('#4C7C58')
+      .setFooter({ text: 'Greenville Hub™', iconURL: 'https://media.discordapp.net/attachments/1492958669200031814/1505251172150411466/kiaodogcircle_2_.png?ex=6a09f1e5&is=6a08a065&hm=cc710655fb31f9ddd95ec63a37b5b7d48d47ca0308917ecbf724b6415cc3b95d&=&format=webp&quality=lossless&width=818&height=818' });
 
     await interaction.editReply({ embeds: [confirmationEmbed] });
   }

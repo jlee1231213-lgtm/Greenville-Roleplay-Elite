@@ -135,7 +135,7 @@ module.exports = {
         .setColor(embedColor)
         .setTitle('Greenville Hub, Quota Leaderboard - Top 5')
         .setDescription(lines.join('\n'))
-        .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
+        .setFooter({ text: 'Greenville Hub™', iconURL: 'https://media.discordapp.net/attachments/1492958669200031814/1505251172150411466/kiaodogcircle_2_.png?ex=6a09f1e5&is=6a08a065&hm=cc710655fb31f9ddd95ec63a37b5b7d48d47ca0308917ecbf724b6415cc3b95d&=&format=webp&quality=lossless&width=818&height=818' });
 
       const logChannel = interaction.guild.channels.cache.get('1501033078389477436');
       if (logChannel?.isTextBased?.()) {
@@ -155,7 +155,8 @@ module.exports = {
         .setColor(embedColor)
         .setTitle('Quota Summary')
         .setDescription(`<@${user.id}> currently has **${amount}** quota points.`)
-        .addFields({ name: 'Log Entries', value: String(totalLogs), inline: true });
+        .addFields({ name: 'Log Entries', value: String(totalLogs), inline: true })
+        .setFooter({ text: 'Greenville Hub™', iconURL: 'https://media.discordapp.net/attachments/1492958669200031814/1505251172150411466/kiaodogcircle_2_.png?ex=6a09f1e5&is=6a08a065&hm=cc710655fb31f9ddd95ec63a37b5b7d48d47ca0308917ecbf724b6415cc3b95d&=&format=webp&quality=lossless&width=818&height=818' });
 
       return interaction.editReply({ embeds: [embed] });
     }
