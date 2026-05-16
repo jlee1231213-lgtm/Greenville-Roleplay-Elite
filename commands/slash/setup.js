@@ -4,7 +4,7 @@ const StartupSession = require('../../models/startupsession');
 const { activeStartupSessions } = require('./startup');
 
 const DEFAULT_SETUP_EMBED = {
-  title: '<a:loading:1500587786649211051> *__Greenville Hub - Session Preparation!__* <a:loading:1500587786649211051>',
+  title: '<a:loading:1505050390788571167> *__Greenville Hub - Session Preparation!__* <a:loading:1505050390788571167>',
   description: '<a:GVH_animatedarrow:1504244827062010131> {user} is officially setting up their session! While you wait for **EA & Release**, make sure you registered a **vehicle**. Please don\'t ping the host during this time, setup takes time.',
   image: 'https://media.discordapp.net/attachments/1492958669200031814/1505028627622793258/image.png?ex=6a0922a2&is=6a07d122&hm=402525718bdaca06ef9a33abe43c8798f8df10eb1ef38fc72affb55dead7c309&=&format=webp&quality=lossless&width=2320&height=724',
 };
@@ -13,6 +13,7 @@ function normalizeEmbedText(text) {
   if (!text) return text;
   return text
     .replace(/Greenville Roleplaye? Elite/gi, 'Greenville Hub')
+    .replace(/<a:loading:1500587786649211051>/g, '<a:loading:1505050390788571167>')
     .replace(/<:dot:1500584469906591971>|:dot:/g, '<a:GVH_animatedarrow:1504244827062010131>');
 }
 
