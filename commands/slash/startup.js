@@ -13,8 +13,17 @@ const STARTUP_REACTION_EMOJI_TAG = 'GVH_beatinghearts:1504244806803783717';
 const DEFAULT_STARTUP_EMBED = {
   title: '## <a:GVH_beatinghearts:1504244806803783717>   *__Greenville Hub — Startup__* <a:GVH_beatinghearts:1504244806803783717>',
   description: `<a:animatedarrow:1500579646725558352>  {{user}} is currently hosting a **Greenville Hub session**. Before joining, please make sure you have reviewed the information in the ⁠**Comminty Dropdowns** channel and carefully read all guidelines listed below.\n\n<a:GVH_animatedarrow:1504244827062010131> In order for this session to officially begin, we must reach **__{{reactions}}+__ reactions** on this startup message.\n\n<a:animatedarrow:1500968506114572359>  Review the **Restricted Vehicles List** to avoid any rule violations.\n<a:animatedarrow:1500968506114572359>  Make sure all of your vehicles are properly registered using the Greenville Hub system bot!\n<a:animatedarrow:1500968506114572359>  Enable your Roblox privacy settings so that **'Everyone' can invite you to private servers!**`,
-  image: 'https://media.discordapp.net/attachments/1492958669200031814/1502813547971874866/image.png?ex=6a0113ae&is=69ffc22e&hm=98d9ab691999e7822a7e00df0cdac135ffa45f20a447148cc4503ef157753efc&=&format=webp&quality=lossless&width=1992&height=720'
+  image: 'https://cdn.discordapp.com/attachments/1492958669200031814/1502813547971874866/image.png'
 };
+
+const LEGACY_STARTUP_IMAGE_URLS = [
+  'https://media.discordapp.net/attachments/1492958669200031814/1502813547971874866/image.png?ex=6a0113ae&is=69ffc22e&hm=98d9ab691999e7822a7e00df0cdac135ffa45f20a447148cc4503ef157753efc&=&format=webp&quality=lossless&width=1992&height=720',
+];
+
+function isLegacyStartupImageUrl(imageUrl) {
+  return LEGACY_STARTUP_IMAGE_URLS.includes(imageUrl)
+    || imageUrl?.includes('/attachments/1492958669200031814/1502813547971874866/image.png');
+}
 
 function normalizeBranding(text) {
   if (!text) return text;
@@ -29,6 +38,17 @@ function applyStartupTokens(text, userId, now, reactionsRequired) {
     .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
     .replace(/\{\{date\}\}|\$date/g, now.toLocaleString())
     .replace(/\{\{reactions\}\}|\$reactions/g, String(reactionsRequired));
+}
+
+function resolveStartupEmbed(savedEmbed) {
+  if (!savedEmbed) return DEFAULT_STARTUP_EMBED;
+
+  return {
+    ...savedEmbed,
+    image: !savedEmbed.image || isLegacyStartupImageUrl(savedEmbed.image)
+      ? DEFAULT_STARTUP_EMBED.image
+      : savedEmbed.image,
+  };
 }
 
 function formatCooldown(msRemaining) {
@@ -77,7 +97,7 @@ module.exports = {
     const now = new Date();
     const embedColor = '#4C7C58';
 
-    const startupTemplate = settings.startupEmbed || DEFAULT_STARTUP_EMBED;
+    const startupTemplate = resolveStartupEmbed(settings.startupEmbed);
     const setupTemplate = settings.setupEmbed || {};
 
     let embedDescription = applyStartupTokens(startupTemplate.description, userId, now, reactionsRequired) || 'Data was not found, please use `/settings` to configure the Embed';
@@ -148,3 +168,5 @@ module.exports = {
 
 module.exports.activeStartupSessions = activeStartupSessions;
 module.exports.startupCooldowns = startupCooldowns;
+module.exports.DEFAULT_STARTUP_EMBED = DEFAULT_STARTUP_EMBED;
+module.exports.resolveStartupEmbed = resolveStartupEmbed;

@@ -9,6 +9,7 @@ const {
 const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require('../utils/embedFooter');
 const Settings = require('../models/settings');
 const { resolveWelcomeEmbed } = require('./welcome-event');
+const { resolveStartupEmbed } = require('../commands/slash/startup');
 
 async function updateSetting(guildId, field, value) {
     let doc = await Settings.findOne({ guildId });
@@ -171,7 +172,9 @@ module.exports = {
                 const field = interaction.values[0];
                 const currentEmbed = field === 'welcomeEmbed'
                     ? resolveWelcomeEmbed(settings?.[field])
-                    : settings?.[field] || {};
+                    : field === 'startupEmbed'
+                        ? resolveStartupEmbed(settings?.[field])
+                        : settings?.[field] || {};
                 const currentTitle = (currentEmbed.title || '').slice(0, 256);
                 const currentDescription = (currentEmbed.description || '').slice(0, 4000);
                 const currentImage = (currentEmbed.image || '').slice(0, 4000);
