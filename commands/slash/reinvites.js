@@ -2,7 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js"
 const Settings = require('../../models/settings');
 
 const DEFAULT_REINVITES_EMBED = {
-  title: '## :beatinghearts: *__Greenville Hub - Re-invites Released__*',
+  title: '## <a:GVH_beatinghearts:1504244806803783717> *__Greenville Hub - Re-invites Released__*',
   description: ':animatedarrow: {{user}} has released reinvites. If you missed the gran opening, please join by clicking the button below!\n\n:animatedarrow: FRP Speed: {{frplimit}}\n:animatedarrow: LEO Status: {{pt}}\n:animatedarrow: Host: {{user}}\n:animatedarrow: Session link: {{link}}',
   image: 'https://media.discordapp.net/attachments/1492958669200031814/1503075550858711070/image.png?ex=6a0207b1&is=6a00b631&hm=ab6a788a316838df91aa02a88559f60bb33686d1adb90e09b5cbca1e7d9ae821&=&format=webp&quality=lossless&width=2330&height=764',
 };
@@ -77,7 +77,7 @@ module.exports = {
     if (reinvitesTemplate.image?.startsWith('http')) embed.setImage(reinvitesTemplate.image);
 
     const reinviteMessage = await interaction.channel.send({ embeds: [embed] });
-    await reinviteMessage.react('beatinghearts:1500587804445638897').catch(() => {});
+    await reinviteMessage.react('GVH_beatinghearts:1504244806803783717').catch(() => {});
     await interaction.editReply({ content: 'Reinvites sent successfully.', flags: MessageFlags.Ephemeral });
 
     let logChannel;

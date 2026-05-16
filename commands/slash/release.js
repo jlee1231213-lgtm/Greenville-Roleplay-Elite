@@ -2,7 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const Settings = require('../../models/settings');
 
 const DEFAULT_RELEASE_EMBED = {
-  title: '## <a:beatinghearts:1500587804445638897>  *__Greenville Hub - Session Released!__* <a:beatinghearts:1500587804445638897>',
+  title: '## <a:GVH_beatinghearts:1504244806803783717>  *__Greenville Hub - Session Released!__* <a:GVH_beatinghearts:1504244806803783717>',
   description: '<a:GVH_animatedarrow:1504244827062010131> {{user}} has offically released his session. If you reacted, upon joining please park until further notices. Please wait or expect a delay in the members joining.\n\n<a:animatedarrow:1500968506114572359>  FRP Speed: {{frplimit}}\n<a:animatedarrow:1500968506114572359> LEO Status: {{pt}}\n<a:animatedarrow:1500968506114572359> Host: {{user}}\n<a:animatedarrow:1500968506114572359> Session link: {{link}}',
   image: 'https://media.discordapp.net/attachments/1492958669200031814/1502813548236111892/image.png?ex=6a0113ae&is=69ffc22e&hm=d499cd0ed6f25c701eeeb4b32a925e587c4a9b393b97114477f3b8c2495cfed2&=&format=webp&quality=lossless&width=1450&height=540',
 };

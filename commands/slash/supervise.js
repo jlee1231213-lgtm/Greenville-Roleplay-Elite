@@ -5,7 +5,7 @@ const { activeStartupSessions } = require('./startup');
 const { v4: uuidv4 } = require('uuid');
 
 const DEFAULT_SUPERVISE_EMBED = {
-  title: '## <a:beatinghearts:1500587804445638897>  *__Greenville Hub - Session Supervise!__* <a:beatinghearts:1500587804445638897>',
+  title: '## <a:GVH_beatinghearts:1504244806803783717>  *__Greenville Hub - Session Supervise!__* <a:GVH_beatinghearts:1504244806803783717>',
   description: '<a:GVH_animatedarrow:1504244827062010131> {{user}} is supervising this current session, expect this to go smoothly, and expect a better experience within the session!!',
   image: null,
 };
