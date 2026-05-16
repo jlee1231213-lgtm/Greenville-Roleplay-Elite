@@ -86,7 +86,7 @@ module.exports = {
     if (!channel) return;
 
     const embedData = resolveWelcomeEmbed(settings?.welcomeEmbed);
-    const color = '#1a3e88';
+    const color = '#4C7C58';
 
     const title = applyWelcomeTokens(embedData.title || DEFAULT_WELCOME_EMBED.title, member.id);
     const description = applyWelcomeTokens(embedData.description || DEFAULT_WELCOME_EMBED.description, member.id);
