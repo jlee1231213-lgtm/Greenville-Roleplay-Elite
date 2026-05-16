@@ -11,7 +11,7 @@ module.exports = {
     .setDescription('Work to earn some cash.'),
 
   async execute(interaction) {
-    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+    await interaction.deferReply({ });
     const { guild, user, member } = interaction;
 
     const settings = await Settings.findOne({ guildId: guild.id });
