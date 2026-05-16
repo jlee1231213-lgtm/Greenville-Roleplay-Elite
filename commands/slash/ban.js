@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { greenvilleFooter } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 const ModLog = require('../../models/modlogs');
 
@@ -47,7 +48,7 @@ module.exports = {
 > **Proof**: ${proof || 'No proof provided'}
 > **Moderator**: <@${interaction.user.id}>/${interaction.user.tag}`)
       .setColor(embedColor)
-      .setFooter({ text: 'Greenville Hub™', iconURL: 'https://media.discordapp.net/attachments/1492958669200031814/1505251172150411466/kiaodogcircle_2_.png?ex=6a09f1e5&is=6a08a065&hm=cc710655fb31f9ddd95ec63a37b5b7d48d47ca0308917ecbf724b6415cc3b95d&=&format=webp&quality=lossless&width=818&height=818' })
+      .setFooter(greenvilleFooter(interaction))
       .setTimestamp();
 
     await target.send({ embeds: [dmEmbed] }).catch(() => null);
@@ -68,7 +69,7 @@ module.exports = {
       .setTitle('User Banned')
       .setDescription(`<@${target.id}> has been banned from the server.`)
       .setColor(embedColor)
-      .setFooter({ text: 'Greenville Hub™', iconURL: 'https://media.discordapp.net/attachments/1492958669200031814/1505251172150411466/kiaodogcircle_2_.png?ex=6a09f1e5&is=6a08a065&hm=cc710655fb31f9ddd95ec63a37b5b7d48d47ca0308917ecbf724b6415cc3b95d&=&format=webp&quality=lossless&width=818&height=818' })
+      .setFooter(greenvilleFooter(interaction))
       .setTimestamp();
 
     return interaction.editReply({ embeds: [replyEmbed] });

@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { greenvilleFooter } = require('../../utils/embedFooter');
 const Settings = require('../../models/settings');
 const Vehicle = require('../../models/vehicle');
 
@@ -53,6 +54,7 @@ module.exports = {
                 new EmbedBuilder()
                     .setColor(embedColor)
                     .setDescription(`You have reached your vehicle cap of ${cap}.`)
+                    .setFooter(greenvilleFooter(interaction))
             ]
         });
 
@@ -76,7 +78,8 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setColor(embedColor)
             .setTitle('Vehicle Registered')
-            .setDescription(`Successfully registered **${brand} ${model} (${year})** with plate **${plate}** and color **${color}**.`);
+            .setDescription(`Successfully registered **${brand} ${model} (${year})** with plate **${plate}** and color **${color}**.`)
+            .setFooter(greenvilleFooter(interaction));
 
         return interaction.editReply({ embeds: [embed], });
     }

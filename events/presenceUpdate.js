@@ -1,4 +1,5 @@
 const { Events, EmbedBuilder } = require('discord.js');
+const { greenvilleFooter } = require('../utils/embedFooter');
 
 module.exports = {
   name: Events.PresenceUpdate,
@@ -19,7 +20,6 @@ module.exports = {
 
     const supporterRole = guild.roles.cache.get(supporterRoleId);
     if (!supporterRole) return;
-    const footerIcon = guild.iconURL({ extension: 'png', size: 128 }) || undefined;
 
     // Check if user has the /gvhub status
     const newStatus = newPresence.activities.find(activity => activity.name === 'Custom Status')?.state || '';
@@ -41,7 +41,7 @@ module.exports = {
 <a:GVH_animatedarrow:1504244827062010131> Thank you for supporting **__Greenville Hub__** ${user} You will **__recieve__** the <@&1505209789741797436> role for putting /gvhub in you status!
 
 > <a:GVH_animatedarrow:1504244827062010131> Want the <@&1505209789741797436> role...? Ensure to put /gvhub in your status & you will receive it!`)
-            .setFooter({ text: 'Greenville Hub™', iconURL: footerIcon });
+            .setFooter(greenvilleFooter(guild));
 
         await channel.send({ embeds: [embed] });
       } catch (error) {

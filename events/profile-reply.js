@@ -5,6 +5,7 @@ const {
   ButtonBuilder, 
   ButtonStyle 
 } = require('discord.js');
+const { greenvilleFooter } = require('../utils/embedFooter');
 const Vehicle = require('../models/vehicle');
 const Ticket = require('../models/tickets');
 const Warrant = require('../models/warrant');
@@ -40,6 +41,7 @@ module.exports = {
               .setTitle(`${user.user.tag} | Registered Vehicles`)
               .setDescription('No vehicles registered.')
               .setColor(embedColor)
+              .setFooter(greenvilleFooter(interaction))
           ], 
           ephemeral: true 
         });
@@ -56,7 +58,7 @@ module.exports = {
         .setDescription(currentVehicles
           .map(v => `• ${v.brand} ${v.model} (${v.year}) | Color: ${v.Color} | Plate: ${v.Plate}`)
           .join('\n'))
-        .setFooter({ text: `Page ${page} of ${totalPages}` });
+        .setFooter({ ...greenvilleFooter(interaction), text: `Page ${page} of ${totalPages} • Greenville Hub™` });
 
       const buttons = new ActionRowBuilder();
       if (page > 1) buttons.addComponents(
@@ -92,7 +94,8 @@ module.exports = {
         .addFields(
           { name: 'Tickets', value: ticketList, inline: false },
           { name: 'Warrants', value: warrantList, inline: false }
-        );
+        )
+        .setFooter(greenvilleFooter(interaction));
 
       return interaction.reply({ embeds: [embed], ephemeral: true });
     }
@@ -106,8 +109,7 @@ module.exports = {
         const balanceEmbed = new EmbedBuilder()
           .setTitle(`${user.user.tag} | Account Balance`)
           .setColor(embedColor)
-          .setDescription(`**Cash:** $${eco.cash}\n**Bank:** $${eco.bank}\n**Total:** $${eco.cash + eco.bank}`)
-          .setFooter({ text: 'Greenville Hub™', iconURL: 'https://media.discordapp.net/attachments/1492958669200031814/1505251172150411466/kiaodogcircle_2_.png?ex=6a09f1e5&is=6a08a065&hm=cc710655fb31f9ddd95ec63a37b5b7d48d47ca0308917ecbf724b6415cc3b95d&=&format=webp&quality=lossless&width=818&height=818' });
+          .setDescription(`**Cash:** $${eco.cash}\n**Bank:** $${eco.bank}\n**Total:** $${eco.cash + eco.bank}`);
 
         return interaction.reply({ embeds: [balanceEmbed], ephemeral: true });
       } catch (error) {

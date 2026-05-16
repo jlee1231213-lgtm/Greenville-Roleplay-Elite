@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
+const { greenvilleFooter } = require('../../utils/embedFooter');
 const Settings = require('../../models/settings');
 const ModLog = require('../../models/modlogs');
 
@@ -38,6 +39,7 @@ module.exports = {
       .setTitle(`${interaction.guild.name} | Kicked`)
       .setDescription(`You have been kicked from **${interaction.guild.name}**.\n\n> **Reason**: ${reason}\n> **Moderator**: <@${interaction.user.id}>`)
       .setColor(embedColor)
+      .setFooter(greenvilleFooter(interaction))
       .setTimestamp();
 
     await target.send({ embeds: [dmEmbed] }).catch(() => null);
@@ -49,6 +51,7 @@ module.exports = {
       .setTitle('User Kicked')
       .setDescription(`<@${target.id}> has been kicked from the server.`)
       .setColor(embedColor)
+      .setFooter(greenvilleFooter(interaction))
       .setTimestamp();
 
     return interaction.editReply({ embeds: [embed] });

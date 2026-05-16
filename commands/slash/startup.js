@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
+const { greenvilleFooter } = require("../../utils/embedFooter");
 const { v4: uuidv4 } = require('uuid');
 const StartupSession = require('../../models/startupsession');
 const Settings = require('../../models/settings');
@@ -51,17 +52,23 @@ module.exports = {
     await interaction.deferReply({ ephemeral: true });
 
     let settings = await Settings.findOne({ guildId: interaction.guild.id });
-    if (!settings) return interaction.editReply({ content: 'Settings not found' });
+    if (!settings) {
+      return interaction.editReply({
+        embeds: [new EmbedBuilder().setDescription('Settings not found').setColor('#4C7C58').setFooter(greenvilleFooter(interaction))],
+      });
+    }
 
     const staffRoleId = settings.staffRoleId;
     if (!staffRoleId || !interaction.member.roles.cache.has(staffRoleId)) {
-      return interaction.editReply({ content: 'You must have the Staff role' });
+      return interaction.editReply({
+        embeds: [new EmbedBuilder().setDescription('You must have the Staff role').setColor('#4C7C58').setFooter(greenvilleFooter(interaction))],
+      });
     }
 
     const startupCooldownUntil = startupCooldowns.get(interaction.user.id);
     if (startupCooldownUntil && startupCooldownUntil > Date.now()) {
       return interaction.editReply({
-        content: `You can use /startup again in ${formatCooldown(startupCooldownUntil - Date.now())}.`,
+        embeds: [new EmbedBuilder().setDescription(`You can use /startup again in ${formatCooldown(startupCooldownUntil - Date.now())}.`).setColor('#4C7C58').setFooter(greenvilleFooter(interaction))],
       });
     }
 
@@ -79,7 +86,7 @@ module.exports = {
       .setTitle(applyStartupTokens(startupTemplate.title, userId, now, reactionsRequired) || 'Data not found')
       .setDescription(embedDescription)
       .setColor(embedColor)
-      .setFooter({ text: 'Greenville Hub™', iconURL: 'https://media.discordapp.net/attachments/1492958669200031814/1505251172150411466/kiaodogcircle_2_.png?ex=6a09f1e5&is=6a08a065&hm=cc710655fb31f9ddd95ec63a37b5b7d48d47ca0308917ecbf724b6415cc3b95d&=&format=webp&quality=lossless&width=818&height=818' });
+      .setFooter(greenvilleFooter(interaction));
 
     if (startupTemplate.image && startupTemplate.image.startsWith('http')) embed.setImage(startupTemplate.image);
 
@@ -115,7 +122,7 @@ module.exports = {
         const setupEmbed = new EmbedBuilder()
           .setDescription(finalDescription)
           .setColor(embedColor)
-          .setFooter({ text: 'Greenville Hub™', iconURL: 'https://media.discordapp.net/attachments/1492958669200031814/1505251172150411466/kiaodogcircle_2_.png?ex=6a09f1e5&is=6a08a065&hm=cc710655fb31f9ddd95ec63a37b5b7d48d47ca0308917ecbf724b6415cc3b95d&=&format=webp&quality=lossless&width=818&height=818' });
+          .setFooter(greenvilleFooter(interaction));
 
         setupEmbed.addFields({
           name: 'Setup Time Window',

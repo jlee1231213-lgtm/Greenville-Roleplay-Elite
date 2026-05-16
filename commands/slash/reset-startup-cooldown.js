@@ -1,4 +1,5 @@
-const { SlashCommandBuilder, MessageFlags } = require('discord.js');
+const { SlashCommandBuilder, MessageFlags, EmbedBuilder } = require('discord.js');
+const { greenvilleFooter } = require('../../utils/embedFooter');
 const Settings = require('../../models/settings');
 const { startupCooldowns } = require('./startup');
 
@@ -19,16 +20,24 @@ module.exports = {
     const allowedRoleIds = [settings?.staffRoleId, settings?.adminRoleId].filter(Boolean);
 
     if (!interaction.member.roles.cache.some(role => allowedRoleIds.includes(role.id))) {
+      const errorEmbed = new EmbedBuilder()
+        .setDescription('You do not have the required role to use this command.')
+        .setColor('#4C7C58')
+        .setFooter(greenvilleFooter(interaction));
       return interaction.editReply({
-        content: 'You do not have the required role to use this command.',
+        embeds: [errorEmbed],
       });
     }
 
     const targetUser = interaction.options.getUser('user');
     startupCooldowns.delete(targetUser.id);
 
+    const successEmbed = new EmbedBuilder()
+      .setDescription(`Reset startup cooldown for <@${targetUser.id}>.`)
+      .setColor('#4C7C58')
+      .setFooter(greenvilleFooter(interaction));
     return interaction.editReply({
-      content: `Reset startup cooldown for <@${targetUser.id}>.`,
+      embeds: [successEmbed],
     });
   }
 };

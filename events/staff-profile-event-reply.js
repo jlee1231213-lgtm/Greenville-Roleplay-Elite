@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
+const { greenvilleFooter } = require('../utils/embedFooter');
 const Settings = require('../models/settings');
 const SessionLog = require('../models/sessionlog');
 const Quota = require('../models/quota');
@@ -40,7 +41,8 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setTitle(`Sessions (${sessions.length})`)
         .setDescription(description)
-        .setColor(embedColor);
+        .setColor(embedColor)
+        .setFooter(greenvilleFooter(interaction));
 
       await interaction.editReply({ embeds: [embed] });
     }
@@ -60,7 +62,8 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setTitle(`Cohost Sessions (${cohosts.length})`)
         .setDescription(description)
-        .setColor(embedColor);
+        .setColor(embedColor)
+        .setFooter(greenvilleFooter(interaction));
 
       await interaction.editReply({ embeds: [embed] });
     }
@@ -80,7 +83,8 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setTitle(`Supervise Sessions (${supervises.length})`)
         .setDescription(description)
-        .setColor(embedColor);
+        .setColor(embedColor)
+        .setFooter(greenvilleFooter(interaction));
 
       await interaction.editReply({ embeds: [embed] });
     }
@@ -100,6 +104,7 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setTitle(`Partnership Info - ${interaction.user.tag}`)
         .setColor(embedColor)
+        .setFooter(greenvilleFooter(interaction))
         .addFields(
           { name: 'Point Values', value: `🎮 Host: ${POINT_VALUES.host}\n👥 Co-Host: ${POINT_VALUES.cohost}\n👁️ Supervise: ${POINT_VALUES.supervise}\n🤝 Partnership: ${POINT_VALUES.partnership}`, inline: false },
           { name: 'Sessions Count', value: `🎮 Hosted: ${hostSessions}\n👥 Co-Hosted: ${cohostSessions}\n👁️ Supervised: ${superviseSessions}`, inline: false },

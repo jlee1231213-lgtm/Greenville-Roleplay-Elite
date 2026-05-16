@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder, PermissionsBitField } = require('discord.js');
+const { greenvilleFooter } = require('../../utils/embedFooter');
 const Settings = require('../../models/settings');
 
 module.exports = {
@@ -29,9 +30,9 @@ Use this option to report a non-staff member (civilian) for breaking server rule
 Please include clear evidence and a detailed description of the incident to help us review your report effectively.
 
 -# <a:GVH_animatedarrow:1504244827062010131> **Please Note:** If you do not respond to your ticket within **24 Hours**, it will be __automatically__ closed.`)
-  .setColor(embedColor)
+      .setColor(embedColor)
       .setImage("https://media.discordapp.net/attachments/1492958669200031814/1505240193949499504/image.png?ex=6a09e7ac&is=6a08962c&hm=1f547b1a5aba54e28dd75919f1be64bfd1414688b954c7ed832362b0a5bb2963&=&format=webp&quality=lossless&width=2320&height=768")
-      .setFooter({ text: `${interaction.guild.name}`, iconURL: `${interaction.guild.iconURL()}` });
+      .setFooter(greenvilleFooter(interaction));
 
 
     const row = new ActionRowBuilder()

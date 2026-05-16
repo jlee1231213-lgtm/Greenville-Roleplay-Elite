@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
+const { greenvilleFooter } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 const StartupSession = require('../../models/startupsession');
 const { activeStartupSessions } = require('./startup');
@@ -26,7 +27,11 @@ module.exports = {
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#4C7C58';
     const allowedRoleId = settings?.staffRoleId;
-    if (!allowedRoleId || !interaction.member.roles.cache.has(allowedRoleId)) return interaction.editReply({ content: 'No permission' });
+    if (!allowedRoleId || !interaction.member.roles.cache.has(allowedRoleId)) {
+      return interaction.editReply({
+        embeds: [new EmbedBuilder().setDescription('No permission').setColor(embedColor).setFooter(greenvilleFooter(interaction))],
+      });
+    }
     const userId = interaction.user.id;
     const timestamp = new Date();
     const sessionId = uuidv4();
@@ -69,7 +74,7 @@ module.exports = {
           .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
       )
       .setColor(embedColor)
-      .setFooter({ text: 'Greenville Hub™', iconURL: 'https://media.discordapp.net/attachments/1492958669200031814/1505251172150411466/kiaodogcircle_2_.png?ex=6a09f1e5&is=6a08a065&hm=cc710655fb31f9ddd95ec63a37b5b7d48d47ca0308917ecbf724b6415cc3b95d&=&format=webp&quality=lossless&width=818&height=818' });
+      .setFooter(greenvilleFooter(interaction));
     if (superviseTemplate.image?.startsWith('http')) superviseEmbed.setImage(superviseTemplate.image);
 
     if (replyTarget && replyTarget.reply) await replyTarget.reply({ embeds: [superviseEmbed] });

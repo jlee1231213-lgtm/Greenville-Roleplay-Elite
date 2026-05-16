@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
+const { greenvilleFooter } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 const SessionLog = require('../../models/sessionlog');
 const { activeStartupSessions } = require('../slash/startup');
@@ -18,12 +19,12 @@ module.exports = {
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#4C7C58';
     const allowedRoleIds = [settings?.staffRoleId, settings?.adminRoleId].filter(Boolean);
-    if (!interaction.member.roles.cache.some(role => allowedRoleIds.includes(role.id))) return interaction.editReply({ embeds: [new EmbedBuilder().setDescription('You do not have the required role to use this command.').setColor(embedColor)] });
+    if (!interaction.member.roles.cache.some(role => allowedRoleIds.includes(role.id))) return interaction.editReply({ embeds: [new EmbedBuilder().setDescription('You do not have the required role to use this command.').setColor(embedColor).setFooter(greenvilleFooter(interaction))] });
     const userId = interaction.user.id;
 
     const sessionEntry = [...activeStartupSessions.entries()]
       .find(([id, data]) => data.userId === userId && data.type === 'cohost');
-    if (!sessionEntry) return interaction.editReply({ embeds: [new EmbedBuilder().setDescription('No active cohost session found in memory for you.').setColor(embedColor)] });
+    if (!sessionEntry) return interaction.editReply({ embeds: [new EmbedBuilder().setDescription('No active cohost session found in memory for you.').setColor(embedColor).setFooter(greenvilleFooter(interaction))] });
 
     const [sessionId, sessionData] = sessionEntry;
     await SessionLog.create({ guildId: interaction.guild.id, sessiontype: sessionData.type, sessionId, userId: sessionData.userId, timestarted: sessionData.timestamp, timeended: new Date() });
@@ -37,7 +38,7 @@ module.exports = {
           .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
       )
       .setColor(embedColor)
-      .setFooter({ text: 'Greenville Hub™', iconURL: 'https://media.discordapp.net/attachments/1492958669200031814/1505251172150411466/kiaodogcircle_2_.png?ex=6a09f1e5&is=6a08a065&hm=cc710655fb31f9ddd95ec63a37b5b7d48d47ca0308917ecbf724b6415cc3b95d&=&format=webp&quality=lossless&width=818&height=818' });
+      .setFooter(greenvilleFooter(interaction));
     if (cohostEndTemplate.image?.startsWith('http')) endEmbed.setImage(cohostEndTemplate.image);
     if (cohostEndTemplate.thumbnail?.startsWith('http')) endEmbed.setThumbnail(cohostEndTemplate.thumbnail);
 

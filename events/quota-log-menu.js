@@ -75,8 +75,7 @@ module.exports = {
         { name: 'Points', value: `+${pointsToAdd}`, inline: true },
         { name: 'Total', value: `${quotaDoc.amount}`, inline: true }
       )
-      .setThumbnail(interaction.user.displayAvatarURL())
-      .setFooter({ text: 'Greenville Hub™' });
+      .setThumbnail(interaction.user.displayAvatarURL());
 
     const logChannel = interaction.guild.channels.cache.get('1501033146941050920');
     if (logChannel?.isTextBased?.()) {
