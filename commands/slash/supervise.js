@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const DEFAULT_SUPERVISE_EMBED = {
   title: '## <a:beatinghearts:1500587804445638897>  *__Greenville Hub - Session Supervise!__* <a:beatinghearts:1500587804445638897>',
-  description: '<:dot:1500584469906591971> {{user}} is supervising this current session, expect this to go smoothly, and expect a better experience within the session!!',
+  description: '<a:GVH_animatedarrow:1504244827062010131> {{user}} is supervising this current session, expect this to go smoothly, and expect a better experience within the session!!',
   image: null,
 };
 

@@ -5,7 +5,7 @@ const { activeStartupSessions } = require('./startup');
 
 const DEFAULT_SETUP_EMBED = {
   title: '<a:loading:1500587786649211051> *__Greenville Hub - Session Preparation!__* <a:loading:1500587786649211051>',
-  description: '<:dot:1500584469906591971> {user} is officially setting up their session! While you wait for **EA & Release**, make sure you registered a **vehicle**. Please don\'t ping the host during this time, setup takes time.',
+  description: '<a:GVH_animatedarrow:1504244827062010131> {user} is officially setting up their session! While you wait for **EA & Release**, make sure you registered a **vehicle**. Please don\'t ping the host during this time, setup takes time.',
   image: null,
 };
 
