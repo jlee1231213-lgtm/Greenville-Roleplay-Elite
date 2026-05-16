@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, MessageFlags, EmbedBuilder } = require('discord.js');
-const { greenvilleFooter } = require('../../utils/embedFooter');
+const { greenvilleFooter, greenvilleAuthor } = require('../../utils/embedFooter');
 const Settings = require('../../models/settings');
 const { startupCooldowns } = require('./startup');
 
@@ -23,7 +23,7 @@ module.exports = {
       const errorEmbed = new EmbedBuilder()
         .setDescription('You do not have the required role to use this command.')
         .setColor('#4C7C58')
-        .setFooter(greenvilleFooter(interaction));
+        .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
       return interaction.editReply({
         embeds: [errorEmbed],
       });
@@ -35,7 +35,7 @@ module.exports = {
     const successEmbed = new EmbedBuilder()
       .setDescription(`Reset startup cooldown for <@${targetUser.id}>.`)
       .setColor('#4C7C58')
-      .setFooter(greenvilleFooter(interaction));
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
     return interaction.editReply({
       embeds: [successEmbed],
     });

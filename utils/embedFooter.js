@@ -8,13 +8,23 @@ function greenvilleFooter() {
   };
 }
 
+function greenvilleAuthor() {
+  return {
+    name: GREENVILLE_FOOTER_TEXT,
+    iconURL: GREENVILLE_FOOTER_ICON_URL,
+  };
+}
+
 function applyGreenvilleFooter(embed, source) {
-  return embed.setFooter(greenvilleFooter(source));
+  return embed
+    .setAuthor(greenvilleAuthor())
+    .setFooter(greenvilleFooter(source));
 }
 
 module.exports = {
   GREENVILLE_FOOTER_TEXT,
   GREENVILLE_FOOTER_ICON_URL,
+  greenvilleAuthor,
   greenvilleFooter,
   applyGreenvilleFooter,
 };

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const { greenvilleFooter } = require("../../utils/embedFooter");
+const { greenvilleFooter, greenvilleAuthor } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 
 const DEFAULT_HATEPINGS_EMBED = {
@@ -34,7 +34,7 @@ module.exports = {
       .setColor('#4C7C58')
       .setTitle(normalizeEmbedText(hatePingsTemplate.title || DEFAULT_HATEPINGS_EMBED.title))
       .setDescription(normalizeEmbedText(hatePingsTemplate.description || DEFAULT_HATEPINGS_EMBED.description).replace(/\\n/g, '\n'))
-      .setFooter(greenvilleFooter(interaction));
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
 
     if (hatePingsTemplate.image?.startsWith('http')) embed.setImage(hatePingsTemplate.image);
 

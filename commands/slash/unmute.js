@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const { greenvilleFooter } = require('../../utils/embedFooter');
+const { greenvilleFooter, greenvilleAuthor } = require('../../utils/embedFooter');
 const Settings = require('../../models/settings');
 const ModLog = require('../../models/modlogs');
 
@@ -43,7 +43,7 @@ module.exports = {
       .setTitle('User Unmuted')
       .setDescription(`<@${target.id}>'s timeout has been removed.`)
       .setColor(embedColor)
-      .setFooter(greenvilleFooter(interaction))
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
       .setTimestamp();
 
     return interaction.editReply({ embeds: [embed] });

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ComponentType, ButtonStyle } = require('discord.js');
-const { greenvilleFooter } = require('../../utils/embedFooter');
+const { greenvilleFooter, greenvilleAuthor } = require('../../utils/embedFooter');
 const StartupSession = require('../../models/startupsession');
 const Settings = require('../../models/settings');
 
@@ -57,7 +57,7 @@ module.exports = {
       .setDescription(`<a:GVH_animatedarrow:1504244827062010131> ${userMention} has released **Early Access.** If you have reacted, and have permission to join, please click the button below.\n\n> <a:GVH_animatedarrow:1504244827062010131> Reminder; leaking this link will result in a **termination** alongside **moderation.**`)
       .setColor(embedColor)
       .setImage('https://media.discordapp.net/attachments/1492958669200031814/1505028855126294669/image.png?ex=6a0922d9&is=6a07d159&hm=d2fb8cea8f623d86f30dbf5d1d337082b328f50434f76184744175f215292b05&=&format=webp&quality=lossless&width=2294&height=464')
-      .setFooter(greenvilleFooter(interaction));
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
 
     const earlyAccessMessage = await interaction.channel.send({
       content: whitelistMentions || null,
@@ -91,7 +91,7 @@ module.exports = {
     collector.on('collect', async i => {
       if (!i.member.roles.cache.some(r => allowedRoleIds.includes(r.id))) {
         return i.reply({
-          embeds: [new EmbedBuilder().setDescription('You do not have the required role.').setColor(embedColor).setFooter(greenvilleFooter(interaction))],
+          embeds: [new EmbedBuilder().setDescription('You do not have the required role.').setColor(embedColor).setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))],
           ephemeral: true
         });
       }
@@ -99,7 +99,7 @@ module.exports = {
       const startup = await StartupSession.findOne({ guildId: i.guild.id }).sort({ createdAt: -1 });
       if (!startup) {
         return i.reply({
-          embeds: [new EmbedBuilder().setDescription('Startup message not found. Please ask a host to initiate one.').setColor(embedColor).setFooter(greenvilleFooter(interaction))],
+          embeds: [new EmbedBuilder().setDescription('Startup message not found. Please ask a host to initiate one.').setColor(embedColor).setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))],
           ephemeral: true
         });
       }
@@ -108,7 +108,7 @@ module.exports = {
       const startupMsg = await startupChannel.messages.fetch(startup.messageId).catch(() => null);
       if (!startupMsg) {
         return i.reply({
-          embeds: [new EmbedBuilder().setDescription('Startup message no longer exists.').setColor(embedColor).setFooter(greenvilleFooter(interaction))],
+          embeds: [new EmbedBuilder().setDescription('Startup message no longer exists.').setColor(embedColor).setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))],
           ephemeral: true
         });
       }
@@ -121,14 +121,14 @@ module.exports = {
               .setTitle('Reaction Required')
               .setDescription(`You must react to the [startup message](https://discord.com/channels/${i.guild.id}/${startup.channelId}/${startup.messageId}) to get access.`)
               .setColor(embedColor)
-              .setFooter(greenvilleFooter(interaction))
+              .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
           ],
           ephemeral: true
         });
       }
 
       await i.reply({
-        embeds: [new EmbedBuilder().setDescription(`Click here to join the session:\n${sessionLink}`).setColor(embedColor).setFooter(greenvilleFooter(interaction))],
+        embeds: [new EmbedBuilder().setDescription(`Click here to join the session:\n${sessionLink}`).setColor(embedColor).setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))],
         ephemeral: true
       });
 

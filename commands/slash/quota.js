@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags, ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
-const { greenvilleFooter } = require('../../utils/embedFooter');
+const { greenvilleFooter, greenvilleAuthor } = require('../../utils/embedFooter');
 const Settings = require('../../models/settings');
 const Quota = require('../../models/quota');
 
@@ -136,7 +136,7 @@ module.exports = {
         .setColor(embedColor)
         .setTitle('Greenville Hub, Quota Leaderboard - Top 5')
         .setDescription(lines.join('\n'))
-        .setFooter(greenvilleFooter(interaction));
+        .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
 
       const logChannel = interaction.guild.channels.cache.get('1501033078389477436');
       if (logChannel?.isTextBased?.()) {
@@ -157,7 +157,7 @@ module.exports = {
         .setTitle('Quota Summary')
         .setDescription(`<@${user.id}> currently has **${amount}** quota points.`)
         .addFields({ name: 'Log Entries', value: String(totalLogs), inline: true })
-        .setFooter(greenvilleFooter(interaction));
+        .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
 
       return interaction.editReply({ embeds: [embed] });
     }

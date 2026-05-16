@@ -1,5 +1,5 @@
 const { EmbedBuilder, MessageFlags } = require('discord.js');
-const { greenvilleFooter } = require("../utils/embedFooter");
+const { greenvilleFooter, greenvilleAuthor } = require("../utils/embedFooter");
 const Settings = require('../models/settings');
 
 module.exports = {
@@ -28,7 +28,7 @@ module.exports = {
                 const embed = new EmbedBuilder()
                     .setDescription(description)
                     .setColor(embedColor)
-                    .setFooter(greenvilleFooter(interaction));
+                    .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
 
                 if (thumbnailUrl) embed.setThumbnail(thumbnailUrl);
                 if (imageUrl) embed.setImage(imageUrl);

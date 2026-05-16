@@ -28,7 +28,7 @@ module.exports = {
         You can manage roles, embed templates, vehicle/trailer lists, vehicle caps, and set the default embed colors for messages.`
       )
       .setColor(embedColor)
-      .setFooter(greenvilleFooter(interaction));
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
 
     const row = new ActionRowBuilder().addComponents(
       new StringSelectMenuBuilder()

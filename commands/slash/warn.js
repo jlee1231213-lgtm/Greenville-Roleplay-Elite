@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const { greenvilleFooter } = require('../../utils/embedFooter');
+const { greenvilleFooter, greenvilleAuthor } = require('../../utils/embedFooter');
 const Settings = require('../../models/settings');
 const ModLog = require('../../models/modlogs');
 
@@ -34,7 +34,7 @@ module.exports = {
       .setTitle(`${interaction.guild.name} | Warning`)
       .setDescription(`You have received a warning in **${interaction.guild.name}**.\n\n> **Reason**: ${reason}\n> **Moderator**: <@${interaction.user.id}>`)
       .setColor(embedColor)
-      .setFooter(greenvilleFooter(interaction))
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
       .setTimestamp();
 
     await target.send({ embeds: [dmEmbed] }).catch(() => null);
@@ -46,7 +46,7 @@ module.exports = {
       .setDescription(`<@${target.id}> has been warned.`)
       .addFields({ name: 'Reason', value: reason })
       .setColor(embedColor)
-      .setFooter(greenvilleFooter(interaction))
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
       .setTimestamp();
 
     return interaction.editReply({ embeds: [embed] });

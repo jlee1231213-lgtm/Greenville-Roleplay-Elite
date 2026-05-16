@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { greenvilleFooter } = require("../../utils/embedFooter");
+const { greenvilleFooter, greenvilleAuthor } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 
 module.exports = {
@@ -28,7 +28,7 @@ module.exports = {
         { name: 'Bots', value: `${bots}`, inline: true },
       )
       .setColor(embedColor)
-      .setFooter(greenvilleFooter(interaction))
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
       .setTimestamp();
 
     return interaction.editReply({ embeds: [embed] });

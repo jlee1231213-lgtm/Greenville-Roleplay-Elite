@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, MessageFlags, EmbedBuilder } = require('discord.js');
-const { greenvilleFooter } = require("../../utils/embedFooter");
+const { greenvilleFooter, greenvilleAuthor } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 const StartupSession = require('../../models/startupsession');
 const { activeStartupSessions } = require('./startup');
@@ -31,7 +31,7 @@ module.exports = {
       const staffRoleId = settings.staffRoleId;
       if (staffRoleId && !interaction.member.roles.cache.has(staffRoleId)) {
         return interaction.editReply({
-          embeds: [new EmbedBuilder().setDescription('You must have the Staff role to use this command.').setColor('#4C7C58').setFooter(greenvilleFooter(interaction))],
+          embeds: [new EmbedBuilder().setDescription('You must have the Staff role to use this command.').setColor('#4C7C58').setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))],
         });
       }
     }
@@ -84,7 +84,7 @@ module.exports = {
     const setupEmbed = new EmbedBuilder()
       .setDescription(finalDescription)
       .setColor('#4C7C58')
-      .setFooter(greenvilleFooter(interaction));
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
 
     setupEmbed.addFields({
       name: 'Setup Time Window',

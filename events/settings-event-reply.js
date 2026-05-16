@@ -6,7 +6,7 @@ const {
     TextInputStyle, 
     EmbedBuilder 
 } = require('discord.js');
-const { greenvilleFooter } = require('../utils/embedFooter');
+const { greenvilleFooter, greenvilleAuthor } = require('../utils/embedFooter');
 const Settings = require('../models/settings');
 
 async function updateSetting(guildId, field, value) {
@@ -35,7 +35,7 @@ module.exports = {
                             .setTitle('Roles Configuration')
                             .setDescription('Select a role category to configure (single role ID per category)')
                             .setColor(color)
-                            .setFooter(greenvilleFooter(interaction));
+                            .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
                         const row = new ActionRowBuilder().addComponents(
                             new StringSelectMenuBuilder()
                                 .setCustomId('roles_menu')
@@ -89,7 +89,7 @@ module.exports = {
                             .setTitle('Embeds Configuration')
                             .setDescription('Select an embed category to configure')
                             .setColor(color)
-                            .setFooter(greenvilleFooter(interaction));
+                            .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
                         const row = new ActionRowBuilder().addComponents(
                             new StringSelectMenuBuilder()
                                 .setCustomId('embeds_menu')
@@ -134,7 +134,7 @@ module.exports = {
                             .setTitle(`${type.replace('list','').toUpperCase()} List`)
                             .setDescription(`Current items:\n${currentList}\nSelect an action below:`)
                             .setColor(color)
-                            .setFooter(greenvilleFooter(interaction));
+                            .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
                         const row = new ActionRowBuilder().addComponents(
                             new StringSelectMenuBuilder()
                                 .setCustomId(`${type}_menu`)

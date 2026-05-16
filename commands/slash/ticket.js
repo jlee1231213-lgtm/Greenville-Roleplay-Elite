@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { greenvilleFooter } = require("../../utils/embedFooter");
+const { greenvilleFooter, greenvilleAuthor } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 const Ticket = require('../../models/tickets');
 
@@ -55,7 +55,7 @@ module.exports = {
 **How to pay the ticket?**
 To pay the ticket do /payticket and select the fine you would wish to pay. Make sure you do have enough money to pay for the fine in full.`)
       .setColor('#4C7C58')
-      .setFooter(greenvilleFooter(interaction));
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
 
     finedUser.send({ embeds: [dmEmbed] }).catch(() => null);
 
@@ -63,7 +63,7 @@ To pay the ticket do /payticket and select the fine you would wish to pay. Make 
       .setTitle('Ticket Issued')
       .setDescription(`You have successfully issued a ticket to ${finedUser.tag}.\n**Offense:** ${offense}\n**Price:** $${price}`)
       .setColor('#4C7C58')
-      .setFooter(greenvilleFooter(interaction));
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
 
     await interaction.editReply({ embeds: [confirmationEmbed] });
   }

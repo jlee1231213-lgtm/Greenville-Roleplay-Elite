@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { greenvilleFooter } = require("../../utils/embedFooter");
+const { greenvilleFooter, greenvilleAuthor } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 
 const DEFAULT_RELEASE_EMBED = {
@@ -60,7 +60,7 @@ module.exports = {
             .setTitle('Data not found')
             .setDescription(`You do not have the required role to use this command or data is not configured. Please use \`/settings\` to configure the Embed.`)
             .setColor(embedColor)
-            .setFooter(greenvilleFooter(interaction))
+            .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
         ],
       });
     }
@@ -90,7 +90,7 @@ module.exports = {
         )
       )
       .setColor(embedColor)
-      .setFooter(greenvilleFooter(interaction));
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
 
     if (releaseTemplate.image?.startsWith('http')) embed.setImage(releaseTemplate.image);
 
@@ -104,7 +104,7 @@ module.exports = {
         new EmbedBuilder()
           .setDescription(`Session has been released successfully.`)
           .setColor(embedColor)
-          .setFooter(greenvilleFooter(interaction))
+          .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
       ]
     });
 

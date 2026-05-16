@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require("discord.js");
-const { greenvilleFooter } = require('../../utils/embedFooter');
+const { greenvilleFooter, greenvilleAuthor } = require('../../utils/embedFooter');
 const Settings = require('../../models/settings');
 
 const DEFAULT_REINVITES_EMBED = {
@@ -38,7 +38,7 @@ module.exports = {
             .setTitle('Data not found')
             .setDescription('You do not have permission to use this command or data is not configured. Please use `/settings` to configure the Embed.')
             .setColor(embedColor)
-            .setFooter(greenvilleFooter(interaction))
+            .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
         ],
       });
     }
@@ -74,7 +74,7 @@ module.exports = {
         )
       )
       .setColor(embedColor)
-      .setFooter(greenvilleFooter(interaction));
+      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
 
     if (reinvitesTemplate.image?.startsWith('http')) embed.setImage(reinvitesTemplate.image);
 
