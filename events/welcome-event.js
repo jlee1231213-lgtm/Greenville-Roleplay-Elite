@@ -5,13 +5,13 @@ const DEFAULT_WELCOME_CHANNEL_ID = '1500619986295722014';
 
 const DEFAULT_WELCOME_EMBED = {
   title: '# > <a:GVH_beatinghearts:1504244806803783717> *Greenville Hub - __Warm Welcomes__* <a:GVH_beatinghearts:1504244806803783717>',
-  description: '<a:GVH_animatedarrow:1504244827062010131> Welcome to **__Greenville Hub™__** Please make sure you are verified by running the `/verify` command in <#1500626032959422694> using "Dyno". Please ensure you have read over our informative, found in <#1500620852633272350>!\n\n> <a:GVH_animatedarrow:1504244827062010131> Furthermore, requiring assistance? Simple, open a ticket in <#1500623825409278003>!',
+  description: '<a:GVH_animatedarrow:1504244827062010131> Welcome to **__Greenville Hub™__** {user}! Please make sure you are verified by running the `/verify` command in <#1500626032959422694> using "Dyno". Please ensure you have read over our informative, found in <#1500620852633272350>!\n\n> <a:GVH_animatedarrow:1504244827062010131> Furthermore, requiring assistance? Simple, open a ticket in <#1500623825409278003>!',
   image: 'https://media.discordapp.net/attachments/1492958669200031814/1505270658794258552/image.png?ex=6a0a040b&is=6a08b28b&hm=d736c9464ba8b938aa4a1ddaa3183d706a943ad9d56bf37f083d7ab8c9aaee32&=&format=webp&quality=lossless&width=2352&height=728',
 };
 
 const PREVIOUS_WELCOME_EMBED = {
   title: DEFAULT_WELCOME_EMBED.title,
-  description: '<a:GVH_animatedarrow:1504244827062010131> Welcome to **__Greenville Hub™__** {user}! Please make sure you are verified by running the `/verify` command in <#1500626032959422694> using "Dyno". Please ensure you have read over our informative, found in <#1500620852633272350>!\n\n> <a:GVH_animatedarrow:1504244827062010131> Furthermore, requiring assistance? Simple, open a ticket in <#1500623825409278003>!',
+  description: '<a:GVH_animatedarrow:1504244827062010131> Welcome to **__Greenville Hub™__** Please make sure you are verified by running the `/verify` command in <#1500626032959422694> using "Dyno". Please ensure you have read over our informative, found in <#1500620852633272350>!\n\n> <a:GVH_animatedarrow:1504244827062010131> Furthermore, requiring assistance? Simple, open a ticket in <#1500623825409278003>!',
   image: DEFAULT_WELCOME_EMBED.image,
 };
 
