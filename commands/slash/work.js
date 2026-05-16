@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
 const Eco = require('../../models/eco');
 const Settings = require('../../models/settings');
 
@@ -11,7 +11,7 @@ module.exports = {
     .setDescription('Work to earn some cash.'),
 
   async execute(interaction) {
-    await interaction.deferReply();
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const { guild, user, member } = interaction;
 
     const settings = await Settings.findOne({ guildId: guild.id });

@@ -11,7 +11,7 @@ module.exports = {
         .setRequired(true)),
 
   async execute(interaction) {
-    await interaction.deferReply({ });
+    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
 
     const staffRoleId = settings?.staffRoleId;
