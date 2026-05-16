@@ -76,6 +76,8 @@ function applyWelcomeContent(embed, title, description) {
 module.exports = {
   name: 'guildMemberAdd',
   once: false,
+  DEFAULT_WELCOME_EMBED,
+  resolveWelcomeEmbed,
   async execute(member) {
     if (!member.guild) return;
 

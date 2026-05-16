@@ -8,6 +8,7 @@ const {
 } = require('discord.js');
 const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require('../utils/embedFooter');
 const Settings = require('../models/settings');
+const { resolveWelcomeEmbed } = require('./welcome-event');
 
 async function updateSetting(guildId, field, value) {
     let doc = await Settings.findOne({ guildId });
@@ -168,7 +169,9 @@ module.exports = {
             const embedFields = ['startupEmbed','eaEmbed','giveawayEmbed','setupEmbed','welcomeEmbed','cohostEmbed','cohostendEmbed','releaseEmbed','reinvitesEmbed','overEmbed','hatepingsEmbed','superviseEmbed'];
             if (embedFields.includes(interaction.values[0])) {
                 const field = interaction.values[0];
-                const currentEmbed = settings?.[field] || {};
+                const currentEmbed = field === 'welcomeEmbed'
+                    ? resolveWelcomeEmbed(settings?.[field])
+                    : settings?.[field] || {};
                 const currentTitle = (currentEmbed.title || '').slice(0, 256);
                 const currentDescription = (currentEmbed.description || '').slice(0, 4000);
                 const currentImage = (currentEmbed.image || '').slice(0, 4000);
