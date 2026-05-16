@@ -14,7 +14,7 @@ module.exports = {
 
 
         const embed = new EmbedBuilder()
-      .setDescription(`## <:Beige_flying_star:1500584694859694252> *__Greenville Roleplay Elite - Support Center__* <:Beige_flying_star:1500584694859694252>
+      .setDescription(`## <:Beige_flying_star:1500584694859694252> *__Greenville Hub - Support Center__* <:Beige_flying_star:1500584694859694252>
 <:dasharrow:1500584579721990155> Welcome to the support section. To ensure your request is handled quickly and efficiently, please select the appropriate category below and provide clear, detailed information.
 
 <:green_management:1500587061525221616>  \`General Support\`

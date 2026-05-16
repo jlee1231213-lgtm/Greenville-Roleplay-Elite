@@ -130,14 +130,14 @@ module.exports = {
       });
 
       let description = '';
-      if (type === 'st') description = `**Option Selected:** General Support\n\n**Thank you for opening a ticket within *Greenville Roleplay Elite*. Please wait for the staff team to come and reply.**`;
+      if (type === 'st') description = `**Option Selected:** General Support\n\n**Thank you for opening a ticket within *Greenville Hub*. Please wait for the staff team to come and reply.**`;
       if (type === 'mr') description = `**Option Selected:** Staff Report
 
-    **Thank you for opening up a Staff Report within *Greenville Roleplay Elite*. Please wait for the staff team to come and reply.**
+    **Thank you for opening up a Staff Report within *Greenville Hub*. Please wait for the staff team to come and reply.**
 `;
       if (type === 'ma') description = `**Option Selected:** Civilian Report
 
-    **Thank you for opening up a Civilian Report within *Greenville Roleplay Elite*. Please wait for the staff team to come and reply.**`;
+    **Thank you for opening up a Civilian Report within *Greenville Hub*. Please wait for the staff team to come and reply.**`;
 
       const embed = new EmbedBuilder().setColor(embedColor).setDescription(description);
       

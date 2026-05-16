@@ -76,7 +76,7 @@ module.exports = {
         { name: 'Total', value: `${quotaDoc.amount}`, inline: true }
       )
       .setThumbnail(interaction.user.displayAvatarURL())
-      .setFooter({ text: 'Greenville Roleplay Elite™' });
+      .setFooter({ text: 'Greenville Hub™' });
 
     const logChannel = interaction.guild.channels.cache.get('1501033146941050920');
     if (logChannel?.isTextBased?.()) {

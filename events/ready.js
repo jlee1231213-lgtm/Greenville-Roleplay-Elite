@@ -7,7 +7,7 @@ module.exports = {
     const status = 'online';
 
     const activity = {
-      name: 'Greenville Roleplay Elite™ Sessions',
+      name: 'Greenville Hub™ Sessions',
       type: ActivityType.Watching,
     };
 

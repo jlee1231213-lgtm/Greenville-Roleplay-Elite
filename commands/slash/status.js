@@ -29,7 +29,7 @@ module.exports = {
 
     async execute(interaction) {
         const activityKey = interaction.options.getString('activity');
-        const message = interaction.options.getString('message') || 'Greenville Roleplay Elite™ Sessions';
+        const message = interaction.options.getString('message') || 'Greenville Hub™ Sessions';
         const activityType = ACTIVITY_MAP[activityKey];
 
         try {

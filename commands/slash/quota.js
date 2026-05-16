@@ -133,7 +133,7 @@ module.exports = {
 
       const embed = new EmbedBuilder()
         .setColor(embedColor)
-        .setTitle('Greenville Roleplay Elite, Quota Leaderboard - Top 5')
+        .setTitle('Greenville Hub, Quota Leaderboard - Top 5')
         .setDescription(lines.join('\n'))
         .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
 
