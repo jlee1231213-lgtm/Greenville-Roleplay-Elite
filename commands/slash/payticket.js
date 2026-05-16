@@ -20,7 +20,7 @@ module.exports = {
     const ticketId = interaction.options.getString('ticket');
     const ticket = await Ticket.findById(ticketId);
     const settings = await Settings.findOne({ guildId });
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     if (!ticket) return interaction.editReply({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription('Ticket not found.')] });
     if (ticket.UserID !== userId) return interaction.editReply({ embeds: [new EmbedBuilder().setColor(embedColor).setDescription('This ticket is not yours.')] });

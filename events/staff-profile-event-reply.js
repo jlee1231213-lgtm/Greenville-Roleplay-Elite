@@ -24,7 +24,7 @@ module.exports = {
     await interaction.deferReply({ ephemeral: true });
 
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     if (type === 'sessions') {
       const sessions = await SessionLog.find({ userId, sessiontype: 'session' }).sort({ timestarted: -1 });

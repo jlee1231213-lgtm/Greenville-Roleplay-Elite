@@ -22,7 +22,7 @@ module.exports = {
 
 
                 const settings = await Settings.findOne({ guildId: interaction.guild.id });
-                const embedColor = '#368f4c';
+                const embedColor = '#4C7C58';
 
                 const embed = new EmbedBuilder()
                     .setDescription(description)

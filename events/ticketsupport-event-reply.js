@@ -90,7 +90,7 @@ module.exports = {
 
     if (interaction.isModalSubmit() && interaction.customId.startsWith('ticketModal_')) {
       const settings = await Settings.findOne({ guildId: interaction.guild.id });
-      const embedColor = settings?.embedcolor || '#368f4c';
+      const embedColor = settings?.embedcolor || '#4C7C58';
       const type = interaction.customId.split('_')[1];
       const ownerId = interaction.user.id;
       const guild = interaction.guild;
@@ -198,7 +198,7 @@ module.exports = {
       if (!ticketData) return;
       const logChannel = interaction.guild.channels.cache.get('1417296613839339621');
       const settings = await Settings.findOne({ guildId: interaction.guild.id });
-      const embedColor = settings?.embedcolor || '#368f4c';
+      const embedColor = settings?.embedcolor || '#4C7C58';
 
       if (interaction.customId === 'claimTicket') {
         if (ticketData.claimed) return interaction.reply({ content: 'Ticket already claimed!', ephemeral: true });

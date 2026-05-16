@@ -26,7 +26,7 @@ module.exports = {
 
     const user = interaction.options.getUser('user') || interaction.user;
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     const sessionCount = await SessionLog.countDocuments({ userId: user.id, sessiontype: 'session' });
     const cohostCount = await SessionLog.countDocuments({ userId: user.id, sessiontype: 'cohost' });

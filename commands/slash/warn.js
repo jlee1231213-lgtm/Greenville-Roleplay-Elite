@@ -27,7 +27,7 @@ module.exports = {
 
     const target = interaction.options.getUser('user');
     const reason = interaction.options.getString('reason');
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     const dmEmbed = new EmbedBuilder()
       .setTitle(`${interaction.guild.name} | Warning`)

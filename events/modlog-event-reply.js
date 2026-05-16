@@ -22,7 +22,7 @@ module.exports = {
 
       const pageLogs = logs.slice((newPage - 1) * perPage, newPage * perPage);
       const settings = await Settings.findOne({ guildId: interaction.guild.id });
-      const embedColor = '#368f4c';
+      const embedColor = '#4C7C58';
 
       const embed = new EmbedBuilder()
         .setTitle(`${interaction.guild.members.cache.get(targetId)?.user.tag || 'User'} | Mod Logs`)

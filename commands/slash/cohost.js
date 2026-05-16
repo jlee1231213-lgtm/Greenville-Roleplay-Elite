@@ -17,7 +17,7 @@ module.exports = {
   async execute(interaction) {
     await interaction.deferReply({ ephemeral: true });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
     const allowedRoleId = settings?.staffRoleId;
     if (!allowedRoleId || !interaction.member.roles.cache.has(allowedRoleId)) return interaction.editReply({ content: 'No permission' });
     const userId = interaction.user.id;

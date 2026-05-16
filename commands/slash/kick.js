@@ -32,7 +32,7 @@ module.exports = {
     if (!guildMember) return interaction.editReply({ content: 'User not found in the server.' });
     if (!guildMember.kickable) return interaction.editReply({ content: 'I cannot kick that user.' });
 
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     const dmEmbed = new EmbedBuilder()
       .setTitle(`${interaction.guild.name} | Kicked`)

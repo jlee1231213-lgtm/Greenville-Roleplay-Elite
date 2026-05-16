@@ -34,7 +34,7 @@ module.exports = {
 
     await guildMember.timeout(null, reason);
 
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     await ModLog.create({ userId: interaction.user.id, targetId: target.id, reason, type: 'unmute', date: new Date() });
 

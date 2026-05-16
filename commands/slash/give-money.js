@@ -22,7 +22,7 @@ module.exports = {
     const amount = interaction.options.getNumber('amount');
 
     const settings = await Settings.findOne({ guildId: guild.id });
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     if (!settings?.civiRoleId || !member.roles.cache.has(settings.civiRoleId)) {
       return interaction.editReply({

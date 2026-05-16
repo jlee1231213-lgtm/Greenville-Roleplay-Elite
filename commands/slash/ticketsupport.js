@@ -10,7 +10,7 @@ module.exports = {
     await interaction.deferReply({ });
     const channelid = `${interaction.channel.id}`
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
-    const embedColor = settings?.embedcolor || '#368f4c';
+    const embedColor = settings?.embedcolor || '#4C7C58';
 
 
         const embed = new EmbedBuilder()

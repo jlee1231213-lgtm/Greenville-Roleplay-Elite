@@ -23,7 +23,7 @@ module.exports = {
     }
 
     const embed = new EmbedBuilder()
-      .setColor('#368f4c')
+      .setColor('#4C7C58')
       .setTitle(hatePingsTemplate.title || DEFAULT_HATEPINGS_EMBED.title)
       .setDescription((hatePingsTemplate.description || DEFAULT_HATEPINGS_EMBED.description).replace(/\\n/g, '\n'));
 

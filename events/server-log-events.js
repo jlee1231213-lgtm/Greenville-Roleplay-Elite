@@ -40,7 +40,7 @@ module.exports = {
       }
 
       const embed = new EmbedBuilder()
-        .setColor('#ff4d4d')
+        .setColor('#4C7C58')
         .setTitle('Message Deleted')
         .addFields(
           { name: 'User', value: message.author ? `<@${message.author.id}>` : 'Unknown', inline: true },
@@ -68,7 +68,7 @@ module.exports = {
       if (before === after) return;
 
       const embed = new EmbedBuilder()
-        .setColor('#ffaa00')
+        .setColor('#4C7C58')
         .setTitle('Message Edited')
         .addFields(
           { name: 'User', value: newMessage.author ? `<@${newMessage.author.id}>` : 'Unknown', inline: true },
@@ -83,7 +83,7 @@ module.exports = {
 
     client.on(Events.GuildMemberAdd, async (member) => {
       const embed = new EmbedBuilder()
-        .setColor('#4caf50')
+        .setColor('#4C7C58')
         .setTitle('Member Joined')
         .addFields(
           { name: 'User', value: `<@${member.id}>`, inline: true },
@@ -97,7 +97,7 @@ module.exports = {
 
     client.on(Events.GuildMemberRemove, async (member) => {
       const embed = new EmbedBuilder()
-        .setColor('#ff4d4d')
+        .setColor('#4C7C58')
         .setTitle('Member Left')
         .addFields(
           { name: 'User', value: `${member.user.tag} (${member.id})`, inline: false }
@@ -111,7 +111,7 @@ module.exports = {
     client.on(Events.ChannelCreate, async (channel) => {
       if (!channel.guild) return;
       const embed = new EmbedBuilder()
-        .setColor('#00bcd4')
+        .setColor('#4C7C58')
         .setTitle('Channel Created')
         .addFields(
           { name: 'Channel', value: `${channel.name} (${channel.id})`, inline: false }
@@ -124,7 +124,7 @@ module.exports = {
     client.on(Events.ChannelDelete, async (channel) => {
       if (!channel.guild) return;
       const embed = new EmbedBuilder()
-        .setColor('#ff4d4d')
+        .setColor('#4C7C58')
         .setTitle('Channel Deleted')
         .addFields(
           { name: 'Channel', value: `${channel.name || 'Unknown'} (${channel.id})`, inline: false }
@@ -136,7 +136,7 @@ module.exports = {
 
     client.on(Events.GuildBanAdd, async (ban) => {
       const embed = new EmbedBuilder()
-        .setColor('#ff1744')
+        .setColor('#4C7C58')
         .setTitle('Member Banned')
         .addFields(
           { name: 'User', value: `${ban.user.tag} (${ban.user.id})`, inline: false }
@@ -149,7 +149,7 @@ module.exports = {
 
     client.on(Events.GuildBanRemove, async (ban) => {
       const embed = new EmbedBuilder()
-        .setColor('#8bc34a')
+        .setColor('#4C7C58')
         .setTitle('Member Unbanned')
         .addFields(
           { name: 'User', value: `${ban.user.tag} (${ban.user.id})`, inline: false }

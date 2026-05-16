@@ -60,14 +60,14 @@ module.exports = {
 **Issued by:** <@${member.id}>
 
 Please comply with authorities to avoid further consequences.`)
-      .setColor('#368f4c');
+      .setColor('#4C7C58');
 
     targetUser.send({ embeds: [dmEmbed] }).catch(() => null);
 
     const confirmationEmbed = new EmbedBuilder()
       .setTitle('Warrant Issued')
       .setDescription(`You have successfully issued a warrant for ${targetUser.tag}.\n**Offense:** ${offense}\n**Duration:** ${time}\n**Reason:** ${reason}`)
-      .setColor('#368f4c');
+      .setColor('#4C7C58');
 
     await interaction.editReply({ embeds: [confirmationEmbed] });
   }

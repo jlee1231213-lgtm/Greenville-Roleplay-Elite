@@ -33,7 +33,7 @@ module.exports = {
         const member = interaction.member;
 
         const settings = await Settings.findOne({ guildId });
-        const embedColor = '#368f4c';
+        const embedColor = '#4C7C58';
 
         if (!settings) return interaction.editReply({ content: 'Server settings not found!' });
 

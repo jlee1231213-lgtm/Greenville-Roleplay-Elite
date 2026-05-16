@@ -16,7 +16,7 @@ module.exports = {
   async execute(interaction) {
     await interaction.deferReply({ ephemeral: true });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
     const allowedRoleIds = [settings?.staffRoleId, settings?.adminRoleId].filter(Boolean);
     if (!interaction.member.roles.cache.some(role => allowedRoleIds.includes(role.id))) return interaction.editReply({ embeds: [new EmbedBuilder().setDescription('You do not have the required role to use this command.').setColor(embedColor)] });
     const userId = interaction.user.id;

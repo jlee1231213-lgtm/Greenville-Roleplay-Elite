@@ -37,7 +37,7 @@ module.exports = {
     const activityType = interaction.values[0];
     const pointsToAdd = POINT_VALUES[activityType];
     const settings = await Settings.findOne({ guildId });
-    const embedColor = settings?.embedcolor || '#368f4c';
+    const embedColor = settings?.embedcolor || '#4C7C58';
 
     if (!pointsToAdd) {
       return interaction.editReply({ content: 'Invalid activity type.' });

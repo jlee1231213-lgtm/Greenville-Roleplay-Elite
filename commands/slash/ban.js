@@ -37,7 +37,7 @@ module.exports = {
     const guildMember = await interaction.guild.members.fetch(target.id).catch(() => null);
     if (!guildMember) return interaction.editReply({ content: 'User not found in the server.' });
 
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     const dmEmbed = new EmbedBuilder()
       .setTitle(`${interaction.guild.name} | Banned`)

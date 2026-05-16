@@ -9,7 +9,7 @@ module.exports = {
   async execute(interaction) {
     await interaction.deferReply();
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     const guild = interaction.guild;
     await guild.members.fetch();

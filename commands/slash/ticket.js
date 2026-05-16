@@ -53,14 +53,14 @@ module.exports = {
 
 **How to pay the ticket?**
 To pay the ticket do /payticket and select the fine you would wish to pay. Make sure you do have enough money to pay for the fine in full.`)
-      .setColor('#368f4c');
+      .setColor('#4C7C58');
 
     finedUser.send({ embeds: [dmEmbed] }).catch(() => null);
 
     const confirmationEmbed = new EmbedBuilder()
       .setTitle('Ticket Issued')
       .setDescription(`You have successfully issued a ticket to ${finedUser.tag}.\n**Offense:** ${offense}\n**Price:** $${price}`)
-      .setColor('#368f4c');
+      .setColor('#4C7C58');
 
     await interaction.editReply({ embeds: [confirmationEmbed] });
   }

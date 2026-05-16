@@ -55,7 +55,7 @@ module.exports = {
                 `Total: $${(userData.cash + userData.bank).toLocaleString()}\n\n` +
                 `Leaderboard Position: **#${position}** out of ${totalPlayers}`
             )
-            .setColor('#368f4c');
+            .setColor('#4C7C58');
 
         await interaction.editReply({ embeds: [embed] });
     }

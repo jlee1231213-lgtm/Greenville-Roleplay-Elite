@@ -14,7 +14,7 @@ module.exports = {
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
   async execute(interaction) {
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     const embed = new EmbedBuilder()
       .setTitle('Server Settings Panel')

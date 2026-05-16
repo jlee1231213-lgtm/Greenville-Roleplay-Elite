@@ -72,7 +72,7 @@ module.exports = {
 
     const setupEmbed = new EmbedBuilder()
       .setDescription(finalDescription)
-      .setColor('#368f4c')
+      .setColor('#4C7C58')
       .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
 
     setupEmbed.addFields({

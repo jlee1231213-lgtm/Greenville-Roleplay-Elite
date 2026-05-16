@@ -61,7 +61,7 @@ module.exports = {
     const reactionsRequired = interaction.options.getInteger('reactions');
     const userId = interaction.user.id;
     const now = new Date();
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     const startupTemplate = settings.startupEmbed || DEFAULT_STARTUP_EMBED;
     const setupTemplate = settings.setupEmbed || {};

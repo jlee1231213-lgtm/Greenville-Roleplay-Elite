@@ -23,7 +23,7 @@ module.exports = {
   async execute(interaction) {
     await interaction.deferReply({ ephemeral: true });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     const allowedRoleIds = EA_WHITELIST_ROLE_IDS;
 

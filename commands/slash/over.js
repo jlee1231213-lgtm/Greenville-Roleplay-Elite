@@ -99,7 +99,7 @@ module.exports = {
     await interaction.deferReply({ ephemeral: true });
 
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
     const allowedRoleIds = [settings?.staffRoleId, settings?.adminRoleId].filter(Boolean);
 
     if (!interaction.member.roles.cache.some(role => allowedRoleIds.includes(role.id))) {

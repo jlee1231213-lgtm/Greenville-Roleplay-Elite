@@ -25,7 +25,7 @@ module.exports = {
 
       const guildId = interaction.guild.id;
       const settings = await Settings.findOne({ guildId });
-      const embedColor = '#368f4c';
+      const embedColor = '#4C7C58';
 
       const userId = selectedUser.id;
       const guild = interaction.guild;

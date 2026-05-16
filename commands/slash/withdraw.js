@@ -15,7 +15,7 @@ module.exports = {
     await interaction.deferReply({ });
     const guildId = interaction.guild.id;
     const settings = await Settings.findOne({ guildId });
-    const embedColor = '#368f4c';
+    const embedColor = '#4C7C58';
 
     const userId = interaction.user.id;
     const amount = interaction.options.getNumber('amount');

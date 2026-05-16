@@ -112,7 +112,7 @@ module.exports = {
 
     const subcommand = interaction.options.getSubcommand();
     const guildId = interaction.guild.id;
-    const embedColor = settings?.embedcolor || '#368f4c';
+    const embedColor = settings?.embedcolor || '#4C7C58';
 
     if (subcommand === 'leaderboard') {
       const topFive = await Quota.find({ guildId }).sort({ amount: -1, updatedAt: 1 }).limit(5).lean();
