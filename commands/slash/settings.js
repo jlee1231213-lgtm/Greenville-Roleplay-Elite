@@ -5,6 +5,7 @@ const {
   EmbedBuilder,
   PermissionFlagsBits
 } = require('discord.js');
+const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require('../../utils/embedFooter');
 const Settings = require('../../models/settings');
 
 module.exports = {

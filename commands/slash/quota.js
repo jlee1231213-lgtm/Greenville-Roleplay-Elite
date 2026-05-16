@@ -134,7 +134,7 @@ module.exports = {
 
       const embed = new EmbedBuilder()
         .setColor(embedColor)
-        .setTitle('Greenville Hub, Quota Leaderboard - Top 5')
+        .setTitle('> <a:GVH_beatinghearts:1504244806803783717> Greenville Hub, Quota Leaderboard - Top 5 <a:GVH_beatinghearts:1504244806803783717>')
         .setDescription(lines.join('\n'))
         .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
 

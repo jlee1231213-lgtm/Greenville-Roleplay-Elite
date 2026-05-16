@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 const SessionLog = require('../../models/sessionlog');
 const ModLog = require('../../models/modlogs');
@@ -39,8 +38,7 @@ module.exports = {
       .setTitle(`Staff Profile - ${user.tag}`)
       .setDescription(`**User:** <@${user.id}>\n**UserID**: ${user.id}\n\n**Sessions Hosted:** ${sessionCount}\n**Sessions Co-Hosted:** ${cohostCount}\n**Sessions Super-vised:** ${superviseCount}`)
       .setColor(embedColor)
-      .setThumbnail(user.displayAvatarURL())
-      .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
+      .setThumbnail(user.displayAvatarURL());
 
     const buttons = new ActionRowBuilder().addComponents(
       new ButtonBuilder()

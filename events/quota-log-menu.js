@@ -68,7 +68,7 @@ module.exports = {
       .setColor(embedColor)
       .setDescription([
         formatLoggedTitle(activityLabel),
-        `<a:animatedarrow:1500968506114572359> <@${userId}> logged a ${activityLabel.toLowerCase()}`,
+        `<a:GVH_animatedarrow:1504244827062010131> <@${userId}> logged a ${activityLabel.toLowerCase()}`,
       ].join('\n'))
       .addFields(
         { name: 'User', value: interaction.user.username, inline: true },

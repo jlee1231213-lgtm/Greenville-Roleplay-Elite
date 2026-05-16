@@ -5,7 +5,6 @@ const {
   ButtonBuilder, 
   ButtonStyle 
 } = require('discord.js');
-const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require('../utils/embedFooter');
 const Vehicle = require('../models/vehicle');
 const Ticket = require('../models/tickets');
 const Warrant = require('../models/warrant');
@@ -41,7 +40,6 @@ module.exports = {
               .setTitle(`${user.user.tag} | Registered Vehicles`)
               .setDescription('No vehicles registered.')
               .setColor(embedColor)
-              .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction))
           ], 
           ephemeral: true 
         });
@@ -57,8 +55,7 @@ module.exports = {
         .setColor(embedColor)
         .setDescription(currentVehicles
           .map(v => `• ${v.brand} ${v.model} (${v.year}) | Color: ${v.Color} | Plate: ${v.Plate}`)
-          .join('\n'))
-        .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter({ ...greenvilleFooter(interaction), text: `Page ${page} of ${totalPages} • Greenville Hub™` });
+          .join('\n'));
 
       const buttons = new ActionRowBuilder();
       if (page > 1) buttons.addComponents(
@@ -94,8 +91,7 @@ module.exports = {
         .addFields(
           { name: 'Tickets', value: ticketList, inline: false },
           { name: 'Warrants', value: warrantList, inline: false }
-        )
-        .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
+        );
 
       return interaction.reply({ embeds: [embed], ephemeral: true });
     }
