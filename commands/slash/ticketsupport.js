@@ -14,8 +14,8 @@ module.exports = {
 
 
         const embed = new EmbedBuilder()
-      .setDescription(`## <:Beige_flying_star:1500584694859694252> *__Greenville Hub - Support Center__* <:Beige_flying_star:1500584694859694252>
-<:dasharrow:1500584579721990155> Welcome to the support section. To ensure your request is handled quickly and efficiently, please select the appropriate category below and provide clear, detailed information.
+      .setDescription(`# > <a:GVH_beatinghearts:1504244806803783717> *Greenville Hub - __Support Center__* GVH_beatinghearts:
+<a:GVH_animatedarrow:1504244827062010131> Welcome to the support section. To ensure your request is handled quickly and efficiently, please select the appropriate category below and provide clear, detailed information.
 
 <:green_management:1500587061525221616>  \`General Support\`
 Use this option for any general inquiries or assistance related to the server.
@@ -28,9 +28,9 @@ All reports are taken seriously and handled confidentially. Provide as much deta
 Use this option to report a non-staff member (civilian) for breaking server rules.
 Please include clear evidence and a detailed description of the incident to help us review your report effectively.
 
--# <:dasharrow:1500584579721990155> **Please Note:** If you do not respond to your ticket within **24 Hours**, it will be __automatically__ closed.`)
+-# <a:GVH_animatedarrow:1504244827062010131> **Please Note:** If you do not respond to your ticket within **24 Hours**, it will be __automatically__ closed.`)
   .setColor(embedColor)
-      .setImage("https://media.discordapp.net/attachments/1502790559486705755/1502794173168877761/Screenshot_20260509_180725_Discord.jpg?ex=6a0101a3&is=69ffb023&hm=cf4ee71c0834161dc84044cee5e84fc2b5177e962b8d36b239447890a3fc6072&=&format=webp&width=2160&height=468")
+      .setImage("https://media.discordapp.net/attachments/1492958669200031814/1505240193949499504/image.png?ex=6a09e7ac&is=6a08962c&hm=1f547b1a5aba54e28dd75919f1be64bfd1414688b954c7ed832362b0a5bb2963&=&format=webp&quality=lossless&width=2320&height=768")
       .setFooter({ text: `${interaction.guild.name}`, iconURL: `${interaction.guild.iconURL()}` });
 
 
