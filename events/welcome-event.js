@@ -15,6 +15,11 @@ const LEGACY_WELCOME_EMBED = {
   image: 'https://media.discordapp.net/attachments/1492958669200031814/1503549418656370828/image.png?ex=6a03c104&is=6a026f84&hm=8b2a5fd5359d0047363bddda6a9095ab5c08806e377ec6fb83dec1b9388b5dc5&=&format=webp&quality=lossless&width=2334&height=654',
 };
 
+function normalizeBranding(text) {
+  if (!text) return text;
+  return text.replace(/Greenville Roleplaye? Elite/gi, 'Greenville Hub');
+}
+
 function resolveWelcomeEmbed(savedEmbed) {
   if (!savedEmbed) return DEFAULT_WELCOME_EMBED;
 
@@ -33,7 +38,7 @@ function resolveWelcomeEmbed(savedEmbed) {
 
 function applyWelcomeTokens(text, memberId) {
   if (!text) return text;
-  return text
+  return normalizeBranding(text)
     .replace(/\{user\}|\$user/g, `<@${memberId}>`)
     .replace(/\$date/g, new Date().toLocaleDateString())
     .replace(/\\n/g, '\n');

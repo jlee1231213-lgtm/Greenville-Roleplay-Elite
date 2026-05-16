@@ -17,7 +17,7 @@ const ACTIVITY_LABELS = {
 };
 
 function formatLoggedTitle(activityLabel) {
-  return `## > *__Greenville Roleplaye Elite, ${activityLabel} logged__*`;
+  return `## > *__Greenville Hub, ${activityLabel} logged__*`;
 }
 
 module.exports = {

@@ -15,9 +15,14 @@ const DEFAULT_STARTUP_EMBED = {
   image: 'https://media.discordapp.net/attachments/1492958669200031814/1502813547971874866/image.png?ex=6a0113ae&is=69ffc22e&hm=98d9ab691999e7822a7e00df0cdac135ffa45f20a447148cc4503ef157753efc&=&format=webp&quality=lossless&width=1992&height=720'
 };
 
+function normalizeBranding(text) {
+  if (!text) return text;
+  return text.replace(/Greenville Roleplaye? Elite/gi, 'Greenville Hub');
+}
+
 function applyStartupTokens(text, userId, now, reactionsRequired) {
   if (!text) return text;
-  return text
+  return normalizeBranding(text)
     .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
     .replace(/\{\{date\}\}|\$date/g, now.toLocaleString())
     .replace(/\{\{reactions\}\}|\$reactions/g, String(reactionsRequired));
@@ -95,8 +100,8 @@ module.exports = {
       if (message.reactions.cache.get(STARTUP_REACTION_EMOJI_ID)?.count - 1 >= reactionsRequired) {
         collector.stop();
 
-        const setupTitle = (setupTemplate.title || '').trim();
-        const setupDescription = (setupTemplate.description || 'Data was not found, please use `/settings` to configure the Embed')
+        const setupTitle = normalizeBranding(setupTemplate.title || '').trim();
+        const setupDescription = normalizeBranding(setupTemplate.description || 'Data was not found, please use `/settings` to configure the Embed')
           .replace(/\{\{user\}\}|\{user\}|\$user/g, `<@${userId}>`)
           .replace(/\\n/g, '\n');
         const setupEndsAt = Math.floor((Date.now() + 10 * 60 * 1000) / 1000);
