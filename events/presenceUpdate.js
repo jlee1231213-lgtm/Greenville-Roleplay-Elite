@@ -1,5 +1,5 @@
 const { Events, EmbedBuilder } = require('discord.js');
-const { greenvilleFooter, greenvilleAuthor } = require('../utils/embedFooter');
+const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require('../utils/embedFooter');
 
 module.exports = {
   name: Events.PresenceUpdate,
@@ -41,7 +41,7 @@ module.exports = {
 <a:GVH_animatedarrow:1504244827062010131> Thank you for supporting **__Greenville Hub__** ${user} You will **__recieve__** the <@&1505209789741797436> role for putting /gvhub in you status!
 
 > <a:GVH_animatedarrow:1504244827062010131> Want the <@&1505209789741797436> role...? Ensure to put /gvhub in your status & you will receive it!`)
-            .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(guild));
+            .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(guild));
 
         await channel.send({ embeds: [embed] });
       } catch (error) {

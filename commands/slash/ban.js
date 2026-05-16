@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { greenvilleFooter, greenvilleAuthor } = require("../../utils/embedFooter");
+const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 const ModLog = require('../../models/modlogs');
 
@@ -48,7 +48,7 @@ module.exports = {
 > **Proof**: ${proof || 'No proof provided'}
 > **Moderator**: <@${interaction.user.id}>/${interaction.user.tag}`)
       .setColor(embedColor)
-      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
+      .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction))
       .setTimestamp();
 
     await target.send({ embeds: [dmEmbed] }).catch(() => null);
@@ -69,7 +69,7 @@ module.exports = {
       .setTitle('User Banned')
       .setDescription(`<@${target.id}> has been banned from the server.`)
       .setColor(embedColor)
-      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
+      .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction))
       .setTimestamp();
 
     return interaction.editReply({ embeds: [replyEmbed] });

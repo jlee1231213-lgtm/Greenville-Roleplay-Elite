@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const { greenvilleFooter, greenvilleAuthor } = require("../../utils/embedFooter");
+const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 const SessionLog = require('../../models/sessionlog');
 const { activeStartupSessions } = require('../slash/startup');
@@ -19,12 +19,12 @@ module.exports = {
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
     const embedColor = '#4C7C58';
     const allowedRoleIds = [settings?.staffRoleId, settings?.adminRoleId].filter(Boolean);
-    if (!interaction.member.roles.cache.some(role => allowedRoleIds.includes(role.id))) return interaction.editReply({ embeds: [new EmbedBuilder().setDescription('You do not have the required role to use this command.').setColor(embedColor).setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))] });
+    if (!interaction.member.roles.cache.some(role => allowedRoleIds.includes(role.id))) return interaction.editReply({ embeds: [new EmbedBuilder().setDescription('You do not have the required role to use this command.').setColor(embedColor).setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction))] });
     const userId = interaction.user.id;
 
     const sessionEntry = [...activeStartupSessions.entries()]
       .find(([id, data]) => data.userId === userId && data.type === 'cohost');
-    if (!sessionEntry) return interaction.editReply({ embeds: [new EmbedBuilder().setDescription('No active cohost session found in memory for you.').setColor(embedColor).setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))] });
+    if (!sessionEntry) return interaction.editReply({ embeds: [new EmbedBuilder().setDescription('No active cohost session found in memory for you.').setColor(embedColor).setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction))] });
 
     const [sessionId, sessionData] = sessionEntry;
     await SessionLog.create({ guildId: interaction.guild.id, sessiontype: sessionData.type, sessionId, userId: sessionData.userId, timestarted: sessionData.timestamp, timeended: new Date() });
@@ -38,7 +38,7 @@ module.exports = {
           .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
       )
       .setColor(embedColor)
-      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
+      .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
     if (cohostEndTemplate.image?.startsWith('http')) endEmbed.setImage(cohostEndTemplate.image);
     if (cohostEndTemplate.thumbnail?.startsWith('http')) endEmbed.setThumbnail(cohostEndTemplate.thumbnail);
 

@@ -10,7 +10,7 @@ const {
   TextInputStyle,
   ComponentType,
 } = require('discord.js');
-const { greenvilleFooter, greenvilleAuthor } = require('../../utils/embedFooter');
+const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require('../../utils/embedFooter');
 const SessionLog = require('../../models/sessionlog');
 const StartupSession = require('../../models/startupsession');
 const Settings = require('../../models/settings');
@@ -165,7 +165,7 @@ module.exports = {
       .addFields(
         { name: 'Next Session Available', value: `<t:${Math.floor(cooldownUntil.getTime() / 1000)}:R>`, inline: false }
       )
-      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
+      .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
     if (overTemplate.image?.startsWith('http')) embed.setImage(overTemplate.image);
 
     const feedbackCustomId = `over_feedback_${sessionId}`;

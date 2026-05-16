@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const { greenvilleFooter, greenvilleAuthor } = require("../../utils/embedFooter");
+const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 const StartupSession = require('../../models/startupsession');
 const { activeStartupSessions } = require('./startup');
@@ -29,7 +29,7 @@ module.exports = {
     const allowedRoleId = settings?.staffRoleId;
     if (!allowedRoleId || !interaction.member.roles.cache.has(allowedRoleId)) {
       return interaction.editReply({
-        embeds: [new EmbedBuilder().setDescription('No permission').setColor(embedColor).setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))],
+        embeds: [new EmbedBuilder().setDescription('No permission').setColor(embedColor).setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction))],
       });
     }
     const userId = interaction.user.id;
@@ -74,7 +74,7 @@ module.exports = {
           .replace(/\{\{user\}\}|\$user/g, `<@${userId}>`)
       )
       .setColor(embedColor)
-      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
+      .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
     if (superviseTemplate.image?.startsWith('http')) superviseEmbed.setImage(superviseTemplate.image);
 
     if (replyTarget && replyTarget.reply) await replyTarget.reply({ embeds: [superviseEmbed] });

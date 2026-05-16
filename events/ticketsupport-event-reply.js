@@ -10,7 +10,7 @@ const {
   PermissionsBitField,
   MessageFlags 
 } = require('discord.js');
-const { greenvilleFooter, greenvilleAuthor } = require('../utils/embedFooter');
+const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require('../utils/embedFooter');
 const discordTranscripts = require('@fluxbot/discord-html-transcripts');
 const Ticket = require('../models/support');
 const Settings = require('../models/settings');
@@ -143,7 +143,7 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setColor(embedColor)
         .setDescription(description)
-        .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
+        .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
       
       // Add fields for General Support tickets
       if (type === 'st') {
@@ -288,7 +288,7 @@ module.exports = {
           .setColor(embedColor)
           .setTitle('Close Request')
           .setDescription(`<@${ticketData.ownerId}>, <@${interaction.user.id}> requested to close this ticket.\n\nDo you want to close it?`)
-          .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
+          .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
 
         await interaction.reply({ content: `<@${ticketData.ownerId}>`, embeds: [requestEmbed], components: [row], ephemeral: false });
         return;
@@ -320,7 +320,7 @@ module.exports = {
           .setColor(embedColor)
           .setTitle('Ticket Closed')
           .setDescription('We hope we were able to help you.')
-          .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
+          .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction))
           .addFields(
             { name: 'Owner', value: `<@${ticketData.ownerId}>`, inline: true },
             { name: 'Requested by', value: `<@${requesterId}>`, inline: true },

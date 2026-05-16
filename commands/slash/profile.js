@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
-const { greenvilleFooter, greenvilleAuthor } = require("../../utils/embedFooter");
+const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require("../../utils/embedFooter");
 const Vehicle = require('../../models/vehicle');
 const Ticket = require('../../models/tickets');
 const License = require('../../models/license');
@@ -74,7 +74,7 @@ module.exports = {
         )
         .setThumbnail(robloxThumbnail || selectedUser.displayAvatarURL({ dynamic: true }) || '')
         .setColor(embedColor)
-        .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
+        .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
 
       const buttons = new ActionRowBuilder()
         .addComponents(

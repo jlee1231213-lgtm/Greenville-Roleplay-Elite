@@ -1,6 +1,6 @@
 
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { greenvilleFooter, greenvilleAuthor } = require('../../utils/embedFooter');
+const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require('../../utils/embedFooter');
 const Settings = require('../../models/settings');
 const Vehicle = require('../../models/vehicle');
 
@@ -36,7 +36,7 @@ module.exports = {
                 new EmbedBuilder()
                     .setColor(embedColor)
                     .setDescription('You do not own this vehicle.')
-                    .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
+                    .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction))
             ]
         });
 
@@ -46,7 +46,7 @@ module.exports = {
             .setColor(embedColor)
             .setTitle('Vehicle Unregistered')
             .setDescription(`Vehicle **${vehicle.brand} ${vehicle.model} (${vehicle.year})** has been unregistered successfully.`)
-            .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
+            .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
 
         return interaction.editReply({ embeds: [embed], });
     }

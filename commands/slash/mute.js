@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, MessageFlags } = require('discord.js');
-const { greenvilleFooter, greenvilleAuthor } = require('../../utils/embedFooter');
+const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require('../../utils/embedFooter');
 const Settings = require('../../models/settings');
 const ModLog = require('../../models/modlogs');
 
@@ -50,7 +50,7 @@ module.exports = {
       .setDescription(`<@${target.id}> has been muted for **${duration} minute(s)**.`)
       .addFields({ name: 'Reason', value: reason })
       .setColor(embedColor)
-      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction))
+      .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction))
       .setTimestamp();
 
     return interaction.editReply({ embeds: [embed] });

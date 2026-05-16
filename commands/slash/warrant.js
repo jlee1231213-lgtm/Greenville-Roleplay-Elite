@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { greenvilleFooter, greenvilleAuthor } = require("../../utils/embedFooter");
+const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require("../../utils/embedFooter");
 const Settings = require('../../models/settings');
 const Warrant = require('../../models/warrant');
 
@@ -62,7 +62,7 @@ module.exports = {
 
 Please comply with authorities to avoid further consequences.`)
       .setColor('#4C7C58')
-      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
+      .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
 
     targetUser.send({ embeds: [dmEmbed] }).catch(() => null);
 
@@ -70,7 +70,7 @@ Please comply with authorities to avoid further consequences.`)
       .setTitle('Warrant Issued')
       .setDescription(`You have successfully issued a warrant for ${targetUser.tag}.\n**Offense:** ${offense}\n**Duration:** ${time}\n**Reason:** ${reason}`)
       .setColor('#4C7C58')
-      .setAuthor(greenvilleAuthor()).setFooter(greenvilleFooter(interaction));
+      .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
 
     await interaction.editReply({ embeds: [confirmationEmbed] });
   }
