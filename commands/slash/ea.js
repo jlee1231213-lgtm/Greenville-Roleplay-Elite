@@ -52,7 +52,7 @@ module.exports = {
 
     const eaEmbed = new EmbedBuilder()
       .setTitle('<a:GVH_beatinghearts:1504244806803783717>  *__Greenville Hub - Early Access__*  <a:GVH_beatinghearts:1504244806803783717>')
-      .setDescription(`<a:animatedarrow:1500968506114572359> ${userMention} has released **Early Access.** If you have reacted, and have permission to join, please click the button below.\n\n> <a:animatedarrow:1500968506114572359> Reminder; leaking this link will result in a **termination** alongside **moderation.**`)
+      .setDescription(`<a:GVH_animatedarrow:1504244827062010131> ${userMention} has released **Early Access.** If you have reacted, and have permission to join, please click the button below.\n\n> <a:GVH_animatedarrow:1504244827062010131> Reminder; leaking this link will result in a **termination** alongside **moderation.**`)
       .setColor(embedColor)
       .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() });
 
