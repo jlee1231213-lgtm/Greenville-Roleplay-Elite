@@ -5,6 +5,8 @@ const ticketSchema = new mongoose.Schema({
   OfficerID: { type: String, required: true },
   Offense: { type: String, required: true },
   Price: { type: Number, required: true },
+  LogChannelID: { type: String, default: null },
+  LogMessageID: { type: String, default: null },
   Date: { type: Date, default: Date.now }
 })
 

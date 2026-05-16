@@ -3,6 +3,8 @@ const Eco = require('../../models/eco');
 const Settings = require('../../models/settings');
 const Ticket = require('../../models/tickets');
 
+const TICKET_LOG_CHANNEL_ID = '1503157333704835093';
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('payticket')
@@ -46,12 +48,41 @@ module.exports = {
     }
 
     await userEco.save();
-    await ticket.deleteOne();
 
     const embed = new EmbedBuilder()
       .setTitle('Ticket Paid')
       .setDescription(`You have successfully paid the ticket.\n**Offense:** ${ticket.Offense}\n**Amount Paid:** $${ticket.Price}`)
       .setColor(embedColor);
+
+    const ticketLogChannelId = ticket.LogChannelID || TICKET_LOG_CHANNEL_ID;
+    const ticketLogChannel = interaction.guild.channels.cache.get(ticketLogChannelId)
+      || await interaction.client.channels.fetch(ticketLogChannelId).catch(() => null);
+    if (ticketLogChannel?.isTextBased?.()) {
+      const paidLogEmbed = new EmbedBuilder()
+        .setTitle('Ticket Paid')
+        .setDescription(`<@${userId}> paid their ticket.`)
+        .addFields(
+          { name: 'Offense', value: ticket.Offense, inline: false },
+          { name: 'Amount Paid', value: `$${ticket.Price}`, inline: true },
+          { name: 'Issued By', value: `<@${ticket.OfficerID}>`, inline: true }
+        )
+        .setColor(embedColor);
+
+      let repliedToIssuedTicket = false;
+      if (ticket.LogMessageID) {
+        const issuedTicketMessage = await ticketLogChannel.messages.fetch(ticket.LogMessageID).catch(() => null);
+        if (issuedTicketMessage) {
+          await issuedTicketMessage.reply({ embeds: [paidLogEmbed] }).catch(() => null);
+          repliedToIssuedTicket = true;
+        }
+      }
+
+      if (!repliedToIssuedTicket) {
+        await ticketLogChannel.send({ embeds: [paidLogEmbed] }).catch(() => null);
+      }
+    }
+
+    await ticket.deleteOne();
 
     await interaction.editReply({ embeds: [embed] });
   }

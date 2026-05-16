@@ -3,6 +3,8 @@ const { greenvilleFooter, GREENVILLE_FOOTER_ICON_URL } = require("../../utils/em
 const Settings = require('../../models/settings');
 const Ticket = require('../../models/tickets');
 
+const TICKET_LOG_CHANNEL_ID = '1503157333704835093';
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('ticket')
@@ -58,6 +60,30 @@ To pay the ticket do /payticket and select the fine you would wish to pay. Make 
       .setThumbnail(GREENVILLE_FOOTER_ICON_URL).setFooter(greenvilleFooter(interaction));
 
     finedUser.send({ embeds: [dmEmbed] }).catch(() => null);
+
+    const ticketLogChannel = interaction.guild.channels.cache.get(TICKET_LOG_CHANNEL_ID)
+      || await interaction.client.channels.fetch(TICKET_LOG_CHANNEL_ID).catch(() => null);
+    if (ticketLogChannel?.isTextBased?.()) {
+      const logEmbed = new EmbedBuilder()
+        .setTitle('Ticket Issued')
+        .setDescription(`<@${finedUser.id}> has received a ticket.`)
+        .addFields(
+          { name: 'Offense', value: offense, inline: false },
+          { name: 'Amount', value: `$${price}`, inline: true },
+          { name: 'Officer', value: `<@${interaction.user.id}>`, inline: true },
+          { name: 'How to Pay', value: 'Use `/payticket` and select this fine.', inline: false }
+        )
+        .setColor('#4C7C58')
+        .setThumbnail(GREENVILLE_FOOTER_ICON_URL)
+        .setFooter(greenvilleFooter(interaction));
+
+      const logMessage = await ticketLogChannel.send({ embeds: [logEmbed] }).catch(() => null);
+      if (logMessage) {
+        newTicket.LogChannelID = TICKET_LOG_CHANNEL_ID;
+        newTicket.LogMessageID = logMessage.id;
+        await newTicket.save();
+      }
+    }
 
     const confirmationEmbed = new EmbedBuilder()
       .setTitle('Ticket Issued')
