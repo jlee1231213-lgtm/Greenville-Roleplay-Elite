@@ -6,6 +6,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('say')
     .setDescription('Make the bot send a message in this channel.')
+    .setDMPermission(false)
     .addStringOption(option =>
       option.setName('message')
         .setDescription('The message to send')
@@ -14,7 +15,9 @@ module.exports = {
   async execute(interaction) {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-    if (!interaction.member.roles.cache.has(SAY_COMMAND_ROLE_ID)) {
+    const member = await interaction.guild.members.fetch(interaction.user.id);
+
+    if (!member.roles.cache.has(SAY_COMMAND_ROLE_ID)) {
       return interaction.editReply({ content: 'You do not have the required role to use this command.' });
     }
 
