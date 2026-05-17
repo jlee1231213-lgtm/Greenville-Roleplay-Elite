@@ -14,9 +14,9 @@ module.exports = {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
     const settings = await Settings.findOne({ guildId: interaction.guild.id });
 
-    const staffRoleId = settings?.staffRoleId;
-    if (staffRoleId && !interaction.member.roles.cache.has(staffRoleId)) {
-      return interaction.editReply({ content: 'You must have the Staff role to use this command.' });
+    const adminRoleId = settings?.adminRoleId;
+    if (!adminRoleId || !interaction.member.roles.cache.has(adminRoleId)) {
+      return interaction.editReply({ content: 'You must have the Admin role to use this command.' });
     }
 
     const message = interaction.options.getString('message');
