@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, MessageFlags } = require('discord.js');
-const Settings = require('../../models/settings');
+
+const SAY_COMMAND_ROLE_ID = '1502674328951455866';
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -12,11 +13,9 @@ module.exports = {
 
   async execute(interaction) {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-    const settings = await Settings.findOne({ guildId: interaction.guild.id });
 
-    const adminRoleId = settings?.adminRoleId;
-    if (!adminRoleId || !interaction.member.roles.cache.has(adminRoleId)) {
-      return interaction.editReply({ content: 'You must have the Admin role to use this command.' });
+    if (!interaction.member.roles.cache.has(SAY_COMMAND_ROLE_ID)) {
+      return interaction.editReply({ content: 'You do not have the required role to use this command.' });
     }
 
     const message = interaction.options.getString('message');
